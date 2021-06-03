@@ -1,0 +1,28 @@
+{
+  "comment": "estate data - estates.json",
+  "names": [
+    {
+      "type": [
+        { "value": "Flat" },
+        { "value": "House" },
+        { "value": "Duplex" },
+        { "value": "House" },
+        { "value": "Penthouse" }
+      ],
+      "city": [
+        { "value": "Manhattan" },
+        { "value": "Montauk" },
+        { "value": "Southampton" },
+        { "value": "Upper East Side" },
+        { "value": "Hampton Bays" }
+      ],
+      "price": [
+        { "value": "$17,870,000" },
+        { "value": "$21,130,000"},
+        { "value": "$41,990,000" },
+        { "value": "$13,990,000" },
+        { "value": "$44,220,000" }
+      ]
+    }
+  ]
+}
