@@ -19,5 +19,4 @@ data class Estate(
     var saleDate : Calendar,
     var dateOfSale : Calendar? = null,
     var agentName : String
-) {
-}
+)

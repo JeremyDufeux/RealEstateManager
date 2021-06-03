@@ -8,7 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityListBinding
+import com.openclassrooms.realestatemanager.ui.listFragment.ListFragment
+import com.openclassrooms.realestatemanager.ui.mapFragment.MapFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ListActivity : AppCompatActivity() {
     private val TAG = "ListActivity"
 
