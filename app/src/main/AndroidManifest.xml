@@ -21,6 +21,10 @@
         </activity>
         <activity android:name=".ui.DetailsActivity"/>
         <activity android:name=".ui.AddEstateActivity" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
