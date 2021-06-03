@@ -3,7 +3,6 @@ package com.openclassrooms.realestatemanager.extensions
 import com.openclassrooms.realestatemanager.models.Estate
 import com.openclassrooms.realestatemanager.models.EstateTypes
 import com.openclassrooms.realestatemanager.models.PointsOfInterests
-import java.util.*
 
 fun generateEstates() : List<Estate> {
     return listOf(
@@ -23,7 +22,7 @@ fun generateEstates() : List<Estate> {
             country = "USA",
             pointOfInterest = listOf(PointsOfInterests.SCHOOL, PointsOfInterests.PARK),
             available = true,
-            saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
+            //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
             agentName = "John McLaughlin"
         )
     )

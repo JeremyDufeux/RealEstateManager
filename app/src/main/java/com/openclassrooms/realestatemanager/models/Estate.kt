@@ -16,7 +16,7 @@ data class Estate(
     var country : String,
     var pointOfInterest : List<PointsOfInterests>,
     var available : Boolean,
-    var saleDate : Calendar,
+    var saleDate : Calendar? = null,
     var dateOfSale : Calendar? = null,
     var agentName : String
 )
