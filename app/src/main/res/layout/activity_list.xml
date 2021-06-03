@@ -7,7 +7,7 @@
     tools:context=".ui.ListActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/list_activity_toolbar"
+        android:id="@+id/activity_list_toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -18,21 +18,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/list_activity_tabLayout"
+        android:id="@+id/activity_list_tabLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_activity_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/activity_list_toolbar">
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/details_activity_viewPager"
+        android:id="@+id/activity_list_viewPager"
         android:name="com.openclassrooms.realestatemanager.ui.ListFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_activity_tabLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/activity_list_tabLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

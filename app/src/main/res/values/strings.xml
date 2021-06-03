@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
-
+    <!-- tab layout -->
     <string name="list_tab">List</string>
     <string name="map_tab">Map</string>
+    <!-- Toolbar menu -->
+    <string name="menu_add">Add</string>
+    <string name="menu_save">Save</string>
+    <string name="toolbar_title_add_estate">Add estate</string>
+    <string name="toolbar_title_estate_details">Estate details</string>
 </resources>
