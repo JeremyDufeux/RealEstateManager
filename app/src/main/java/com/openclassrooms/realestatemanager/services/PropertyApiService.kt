@@ -1,9 +1,10 @@
 package com.openclassrooms.realestatemanager.services
 
 import com.openclassrooms.realestatemanager.models.Property
+import kotlinx.coroutines.flow.Flow
 
 interface PropertyApiService {
-    fun gePropertyList() : List<Property>
+    val propertyList : Flow<List<Property>>
 
     fun addProperty(property: Property)
 
