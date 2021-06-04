@@ -2,9 +2,9 @@ package com.openclassrooms.realestatemanager.models
 
 import java.util.*
 
-data class Estate(
+data class Property(
     val id: String? = UUID.randomUUID().toString(),
-    var type : EstateTypes,
+    var type : PropertyTypes,
     var price : Int,
     var area : Int,
     var roomsAmount : Int,

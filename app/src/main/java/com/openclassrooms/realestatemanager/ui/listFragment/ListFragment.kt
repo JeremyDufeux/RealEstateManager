@@ -12,16 +12,16 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
-import com.openclassrooms.realestatemanager.models.Estate
+import com.openclassrooms.realestatemanager.models.Property
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ListFragment : Fragment(), EstateListAdapter.OnEstateListener{
+class ListFragment : Fragment(), PropertyListAdapter.OnPropertyListener{
     private val TAG = "ListFragment"
 
     private val listFragmentViewModel: ListFragmentViewModel by viewModels()
     private lateinit var mBinding : FragmentListBinding
-    private val mAdapter = EstateListAdapter(this)
+    private val mAdapter = PropertyListAdapter(this)
 
     companion object {
         fun newInstance() = ListFragment()
@@ -34,7 +34,7 @@ class ListFragment : Fragment(), EstateListAdapter.OnEstateListener{
     }
 
     private fun configureViewModel() {
-        listFragmentViewModel.observeEstateList().observe(this, estateListObserver)
+        listFragmentViewModel.observePropertyList().observe(this, propertyListObserver)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -54,11 +54,11 @@ class ListFragment : Fragment(), EstateListAdapter.OnEstateListener{
         mBinding.fragmentListRv.addItemDecoration(itemDecoration)
     }
 
-    private val estateListObserver = Observer<List<Estate>> {
+    private val propertyListObserver = Observer<List<Property>> {
         mAdapter.updateList(it)
     }
 
-    override fun onEstateClick(position: Int) {
+    override fun onPropertyClick(position: Int) {
         Log.d(TAG, "onEstateClick: $position")
     }
 

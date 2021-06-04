@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.AddEstateActivity">
+    tools:context=".ui.AddPropertyActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/activity_add_estate_toolbar"
+        android:id="@+id/activity_add_property_toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"

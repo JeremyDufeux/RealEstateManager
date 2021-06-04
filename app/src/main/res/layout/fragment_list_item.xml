@@ -12,8 +12,8 @@
         android:layout_height="80dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@sample/estates"
-        android:contentDescription="@string/estate_picture" />
+        tools:srcCompat="@sample/properties"
+        android:contentDescription="@string/property_picture" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -33,7 +33,7 @@
             android:fontFamily="@font/roboto_bold"
             android:textSize="@dimen/fragment_list_item_type_tv_text_size"
             android:textColor="@color/black"
-            tools:text="@sample/estates.json/names/type/value" />
+            tools:text="@sample/properties.json/names/type/value" />
 
         <TextView
             android:id="@+id/fragment_list_item_city_tv"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_medium"
             android:textSize="@dimen/fragment_list_item_type_tv_text_size"
-            tools:text="@sample/estates.json/names/city/value" />
+            tools:text="@sample/properties.json/names/city/value" />
 
         <TextView
             android:id="@+id/fragment_list_item_price_tv"
@@ -50,7 +50,7 @@
             android:fontFamily="@font/roboto"
             android:textSize="@dimen/fragment_list_item_type_tv_text_size"
             android:textColor="@color/colorPrimary"
-            tools:text="@sample/estates.json/names/price/value" />
+            tools:text="@sample/properties.json/names/price/value" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,7 +6,7 @@
     <!-- Toolbar menu -->
     <string name="menu_add">Add</string>
     <string name="menu_save">Save</string>
-    <string name="toolbar_title_add_estate">Add estate</string>
-    <string name="toolbar_title_estate_details">Estate details</string>
-    <string name="estate_picture">Estate picture</string>
+    <string name="toolbar_title_add_property">Add property</string>
+    <string name="toolbar_title_property_details">Property details</string>
+    <string name="property_picture">Property picture</string>
 </resources>

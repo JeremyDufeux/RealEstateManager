@@ -1,6 +1,6 @@
 package com.openclassrooms.realestatemanager.models
 
-enum class EstateTypes(val description : String) {
+enum class PropertyTypes(val description : String) {
     FLAT("Flat"),
     HOUSE("House"),
     DUPLEX("Duplex"),

@@ -1,13 +1,13 @@
 package com.openclassrooms.realestatemanager.extensions
 
-import com.openclassrooms.realestatemanager.models.Estate
-import com.openclassrooms.realestatemanager.models.EstateTypes
 import com.openclassrooms.realestatemanager.models.PointsOfInterests
+import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.models.PropertyTypes
 
-fun generateEstates() : List<Estate> {
+fun generateProperties() : List<Property> {
     return listOf(
-        Estate(id = "1",
-            type = EstateTypes.FLAT,
+        Property(id = "1",
+            type = PropertyTypes.FLAT,
             price = 169000,
             area = 900,
             roomsAmount = 8,
@@ -32,8 +32,8 @@ fun generateEstates() : List<Estate> {
             //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
             agentName = "John McLaughlin"
         ),
-        Estate(id = "2",
-            type = EstateTypes.FLAT,
+        Property(id = "2",
+            type = PropertyTypes.FLAT,
             price = 379000,
             area = 1800,
             roomsAmount = 8,
@@ -62,8 +62,8 @@ fun generateEstates() : List<Estate> {
             //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
             agentName = "Kristen Fortino"
         ),
-        Estate(id = "3",
-            type = EstateTypes.HOUSE,
+        Property(id = "3",
+            type = PropertyTypes.HOUSE,
             price = 478500,
             area = 1892,
             roomsAmount = 7,
@@ -97,8 +97,8 @@ fun generateEstates() : List<Estate> {
             //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
             agentName = "Douglas Elliman"
         ),
-        Estate(id = "4",
-            type = EstateTypes.TRIPLEX,
+        Property(id = "4",
+            type = PropertyTypes.TRIPLEX,
             price = 66000000,
             area = 7130,
             roomsAmount = 10,
@@ -124,8 +124,8 @@ fun generateEstates() : List<Estate> {
             //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
             agentName = "Douglas Elliman"
         ),
-        Estate(id = "5",
-            type = EstateTypes.HOUSE,
+        Property(id = "5",
+            type = PropertyTypes.HOUSE,
             price = 453200,
             area = 2168,
             roomsAmount = 10,
@@ -146,8 +146,8 @@ fun generateEstates() : List<Estate> {
             //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
             agentName = "John McLaughlin"
         ),
-        Estate(id = "6",
-            type = EstateTypes.FLAT,
+        Property(id = "6",
+            type = PropertyTypes.FLAT,
             price = 295000,
             area = 800,
             roomsAmount = 3,
@@ -167,8 +167,8 @@ fun generateEstates() : List<Estate> {
             //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
             agentName = "Kristen Fortino"
         ),
-        Estate(id = "7",
-        type = EstateTypes.DUPLEX,
+        Property(id = "7",
+        type = PropertyTypes.DUPLEX,
         price = 1795000,
         area = 3228,
         roomsAmount = 7,

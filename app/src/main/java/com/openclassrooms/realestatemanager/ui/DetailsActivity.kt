@@ -22,7 +22,7 @@ class DetailsActivity : AppCompatActivity() {
 
     private fun configureToolBar(){
         setSupportActionBar(mBinding.activityDetailsToolbar)
-        mBinding.activityDetailsToolbar.title = resources.getString(R.string.toolbar_title_add_estate)
+        mBinding.activityDetailsToolbar.title = resources.getString(R.string.toolbar_title_add_property)
         mBinding.activityDetailsToolbar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_back_arrow, null)
         mBinding.activityDetailsToolbar.setNavigationOnClickListener { finish() }
     }

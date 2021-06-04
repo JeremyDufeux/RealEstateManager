@@ -55,13 +55,13 @@ class ListActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.add_estate -> openAddEstateActivity()
+            R.id.add_property -> openAddPropertyActivity()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun openAddEstateActivity() {
-        val addEstateActivityIntent = Intent(this, AddEstateActivity::class.java)
-        startActivity(addEstateActivityIntent)
+    private fun openAddPropertyActivity() {
+        val addPropertyActivityIntent = Intent(this, AddPropertyActivity::class.java)
+        startActivity(addPropertyActivityIntent)
     }
 }
