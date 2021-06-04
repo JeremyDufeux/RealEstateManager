@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.listFragment
+package com.openclassrooms.realestatemanager.ui.mapFragment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,16 +11,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ListFragmentViewModel @Inject constructor(
-    private val mPropertyRepository : PropertyRepository
-    ) : ViewModel() {
+class MapFragmentViewModel @Inject constructor(
+    private val mPropertyRepository: PropertyRepository
+    ) : ViewModel(){
 
     private val mPropertyListMutableLiveData : MutableLiveData<List<Property>> = MutableLiveData()
     val propertyListLiveData: LiveData<List<Property>> = mPropertyListMutableLiveData
 
     init {
         viewModelScope.launch {
-            mPropertyListMutableLiveData.postValue(mPropertyRepository.propertyList())
+                mPropertyListMutableLiveData.postValue(mPropertyRepository.propertyList())
         }
     }
 }

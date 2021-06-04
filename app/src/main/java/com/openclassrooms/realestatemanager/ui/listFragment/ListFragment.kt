@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class ListFragment : Fragment(), PropertyListAdapter.OnPropertyListener{
     private val TAG = "ListFragment"
 
-    private val listFragmentViewModel: ListFragmentViewModel by viewModels()
+    private val mViewModel: ListFragmentViewModel by viewModels()
     private lateinit var mBinding : FragmentListBinding
     private val mAdapter = PropertyListAdapter(this)
 
@@ -34,7 +34,7 @@ class ListFragment : Fragment(), PropertyListAdapter.OnPropertyListener{
     }
 
     private fun configureViewModel() {
-        listFragmentViewModel.observePropertyList().observe(this, propertyListObserver)
+        mViewModel.propertyListLiveData.observe(this, propertyListObserver)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

@@ -38,6 +38,7 @@ class ListActivity : AppCompatActivity() {
         pagerAdapter.addFragment(MapFragment.newInstance())
 
         mBinding.activityListViewPager.adapter = pagerAdapter
+        mBinding.activityListViewPager.isUserInputEnabled = false
 
         TabLayoutMediator(mBinding.activityListTabLayout, mBinding.activityListViewPager
         ) { tab, position ->

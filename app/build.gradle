@@ -3,6 +3,8 @@ apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
+def mapApiKey = project.properties['MAPS_API_KEY']
+
 android {
     compileSdkVersion 30
     defaultConfig {
@@ -23,6 +25,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField("String", "MAPS_API_KEY", "\"${mapApiKey}\"")
+            resValue("string", "maps_api_key", "${mapApiKey}")
         }
     }
 
@@ -60,6 +66,10 @@ dependencies {
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+    // Google Maps
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    implementation 'com.google.maps.android:android-maps-utils:2.2.0'
 }
 
 kapt {

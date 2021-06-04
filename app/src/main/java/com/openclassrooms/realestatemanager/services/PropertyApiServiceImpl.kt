@@ -2,19 +2,17 @@ package com.openclassrooms.realestatemanager.services
 
 import com.openclassrooms.realestatemanager.extensions.generateProperties
 import com.openclassrooms.realestatemanager.models.Property
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 
 class PropertyApiServiceImpl : PropertyApiService {
     private val mProperties : MutableList<Property> = generateProperties().toMutableList()
 
-    override val propertyList: Flow<List<Property>> = flow{
-        while (true) {
+    override suspend fun propertyList() = withContext(Dispatchers.IO) {
             val propertyList = generateProperties()
             delay(1500)
-            emit(propertyList)
-        }
+            propertyList
     }
 
     override fun addProperty(property: Property) {

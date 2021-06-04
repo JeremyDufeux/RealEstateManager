@@ -3,10 +3,12 @@ package com.openclassrooms.realestatemanager.extensions
 import com.openclassrooms.realestatemanager.models.PointsOfInterests
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.PropertyTypes
+import java.util.*
 
 fun generateProperties() : List<Property> {
     return listOf(
-        Property(id = "1",
+        Property(
+            id = "1",
             type = PropertyTypes.FLAT,
             price = 169000,
             area = 900,
@@ -27,12 +29,15 @@ fun generateProperties() : List<Property> {
             city = "Manhathan",
             postalCode = "NY 10111",
             country = "USA",
+            latitude = 40.7589408497391,
+            longitude = -73.97983110154246,
             pointOfInterest = listOf(PointsOfInterests.SCHOOL, PointsOfInterests.PARK),
             available = true,
-            //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
+            saleDate = Calendar.getInstance().also { it.set(2021, 5, 20) },
             agentName = "John McLaughlin"
         ),
-        Property(id = "2",
+        Property(
+            id = "2",
             type = PropertyTypes.FLAT,
             price = 379000,
             area = 1800,
@@ -57,12 +62,15 @@ fun generateProperties() : List<Property> {
             city = "Manhathan",
             postalCode = "NY 10022",
             country = "USA",
+            latitude = 40.759524542858905,
+            longitude = -73.9648487396234,
             pointOfInterest = listOf(PointsOfInterests.GROCERY, PointsOfInterests.PARK, PointsOfInterests.SWIMMING_POOL),
             available = true,
             //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
             agentName = "Kristen Fortino"
         ),
-        Property(id = "3",
+        Property(
+            id = "3",
             type = PropertyTypes.HOUSE,
             price = 478500,
             area = 1892,
@@ -92,12 +100,15 @@ fun generateProperties() : List<Property> {
             city = "Staten Island",
             postalCode = "NY 10312",
             country = "USA",
+            latitude = 40.55390377650278,
+            longitude = -74.19467206015342,
             pointOfInterest = listOf(PointsOfInterests.SCHOOL, PointsOfInterests.TRAIN_STATION, PointsOfInterests.PUBLIC_TRANSPORT),
             available = true,
             //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
             agentName = "Douglas Elliman"
         ),
-        Property(id = "4",
+        Property(
+            id = "4",
             type = PropertyTypes.TRIPLEX,
             price = 66000000,
             area = 7130,
@@ -119,12 +130,15 @@ fun generateProperties() : List<Property> {
             city = "Manhathan",
             postalCode = "NY 10019",
             country = "USA",
+            latitude = 40.76482158883576,
+            longitude = -73.97782416556161,
             pointOfInterest = listOf(PointsOfInterests.SCHOOL, PointsOfInterests.PARK, PointsOfInterests.GROCERY, PointsOfInterests.FITNESS_CLUB),
             available = true,
             //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
             agentName = "Douglas Elliman"
         ),
-        Property(id = "5",
+        Property(
+            id = "5",
             type = PropertyTypes.HOUSE,
             price = 453200,
             area = 2168,
@@ -141,12 +155,15 @@ fun generateProperties() : List<Property> {
             city = "Brooklyn",
             postalCode = "NY 11433",
             country = "USA",
+            latitude = 40.697167874862615,
+            longitude = -73.78038285309472,
             pointOfInterest = listOf(PointsOfInterests.GROCERY, PointsOfInterests.PUBLIC_TRANSPORT),
             available = true,
             //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
             agentName = "John McLaughlin"
         ),
-        Property(id = "6",
+        Property(
+            id = "6",
             type = PropertyTypes.FLAT,
             price = 295000,
             area = 800,
@@ -162,40 +179,45 @@ fun generateProperties() : List<Property> {
             city = "Harlem",
             postalCode = "NY 10031",
             country = "USA",
+            latitude = 40.82568643585645,
+            longitude = -73.94261050737286,
             pointOfInterest = listOf(PointsOfInterests.SCHOOL, PointsOfInterests.PUBLIC_TRANSPORT, PointsOfInterests.FITNESS_CLUB),
             available = true,
             //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
             agentName = "Kristen Fortino"
         ),
-        Property(id = "7",
-        type = PropertyTypes.DUPLEX,
-        price = 1795000,
-        area = 3228,
-        roomsAmount = 7,
-        description = "A true diamond in the rough waiting for your vision to make it sparkle.\n" +
-                "This massive  detached stand alone home has over 3200sq feet of possibility.\n" +
-                "Situated on an oversized 2500sq ft lot. \n" +
-                " This 3 family house is currently configured as a 1 bedroom rental with 3 bedroom duplex above.\n" +
-                " The 1 bedroom apartment has been recently renovated and features original hardwood floors and fireplace.  The duplex above features an open floor layout for living and dining..\n" +
-                "Great light from east, west and southern exposures.\n" +
-                "Boasting a full basement with laundry and an expansive backyard- even a pool !\n" +
-                "Located in Prime Greenpoint on a picturesque tree lined block minutes from transport, restaurants, bars, shops and McCarren Park.\n" +
-                "This gem won't last - schedule your viewing today.",
-        picturesUriList = listOf(
-            "https://photos.zillowstatic.com/fp/f259812ea3129d47389a09ca7d51a53c-cc_ft_768.jpg",
-            "https://photos.zillowstatic.com/fp/f27d3b7c4ae9c447331dddefa79e85b3-cc_ft_384.jpg",
-            "https://photos.zillowstatic.com/fp/bb4e835dc40cef310d690fae2296a972-cc_ft_384.jpg",
-            "https://photos.zillowstatic.com/fp/cbde3883e38a4e44919cc079ace4f232-cc_ft_384.jpg",
-            "https://photos.zillowstatic.com/fp/f2dfb51bae1056b64b772e3b504928b5-cc_ft_384.jpg"
-        ),
-        address = "651 Leonard St",
-        city = "Eastpoint",
-        postalCode = "NY 11222",
-        country = "USA",
-        pointOfInterest = listOf(PointsOfInterests.SCHOOL, PointsOfInterests.PUBLIC_TRANSPORT, PointsOfInterests.FITNESS_CLUB),
-        available = true,
-        //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
-        agentName = "Douglas Elliman"
-    )
+        Property(
+            id = "7",
+            type = PropertyTypes.DUPLEX,
+            price = 1795000,
+            area = 3228,
+            roomsAmount = 7,
+            description = "A true diamond in the rough waiting for your vision to make it sparkle.\n" +
+                    "This massive  detached stand alone home has over 3200sq feet of possibility.\n" +
+                    "Situated on an oversized 2500sq ft lot. \n" +
+                    " This 3 family house is currently configured as a 1 bedroom rental with 3 bedroom duplex above.\n" +
+                    " The 1 bedroom apartment has been recently renovated and features original hardwood floors and fireplace.  The duplex above features an open floor layout for living and dining..\n" +
+                    "Great light from east, west and southern exposures.\n" +
+                    "Boasting a full basement with laundry and an expansive backyard- even a pool !\n" +
+                    "Located in Prime Greenpoint on a picturesque tree lined block minutes from transport, restaurants, bars, shops and McCarren Park.\n" +
+                    "This gem won't last - schedule your viewing today.",
+            picturesUriList = listOf(
+                "https://photos.zillowstatic.com/fp/f259812ea3129d47389a09ca7d51a53c-cc_ft_768.jpg",
+                "https://photos.zillowstatic.com/fp/f27d3b7c4ae9c447331dddefa79e85b3-cc_ft_384.jpg",
+                "https://photos.zillowstatic.com/fp/bb4e835dc40cef310d690fae2296a972-cc_ft_384.jpg",
+                "https://photos.zillowstatic.com/fp/cbde3883e38a4e44919cc079ace4f232-cc_ft_384.jpg",
+                "https://photos.zillowstatic.com/fp/f2dfb51bae1056b64b772e3b504928b5-cc_ft_384.jpg"
+            ),
+            address = "651 Leonard St",
+            city = "Greenpoint",
+            postalCode = "NY 11222",
+            country = "USA",
+            latitude = 40.7267017136229,
+            longitude = -73.95191893544883,
+            pointOfInterest = listOf(PointsOfInterests.SCHOOL, PointsOfInterests.PUBLIC_TRANSPORT, PointsOfInterests.FITNESS_CLUB),
+            available = true,
+            //saleDate = Calendar.getInstance().set(2021, 5, 20) as Calendar,
+            agentName = "Douglas Elliman"
+        )
     )
 }
