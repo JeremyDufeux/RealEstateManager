@@ -9,4 +9,15 @@
     <string name="toolbar_title_add_property">Add property</string>
     <string name="toolbar_title_property_details">Property details</string>
     <string name="property_picture">Property picture</string>
+    <string name="media">Media</string>
+    <string name="property_location">Property location</string>
+    <string name="number_of_bedrooms">Number of bedrooms</string>
+    <string name="number_of_bathrooms">Number of bathrooms</string>
+    <string name="number_of_rooms">Number of rooms</string>
+    <string name="surface">Surface</string>
+    <string name="description">Description</string>
+    <string name="location">Location</string>
+    <string name="available_since">Available since</string>
+    <string name="real_estate_agent">Real estate agent</string>
+    <string name="point_of_interest">Point of interest</string>
 </resources>

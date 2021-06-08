@@ -8,6 +8,28 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="titleTextColor">@color/white</item>
+
+    </style>
+
+    <style name="detailTitle">
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <style name="detailSubtitle">
+        <item name="android:textSize">15sp</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <style name="detailIcon">
+        <item name="tint">@color/grey</item>
+    </style>
+
+    <style name="detailMediaText">
+        <item name="android:background">@color/blackTransparent</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
 </resources>

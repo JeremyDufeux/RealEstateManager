@@ -14,15 +14,15 @@
         android:supportsRtl="true"
         android:name=".RealEstateManagerApplication"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.ListActivity">
+        <activity android:name=".ui.list.ListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.DetailsActivity"/>
-        <activity android:name=".ui.AddPropertyActivity" />
+        <activity android:name=".ui.details.DetailsActivity"/>
+        <activity android:name=".ui.add.AddPropertyActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

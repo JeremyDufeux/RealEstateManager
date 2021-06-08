@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/fragment_detail_point_of_interest_item_iv"
+            style="@style/detailIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:contentDescription="@string/point_of_interest"
+            tools:srcCompat="@sample/interest" />
+
+        <TextView
+            android:id="@+id/fragment_detail_point_of_interest_item_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:textAlignment="center"
+            tools:text="@sample/properties.json/details/point_of_interest/value" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

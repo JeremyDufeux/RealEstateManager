@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.DetailsActivity">
+    tools:context=".ui.details.DetailsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/activity_details_toolbar"
@@ -19,7 +19,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/activity_details_fragmentContainer"
-        android:name="com.openclassrooms.realestatemanager.ui.DetailsFragment"
+        android:name="com.openclassrooms.realestatemanager.ui.details.DetailsFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

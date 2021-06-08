@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.listFragment.ListFragment"
+    tools:context=".ui.list.list.ListFragment"
     tools:listitem="@layout/fragment_list_item"
     android:id="@+id/fragment_list_rv">
 

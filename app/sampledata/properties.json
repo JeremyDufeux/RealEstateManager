@@ -22,6 +22,50 @@
         { "value": "$41,990,000" },
         { "value": "$13,990,000" },
         { "value": "$44,220,000" }
+      ],
+      "media_name": [
+        { "value": "Facade" },
+        { "value": "Lounge 1"},
+        { "value": "Lounge 2" },
+        { "value": "Kitchen" },
+        { "value": "Bathroom" },
+        { "value": "Bedroom" }
+      ]
+    }
+  ],
+  "details": [
+    {
+      "description" : [
+        {"value" : "Peaceful and quiet, this approximately 900sf home has much to offer. Spacious one bedroom with a separate dining alcove and a huge bedroom measuring 12x18'3. The full, windowed kitchen is original, just waiting for your creative touch.  This wonderful apartment has lots of storage with 3 large closets.  There are lovely, solid oak parquet flooring throughout.  Carnegie House is situated in the heart of midtown, steps to Central Park, CarnegieHall, Lincoln Center, the Theater District and the Time Warner Center. The full service building is pet-friendly, has a Concierge, valet, bike room, storage, and an on-site garage in which residents receive a 25% discount.Pied-a-terre, parent's buying for children, and co-purchasing are allowed.  There is a monthly special assessment of $287.24 through 2/28/22 not included in the maintenance"}
+      ],
+      "surface" : [
+        {"value" : "750 sq ft"}
+      ],
+      "rooms" : [
+        {"value" : "8"}
+      ],
+      "bathrooms" : [
+        {"value" : "2"}
+      ],
+      "bedrooms" : [
+        {"value" : "4"}
+      ],
+      "location" : [
+        {"value" : "740 Park Avenue\\nApt6/7A\\nNew York\\nUnited States"}
+      ],
+      "availability_date" : [
+        {"value" : "07/05/2021"}
+      ],
+      "agent" : [
+        {"value" : "Bob Wilson"}
+      ],
+      "point_of_interest" : [
+        {"value" : "School"},
+        {"value" : "Grocery"},
+        {"value" : "Park"},
+        {"value" : "Public transport"},
+        {"value" : "Swimming pool"},
+        {"value" : "Fitness club"}
       ]
     }
   ]

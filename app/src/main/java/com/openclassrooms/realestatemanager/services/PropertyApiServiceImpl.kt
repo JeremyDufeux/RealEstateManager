@@ -3,16 +3,16 @@ package com.openclassrooms.realestatemanager.services
 import com.openclassrooms.realestatemanager.extensions.generateProperties
 import com.openclassrooms.realestatemanager.models.Property
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 class PropertyApiServiceImpl : PropertyApiService {
     private val mProperties : MutableList<Property> = generateProperties().toMutableList()
 
-    override suspend fun propertyList() = withContext(Dispatchers.IO) {
-            val propertyList = generateProperties()
-            delay(1500)
-            propertyList
+    override suspend fun getPropertyList() = withContext(Dispatchers.IO) {
+            mProperties
+    }
+    override suspend fun getPropertyWithId(propertyId : String): Property = withContext(Dispatchers.IO) {
+        mProperties.find { it.id == propertyId}!!
     }
 
     override fun addProperty(property: Property) {
