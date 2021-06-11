@@ -60,8 +60,25 @@ class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
     }
 
     private val propertyObserver = Observer<Property> {
-        mMediaAdapter.updateList(it.picturesUriList)
-        mPointOfInterestListAdapter.updateList(it.pointOfInterest)
+
+        if(it.picturesUriList.isEmpty()){
+            mBinding.apply {
+                fragmentDetailMediaRv.visibility = View.GONE
+                fragmentDetailMediaTitleTv.visibility = View.GONE
+            }
+        } else {
+            mMediaAdapter.updateList(it.picturesUriList)
+        }
+
+        if(it.pointOfInterest.isEmpty()){
+            mBinding.apply {
+                fragmentDetailPointOfInterestRv.visibility = View.GONE
+                fragmentDetailPointOfInterestIv.visibility = View.GONE
+                fragmentDetailPointOfInterestTitleTv.visibility = View.GONE
+            }
+        } else {
+            mPointOfInterestListAdapter.updateList(it.pointOfInterest)
+        }
 
         GlideApp.with(this)
             .load(it.mapPictureUrl)
