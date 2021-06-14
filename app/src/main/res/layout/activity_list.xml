@@ -13,6 +13,7 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+        style="@style/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,8 +24,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_list_toolbar">
-    </com.google.android.material.tabs.TabLayout>
+        app:layout_constraintTop_toBottomOf="@+id/activity_list_toolbar"
+        app:tabSelectedTextColor="@color/colorAccent" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/activity_list_viewPager"

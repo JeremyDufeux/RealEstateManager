@@ -5,11 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.android.material.chip.Chip
+import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.modules.GlideApp
@@ -23,7 +26,7 @@ class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
     private val mViewModel: DetailsFragmentViewModel by viewModels()
     private lateinit var mBinding : FragmentDetailsBinding
     private val mMediaAdapter = MediaListAdapter(this)
-    private val mPointOfInterestListAdapter = PointOfInterestListAdapter()
+    //private val mPointOfInterestListAdapter = PointOfInterestListAdapter()
 
     companion object {
         fun newInstance() = DetailsFragment()
@@ -51,8 +54,8 @@ class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
         mBinding.fragmentDetailMediaRv.adapter = mMediaAdapter
         mBinding.fragmentDetailMediaRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        mBinding.fragmentDetailPointOfInterestRv.adapter = mPointOfInterestListAdapter
-        mBinding.fragmentDetailPointOfInterestRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        /*mBinding.fragmentDetailPointOfInterestRv.adapter = mPointOfInterestListAdapter
+        mBinding.fragmentDetailPointOfInterestRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)*/
     }
 
     fun setPropertyId(propertyId: String) {
@@ -72,12 +75,21 @@ class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
 
         if(it.pointOfInterest.isEmpty()){
             mBinding.apply {
-                fragmentDetailPointOfInterestRv.visibility = View.GONE
+                fragmentDetailPointOfInterestCg.visibility = View.GONE
                 fragmentDetailPointOfInterestIv.visibility = View.GONE
                 fragmentDetailPointOfInterestTitleTv.visibility = View.GONE
             }
         } else {
-            mPointOfInterestListAdapter.updateList(it.pointOfInterest)
+            it.pointOfInterest.map {
+                val image = ResourcesCompat.getDrawable(mBinding.root.context.resources, it.icon, null)
+                val chip = Chip(requireContext())
+                chip.text = it.description
+                chip.tag = it
+                chip.chipIcon = image
+                chip.setChipIconTintResource( R.color.colorAccent)
+                chip.isClickable = false
+                mBinding.fragmentDetailPointOfInterestCg.addView(chip)
+            }
         }
 
         GlideApp.with(this)
