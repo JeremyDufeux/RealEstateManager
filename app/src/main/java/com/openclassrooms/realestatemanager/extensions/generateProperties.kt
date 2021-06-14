@@ -25,8 +25,8 @@ fun generateProperties() : List<Property> {
                     "Pied-a-terre, parent's buying for children, and co-purchasing are allowed.  There is a monthly special assessment " +
                     "of $287.24 through 2/28/22 not included in the maintenance",
             picturesUriList = listOf(
-                Pair("https://photos.zillowstatic.com/fp/5f3b6091f47a36edac88ad461d7b5518-cc_ft_576.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/a1ac5668a4dcc1795e250b8f2779633f-o_a.jpg", "Bed")
+                Pair("https://photos.zillowstatic.com/fp/5f3b6091f47a36edac88ad461d7b5518-cc_ft_576.jpg", "Living room"),
+                Pair("https://photos.zillowstatic.com/fp/a1ac5668a4dcc1795e250b8f2779633f-o_a.jpg", "Bedroom")
             ),
             address = "45 Rockefeller Plaza",
             city = "Manhathan",
@@ -59,10 +59,10 @@ fun generateProperties() : List<Property> {
                     "doormen and repairmen. Pets, Pied-a-terres and sublets are allowed. A fabulous public school is located across the " +
                     "street, thus easing educational costs.",
             picturesUriList = listOf(
-                Pair("https://photos.zillowstatic.com/fp/1e71b46abea77c70303f76af0886cc30-cc_ft_768.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/d9fb3b499aee5de69f2c400c6f626d92-cc_ft_384.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/0dfa3f33fa13c6a6b3bcbc55894de2ce-cc_ft_384.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/a60feda35e489359a1f46c34fbc31106-cc_ft_384.jpg", "Bed")
+                Pair("https://photos.zillowstatic.com/fp/1e71b46abea77c70303f76af0886cc30-cc_ft_768.jpg", "Living room"),
+                Pair("https://photos.zillowstatic.com/fp/d9fb3b499aee5de69f2c400c6f626d92-cc_ft_384.jpg", "Bedroom"),
+                Pair("https://photos.zillowstatic.com/fp/0dfa3f33fa13c6a6b3bcbc55894de2ce-cc_ft_384.jpg", "View"),
+                Pair("https://photos.zillowstatic.com/fp/a60feda35e489359a1f46c34fbc31106-cc_ft_384.jpg", "Living room")
             ),
             address = "303 E 57th St APT 32B",
             city = "Manhathan",
@@ -99,18 +99,18 @@ fun generateProperties() : List<Property> {
                     "Did I mention there's 2 community olympic size pools? Travel is super convenient because the highway is just minutes " +
                     "away. Don’t let this fantastic dream home pass you by!",
             picturesUriList = listOf(
-                Pair("https://photos.zillowstatic.com/fp/14f1984c6ec05fb7a4356e4133934aea-cc_ft_768.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/75348e9428f0589a82cb70fe52df08bd-cc_ft_384.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/d74ac5d7059bf5528659234054c21481-cc_ft_384.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/d3e29b38f5c0a428df23d66d07cc16cd-cc_ft_384.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/d041509f327311831d711545a012c856-cc_ft_384.jpg", "Bed")
+                Pair("https://photos.zillowstatic.com/fp/14f1984c6ec05fb7a4356e4133934aea-cc_ft_768.jpg", "Dining room 1"),
+                Pair("https://photos.zillowstatic.com/fp/75348e9428f0589a82cb70fe52df08bd-cc_ft_384.jpg", "Living room"),
+                Pair("https://photos.zillowstatic.com/fp/d74ac5d7059bf5528659234054c21481-cc_ft_384.jpg", "Kitchen"),
+                Pair("https://photos.zillowstatic.com/fp/d3e29b38f5c0a428df23d66d07cc16cd-cc_ft_384.jpg", "Bathroom"),
+                Pair("https://photos.zillowstatic.com/fp/d041509f327311831d711545a012c856-cc_ft_384.jpg", "Dining room 2")
             ),
             address = "32 Barclay Cir",
             city = "Staten Island",
             postalCode = "NY 10312",
             country = "USA",
-            latitude = 40.55390377650278,
-            longitude = -74.19467206015342,
+            latitude = -74.19466925910078,
+            longitude = 40.553881452248525,
             pointOfInterest = listOf(PointsOfInterest.SCHOOL, PointsOfInterest.SWIMMING_POOL, PointsOfInterest.PUBLIC_TRANSPORT),
             available = true,
             saleDate = Calendar.getInstance().also { it.set(2021, 4, 28) },
@@ -132,11 +132,11 @@ fun generateProperties() : List<Property> {
                     "The extraordinary private loggia is 1,367 sq ft and provides for an elevated, sheltered open-air entertaining experience " +
                     "unrivalled on Central Park South",
             picturesUriList = listOf(
-                Pair("https://photos.zillowstatic.com/fp/82a3ef885a3722b2483e689c1a215085-cc_ft_768.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/85dfc4e5f85cc500d004d390337fc69e-cc_ft_384.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/eafb244ea6f7eebb37395a4a8095354e-cc_ft_384.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/d25ca12dc14670087a0a186ecf1a4450-cc_ft_384.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/bca7129277de8af2f982c78e57be11ef-cc_ft_384.jpg", "Bed")
+                Pair("https://photos.zillowstatic.com/fp/82a3ef885a3722b2483e689c1a215085-cc_ft_768.jpg", "Living room 1"),
+                Pair("https://photos.zillowstatic.com/fp/85dfc4e5f85cc500d004d390337fc69e-cc_ft_384.jpg", "Stairs"),
+                Pair("https://photos.zillowstatic.com/fp/eafb244ea6f7eebb37395a4a8095354e-cc_ft_384.jpg", "Bathroom"),
+                Pair("https://photos.zillowstatic.com/fp/d25ca12dc14670087a0a186ecf1a4450-cc_ft_384.jpg", "Living room 2"),
+                Pair("https://photos.zillowstatic.com/fp/bca7129277de8af2f982c78e57be11ef-cc_ft_384.jpg", "Living room 3")
             ),
             address = "111 W 57th St PENTHOUSE 72",
             city = "Manhathan",
@@ -162,9 +162,9 @@ fun generateProperties() : List<Property> {
                     "2 Baths on the 1st Floor, and Living Room / Dining Room, Eat-In Kitchen, 3 Bedrooms and 2 Baths on the 2nd Floor. Also there is " +
                     "a Full Finished Basement and a Private Driveway. Don't miss out on the opportunity to own a home at an affordable price!!!",
             picturesUriList = listOf(
-                Pair("https://photos.zillowstatic.com/fp/91c4571f75dbb3090154016b8b504e60-cc_ft_768.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/ecec97465481bdde4c0b095fd6ae7119-cc_ft_384.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/edb05161a372ba4914b63f5c96cdbcd8-cc_ft_384.jpg", "Bed")
+                Pair("https://photos.zillowstatic.com/fp/91c4571f75dbb3090154016b8b504e60-cc_ft_768.jpg", "Facade 1"),
+                Pair("https://photos.zillowstatic.com/fp/ecec97465481bdde4c0b095fd6ae7119-cc_ft_384.jpg", "Facade 2"),
+                Pair("https://photos.zillowstatic.com/fp/edb05161a372ba4914b63f5c96cdbcd8-cc_ft_384.jpg", "Facade 3")
             ),
             address = "173-11 110th Ave, Jamaica",
             city = "Brooklyn",
@@ -188,10 +188,10 @@ fun generateProperties() : List<Property> {
             bedroomsAmount = 1,
             description = "This 800 square foot condo home has 2 bedrooms and 1.0 bathrooms. This home is located at 323 Edgecombe Ave APT 7, New York, NY 10031",
             picturesUriList = listOf(
-                Pair("https://photos.zillowstatic.com/fp/8e335a55b050bf45a3d2777fd1060659-cc_ft_768.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/85b8b974a55f0882752ad29014522770-cc_ft_384.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/58cab65439d54afab2b5121a31f1bff8-cc_ft_384.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/241437edd3e02feb8f9518f59a18d875-cc_ft_384.jpg", "Bed")
+                Pair("https://photos.zillowstatic.com/fp/8e335a55b050bf45a3d2777fd1060659-cc_ft_768.jpg", "Dining room"),
+                Pair("https://photos.zillowstatic.com/fp/85b8b974a55f0882752ad29014522770-cc_ft_384.jpg", "Living room 1"),
+                Pair("https://photos.zillowstatic.com/fp/58cab65439d54afab2b5121a31f1bff8-cc_ft_384.jpg", "Living room 2"),
+                Pair("https://photos.zillowstatic.com/fp/241437edd3e02feb8f9518f59a18d875-cc_ft_384.jpg", "Kitchen")
             ),
             address = "323 Edgecombe Ave APT 7",
             city = "Harlem",
@@ -223,11 +223,11 @@ fun generateProperties() : List<Property> {
                     "Located in Prime Greenpoint on a picturesque tree lined block minutes from transport, restaurants, bars, shops and McCarren Park.\n" +
                     "This gem won't last - schedule your viewing today.",
             picturesUriList = listOf(
-                Pair("https://photos.zillowstatic.com/fp/f259812ea3129d47389a09ca7d51a53c-cc_ft_768.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/f27d3b7c4ae9c447331dddefa79e85b3-cc_ft_384.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/bb4e835dc40cef310d690fae2296a972-cc_ft_384.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/cbde3883e38a4e44919cc079ace4f232-cc_ft_384.jpg", "Bed"),
-                Pair("https://photos.zillowstatic.com/fp/f2dfb51bae1056b64b772e3b504928b5-cc_ft_384.jpg", "Bed")
+                Pair("https://photos.zillowstatic.com/fp/f259812ea3129d47389a09ca7d51a53c-cc_ft_768.jpg", "Facade"),
+                Pair("https://photos.zillowstatic.com/fp/f27d3b7c4ae9c447331dddefa79e85b3-cc_ft_384.jpg", "Living room 1"),
+                Pair("https://photos.zillowstatic.com/fp/bb4e835dc40cef310d690fae2296a972-cc_ft_384.jpg", "Living room 2"),
+                Pair("https://photos.zillowstatic.com/fp/cbde3883e38a4e44919cc079ace4f232-cc_ft_384.jpg", "Hall"),
+                Pair("https://photos.zillowstatic.com/fp/f2dfb51bae1056b64b772e3b504928b5-cc_ft_384.jpg", "Bedroom")
             ),
             address = "651 Leonard St",
             city = "Greenpoint",
