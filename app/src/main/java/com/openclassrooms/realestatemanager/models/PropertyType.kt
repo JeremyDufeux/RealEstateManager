@@ -8,6 +8,10 @@ enum class PropertyType(val description : String) {
     PENTHOUSE("Penthouse"),
     MANOR("Manor"),
     LAND("Land"),
-    RANCH("RANCH"),
-    PRIVATE_ISLAND("Private Island")
+    RANCH("Ranch"),
+    PRIVATE_ISLAND("Private Island");
+
+    override fun toString(): String {
+        return description
+    }
 }

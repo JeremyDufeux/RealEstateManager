@@ -19,5 +19,18 @@
     <string name="location">Location</string>
     <string name="available_since">Available since</string>
     <string name="real_estate_agent">Real estate agent</string>
-    <string name="point_of_interest">Point of interest</string>
+    <string name="point_of_interest">Points of interest</string>
+    <string name="property_type">Property type</string>
+    <string name="price">Price</string>
+    <string name="dollar_symbol">$</string>
+    <string name="add_media">Add media</string>
+    <string name="edit">Edit</string>
+    <string name="address_line_1">Address line 1</string>
+    <string name="address_line_2">Address line 2</string>
+    <string name="city">City</string>
+    <string name="postal_code">Postal code</string>
+    <string name="country">Country</string>
+    <string name="sq_ft">sq ft</string>
+    <string name="add">Add</string>
+    <string name="save">Save</string>
 </resources>

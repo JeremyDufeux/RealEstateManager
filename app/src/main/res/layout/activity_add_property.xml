@@ -1,20 +1,346 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.add.AddPropertyActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/activity_add_property_toolbar"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+        style="@style/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/activity_add_property_type_label_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/property_type"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/activity_add_property_type_sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_add_property_type_label_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/activity_add_property_type_label_tv" />
+
+            <TextView
+                android:id="@+id/activity_add_property_price_symbol_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/dollar_symbol"
+                android:textSize="25sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_type_label_tv" />
+
+            <EditText
+                android:id="@+id/activity_add_property_price_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:autofillHints="Price"
+                android:hint="@string/price"
+                android:inputType="numberSigned|number"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_add_property_price_symbol_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/activity_add_property_price_symbol_tv"
+                app:layout_constraintTop_toTopOf="@+id/activity_add_property_price_symbol_tv" />
+
+            <ImageButton
+                android:id="@+id/activity_add_property_add_media_ib"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_marginTop="15dp"
+                android:contentDescription="@string/add_media"
+                android:src="@drawable/ic_add_photo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_price_et"
+                app:tint="@color/colorAccent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/activity_add_property_medias_rv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/activity_add_property_add_media_ib"
+                app:layout_constraintTop_toTopOf="@+id/activity_add_property_add_media_ib"
+                tools:itemCount="1"
+                tools:listitem="@layout/activity_add_property_medias_item" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/activity_add_property_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="activity_add_property_add_media_ib,
+                activity_add_property_medias_rv" />
+
+            <ImageView
+                android:id="@+id/activity_add_property_surface_iv"
+                style="@style/detailIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/surface"
+                android:src="@drawable/ic_surface"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_add_property_surface_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/activity_add_property_surface_et" />
+
+            <EditText
+                android:id="@+id/activity_add_property_surface_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:autofillHints="@string/surface"
+                android:hint="@string/surface"
+                android:inputType="numberSigned|number"
+                app:layout_constraintEnd_toStartOf="@+id/activity_add_property_surface_symbol_tv"
+                app:layout_constraintStart_toEndOf="@+id/activity_add_property_surface_iv"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_barrier" />
+
+            <TextView
+                android:id="@+id/activity_add_property_surface_symbol_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sq_ft"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_add_property_surface_et"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/activity_add_property_surface_et" />
+
+            <ImageView
+                android:id="@+id/activity_add_property_rooms_iv"
+                style="@style/detailIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/number_of_rooms"
+                android:src="@drawable/ic_home"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_add_property_rooms_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/activity_add_property_rooms_et" />
+
+            <EditText
+                android:id="@+id/activity_add_property_rooms_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:autofillHints="@string/surface"
+                android:hint="@string/number_of_rooms"
+                android:inputType="numberSigned|number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/activity_add_property_rooms_iv"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_surface_et" />
+
+            <ImageView
+                android:id="@+id/activity_add_property_bathrooms_iv"
+                style="@style/detailIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/number_of_bathrooms"
+                android:src="@drawable/ic_bathroom"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_add_property_bathrooms_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/activity_add_property_bathrooms_et" />
+
+            <EditText
+                android:id="@+id/activity_add_property_bathrooms_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:autofillHints="@string/number_of_bathrooms"
+                android:hint="@string/number_of_bathrooms"
+                android:inputType="numberSigned|number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/activity_add_property_bathrooms_iv"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_rooms_et" />
+
+            <ImageView
+                android:id="@+id/activity_add_property_bedrooms_iv"
+                style="@style/detailIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/number_of_bathrooms"
+                android:src="@drawable/ic_bedroom"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_add_property_bedrooms_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/activity_add_property_bedrooms_et" />
+
+            <EditText
+                android:id="@+id/activity_add_property_bedrooms_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:autofillHints="@string/number_of_bedrooms"
+                android:hint="@string/number_of_bedrooms"
+                android:inputType="numberSigned|number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/activity_add_property_bedrooms_iv"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_bathrooms_et" />
+
+            <ImageView
+                android:id="@+id/activity_add_property_address_iv"
+                style="@style/detailIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/number_of_bathrooms"
+                android:src="@drawable/ic_pin"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_add_property_address_line1_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/activity_add_property_address_line1_et" />
+
+            <EditText
+                android:id="@+id/activity_add_property_address_line1_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:autofillHints="@string/address_line_1"
+                android:hint="@string/address_line_1"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/activity_add_property_address_iv"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_bedrooms_et"/>
+
+            <EditText
+                android:id="@+id/activity_add_property_address_line2_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:autofillHints="@string/address_line_2"
+                android:hint="@string/address_line_2"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/activity_add_property_address_iv"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_address_line1_et" />
+
+            <EditText
+                android:id="@+id/activity_add_property_address_city_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="5dp"
+                android:autofillHints="@string/city"
+                android:hint="@string/city"
+                android:inputType="text"
+                app:layout_constraintEnd_toStartOf="@+id/activity_add_property_address_postal_code_et"
+                app:layout_constraintStart_toEndOf="@+id/activity_add_property_address_iv"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_address_line2_et" />
+
+            <EditText
+                android:id="@+id/activity_add_property_address_postal_code_et"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/postal_code"
+                android:hint="@string/postal_code"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_address_line2_et" />
+
+            <EditText
+                android:id="@+id/activity_add_property_address_country_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:autofillHints="@string/country"
+                android:hint="@string/country"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/activity_add_property_address_iv"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_address_postal_code_et" />
+
+            <ImageView
+                android:id="@+id/activity_add_property_point_of_interest_iv"
+                style="@style/detailIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="15dp"
+                android:contentDescription="@string/point_of_interest"
+                android:src="@drawable/ic_near"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_address_country_et" />
+
+            <TextView
+                android:id="@+id/activity_add_property_point_of_interest_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/point_of_interest"
+                android:textSize="18sp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                app:layout_constraintStart_toEndOf="@+id/activity_add_property_point_of_interest_iv"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_address_country_et" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/activity_add_property_point_of_interest_cg"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/activity_add_property_point_of_interest_iv"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_point_of_interest_tv" />
+
+            <ImageView
+                android:id="@+id/activity_add_property_agent_iv"
+                style="@style/detailIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/real_estate_agent"
+                android:src="@drawable/ic_person"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_add_property_agent_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/activity_add_property_agent_et" />
+
+            <EditText
+                android:id="@+id/activity_add_property_agent_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:autofillHints="@string/real_estate_agent"
+                android:hint="@string/real_estate_agent"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/activity_add_property_agent_iv"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_point_of_interest_cg"/>
+
+            <Button
+                android:id="@+id/activity_add_property_save_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/save"
+                app:layout_constraintTop_toBottomOf="@id/activity_add_property_agent_et"
+                app:backgroundTint="@color/colorAccent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</LinearLayout>
