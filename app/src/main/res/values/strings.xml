@@ -33,4 +33,5 @@
     <string name="sq_ft">sq ft</string>
     <string name="add">Add</string>
     <string name="save">Save</string>
+    <string name="address_line_2_optional">Address line 2 (Optional)</string>
 </resources>

@@ -14,10 +14,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding
+import com.openclassrooms.realestatemanager.extensions.formatCalendarToString
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.modules.GlideApp
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.DateFormat
 
 private const val TAG = "DetailsFragment"
 
@@ -26,7 +26,6 @@ class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
     private val mViewModel: DetailsFragmentViewModel by viewModels()
     private lateinit var mBinding : FragmentDetailsBinding
     private val mMediaAdapter = MediaListAdapter(this)
-    //private val mPointOfInterestListAdapter = PointOfInterestListAdapter()
 
     companion object {
         fun newInstance() = DetailsFragment()
@@ -53,9 +52,6 @@ class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
     private fun configureRecyclerViews() {
         mBinding.fragmentDetailMediaRv.adapter = mMediaAdapter
         mBinding.fragmentDetailMediaRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-
-        /*mBinding.fragmentDetailPointOfInterestRv.adapter = mPointOfInterestListAdapter
-        mBinding.fragmentDetailPointOfInterestRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)*/
     }
 
     fun setPropertyId(propertyId: String) {
@@ -109,7 +105,7 @@ class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
             fragmentDetailBedroomsTv.text = it.bedroomsAmount.toString()
             val address = "${it.address}\n${it.city}\n${it.postalCode}\n${it.country}"
             fragmentDetailLocationTv.text = address
-            fragmentDetailAvailableTv.text = DateFormat.getDateInstance(DateFormat.LONG).format(it.saleDate.time)
+            fragmentDetailAvailableTv.text = formatCalendarToString(it.saleDate.time)
             fragmentDetailAgentTv.text = it.agentName
         }
 
