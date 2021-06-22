@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MapFragmentViewModel @Inject constructor(
-    private val mPropertyRepository: PropertyRepository
+    private val mPropertyRepository: PropertyRepository,
     ) : ViewModel(){
 
     private val mPropertyListMutableLiveData : MutableLiveData<List<Property>> = MutableLiveData()

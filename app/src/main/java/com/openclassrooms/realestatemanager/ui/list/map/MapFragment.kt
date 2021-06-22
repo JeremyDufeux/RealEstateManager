@@ -1,15 +1,22 @@
 package com.openclassrooms.realestatemanager.ui.list.map
 
+import android.Manifest.permission
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
-import android.util.Log
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -22,16 +29,21 @@ import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.ui.details.DetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
+
 private const val TAG = "MapFragment"
+const val DEFAULT_ZOOM_VALUE = 15f
 
 @AndroidEntryPoint
 class MapFragment : Fragment(),
     OnMapReadyCallback,
-    GoogleMap.OnMarkerClickListener {
+    GoogleMap.OnMarkerClickListener{
 
     private val mViewModel: MapFragmentViewModel by viewModels()
-    lateinit var mBinding : FragmentMapBinding
-    lateinit var mMap : GoogleMap
+    private lateinit var mBinding : FragmentMapBinding
+    private lateinit var mMap : GoogleMap
+    lateinit var mLocation: Location
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
 
     companion object {
         fun newInstance() = MapFragment()
@@ -39,12 +51,27 @@ class MapFragment : Fragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        configureLocationClient()
+    }
+
+    private fun configureLocationClient() {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+
+                locationResult ?: return
+                for (location in locationResult.locations){
+                    mLocation = location
+                }
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-
         mBinding = FragmentMapBinding.inflate(layoutInflater)
+        mBinding.mapViewFragmentLocationBtn.setOnClickListener { requestFocusToLocation() }
 
         configureMaps()
 
@@ -65,6 +92,7 @@ class MapFragment : Fragment(),
         val cameraUpdate : CameraUpdate = CameraUpdateFactory.newLatLngZoom(LatLng(40.75607001232621, -73.98297695576221), 12F)
         mMap.moveCamera(cameraUpdate)
         startObserver()
+        enableLocation()
     }
 
     private fun startObserver() {
@@ -82,17 +110,136 @@ class MapFragment : Fragment(),
             }
             val marker = mMap.addMarker(markerOptions)
             marker?.tag = property.id
-
         }
     }
 
+    // ---------------
+    // Map interactions
+    // ---------------
+
     override fun onMarkerClick(marker : Marker): Boolean {
-        Log.d(TAG, "onMarkerClick: ${marker.tag}")
         marker.tag?.let {
             val intent = Intent(requireContext(), DetailsActivity::class.java)
             intent.putExtra(BUNDLE_KEY_PROPERTY_ID, it as String)
             startActivity(intent)
         }
         return true
+    }
+
+    private fun requestFocusToLocation() {
+        if (hasLocationPermission()) {
+            if(this::mLocation.isInitialized) {
+                focusToLocation()
+            }
+            else{
+                configureLocation()
+            }
+        } else {
+            enableLocation()
+        }
+    }
+
+    private fun focusToLocation() {
+        val latLng = LatLng(mLocation.latitude, mLocation.longitude)
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM_VALUE)
+        mMap.animateCamera(cameraUpdate)
+    }
+
+    // ---------------
+    // Location permissions
+    // ---------------
+
+    private fun enableLocation() {
+        when {
+            hasLocationPermission() -> {
+                configureLocation()
+            }
+            else -> {
+                showLocationRequestDialog()
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun configureLocation() {
+        mMap.isMyLocationEnabled = true
+
+
+        mFusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            if (location != null) {
+                mLocation = location
+                focusToLocation()
+            }
+        }
+
+        val locationRequest = LocationRequest.create()
+        locationRequest.interval = 5000
+        locationRequest.fastestInterval = 1000
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        mFusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
+    }
+
+    private fun showLocationRequestDialog() {
+        val alertDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
+        alertDialog.setTitle(getString(R.string.location_request))
+        alertDialog.setMessage(getString(R.string.location_request_dialog_message))
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok)) { dialog, _ ->
+            dialog.dismiss()
+            openRequestPermissionLauncher()
+        }
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel)) { dialog, _ ->
+            dialog.dismiss()
+        }
+        alertDialog.show()
+    }
+
+    private fun openRequestPermissionLauncher(){
+        requestPermissionLauncher.launch(
+            permission.ACCESS_COARSE_LOCATION)
+    }
+
+    private fun hasLocationPermission() : Boolean{
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission())
+    {
+            isGranted: Boolean ->
+                if (isGranted) {
+                    enableLocation()
+                }
+                else {
+                    showLocationDenialDialog()
+                }
+
+    }
+
+    private fun showLocationDenialDialog() {
+        val alertDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
+        alertDialog.setTitle(getString(R.string.location_permission_denied))
+        alertDialog.setMessage(getString(R.string.location_permission_denied_dialog_message))
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok)) { dialog, _ ->
+            dialog.dismiss()
+        }
+        alertDialog.show()
+    }
+
+    // ---------------
+    // On pause actions
+    // ---------------
+
+    override fun onPause() {
+        super.onPause()
+        stopLocationUpdates()
+    }
+
+    private fun stopLocationUpdates() {
+        mFusedLocationClient.removeLocationUpdates(locationCallback)
     }
 }

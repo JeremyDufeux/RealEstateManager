@@ -13,11 +13,11 @@ import com.openclassrooms.realestatemanager.ui.list.list.ListFragment
 import com.openclassrooms.realestatemanager.ui.list.map.MapFragment
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val TAG = "ListActivity"
+
 @AndroidEntryPoint
 class ListActivity : AppCompatActivity() {
-    private val TAG = "ListActivity"
-
-    lateinit var mBinding : ActivityListBinding
+    private lateinit var mBinding : ActivityListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

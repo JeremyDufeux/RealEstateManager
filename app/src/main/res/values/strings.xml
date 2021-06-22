@@ -34,4 +34,11 @@
     <string name="add">Add</string>
     <string name="save">Save</string>
     <string name="address_line_2_optional">Address line 2 (Optional)</string>
+    <string name="locate_me">Locate me</string>
+    <string name="location_permission_denied">Location permission denied</string>
+    <string name="location_permission_denied_dialog_message">If you change your mind, you can allow this app to get your location in phone settings.</string>
+    <string name="location_request">Location needed</string>
+    <string name="location_request_dialog_message">Your location is needed to locate you on the map, do you allow this app to use your location?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

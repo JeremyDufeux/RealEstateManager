@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.fragment.app.FragmentContainerView
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map_view_fragment_map"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    tools:context=".ui.list.map.MapFragment"/>
+    android:id="@+id/map_view_fragment_cl"
+    tools:context=".ui.list.map.MapFragment">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map_view_fragment_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+    />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/map_view_fragment_location_btn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|end"
+    android:layout_margin="15dp"
+    app:backgroundTint="@color/white"
+    android:contentDescription="@string/locate_me"
+    android:src="@drawable/ic_locate"
+    app:borderWidth="0dp"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

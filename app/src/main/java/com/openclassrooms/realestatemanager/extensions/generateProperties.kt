@@ -109,13 +109,13 @@ fun generateProperties() : List<Property> {
             city = "Staten Island",
             postalCode = "NY 10312",
             country = "USA",
-            latitude = -74.19466925910078,
-            longitude = 40.553881452248525,
+            latitude = 40.553881452248525,
+            longitude = -74.19466925910078,
             pointOfInterest = listOf(PointsOfInterest.SCHOOL, PointsOfInterest.SWIMMING_POOL, PointsOfInterest.PUBLIC_TRANSPORT),
             available = true,
             saleDate = Calendar.getInstance().also { it.set(2021, 4, 28) },
             agentName = "Douglas Elliman",
-            mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.19467206015342,40.55390377650278&zoom=16&marker=lonlat:-73.19467206015342,40.55390377650278;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
+            mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:40.55390377650278,-73.19467206015342&zoom=16&marker=lonlat:-73.19467206015342,40.55390377650278;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
         ),
         Property(
             id = "4",
