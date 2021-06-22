@@ -1,9 +1,12 @@
 package com.openclassrooms.realestatemanager.ui.add
 
 import android.annotation.SuppressLint
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.widget.AdapterView
@@ -24,7 +27,7 @@ private const val TAG = "AddPropertyActivity"
 @AndroidEntryPoint
 class AddPropertyActivity : AppCompatActivity() {
     private val mViewModel: AddActivityViewModel by viewModels()
-    lateinit var mBinding: ActivityAddPropertyBinding
+    private lateinit var mBinding: ActivityAddPropertyBinding
 
     override fun onCreate(savedInstancProperty: Bundle?) {
         super.onCreate(savedInstancProperty)
@@ -39,28 +42,36 @@ class AddPropertyActivity : AppCompatActivity() {
     }
 
     private fun configureUi() {
-        val adapter : ArrayAdapter<PropertyType> = ArrayAdapter<PropertyType>(this, android.R.layout.simple_spinner_item, PropertyType.values())
+        val adapter: ArrayAdapter<PropertyType> = ArrayAdapter<PropertyType>(
+            this,
+            android.R.layout.simple_spinner_item,
+            PropertyType.values()
+        )
         mBinding.activityAddPropertyTypeSp.adapter = adapter
 
-        for (point in PointsOfInterest.values()){
+        for (point in PointsOfInterest.values()) {
             val chip = layoutInflater.inflate(
                 R.layout.single_chip_layout,
                 mBinding.activityAddPropertyPointOfInterestCg,
-                false) as Chip
+                false
+            ) as Chip
             chip.text = point.description
             chip.tag = point
-            val image = ResourcesCompat.getDrawable(mBinding.root.context.resources, point.icon, null)
+            val image =
+                ResourcesCompat.getDrawable(mBinding.root.context.resources, point.icon, null)
             chip.chipIcon = image
             chip.isCheckable = true
+            if (mViewModel.pointOfInterestList.contains(point)) {
+                chip.isChecked = true
+            }
             chip.setOnCheckedChangeListener { buttonView, isChecked ->
-                if(isChecked) {
+                if (isChecked) {
                     mViewModel.pointOfInterestList.add(buttonView.tag as PointsOfInterest)
-                } else{
+                } else {
                     mViewModel.pointOfInterestList.remove(buttonView.tag as PointsOfInterest)
                 }
             }
             mBinding.activityAddPropertyPointOfInterestCg.addView(chip)
-
         }
     }
 
@@ -97,7 +108,12 @@ class AddPropertyActivity : AppCompatActivity() {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         override fun afterTextChanged(s: Editable?) {
-            mViewModel.price = s.toString().toInt()
+            try {
+                mViewModel.price = s.toString().toLong()
+            } catch (e : Exception){
+                mBinding.activityAddPropertyPriceEt.setText(mViewModel.price.toString())
+                mBinding.activityAddPropertyPriceEt.setSelection(mViewModel.price.toString().length)
+            }
             checkFields()
         }
     }
@@ -106,7 +122,12 @@ class AddPropertyActivity : AppCompatActivity() {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         override fun afterTextChanged(s: Editable?) {
-            mViewModel.surface = s.toString().toInt()
+            try {
+                mViewModel.surface = s.toString().toInt()
+            } catch (e : Exception){
+                mBinding.activityAddPropertySurfaceEt.setText(mViewModel.surface.toString())
+                mBinding.activityAddPropertySurfaceEt.setSelection(mViewModel.surface.toString().length)
+            }
             checkFields()
         }
     }
@@ -115,7 +136,12 @@ class AddPropertyActivity : AppCompatActivity() {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         override fun afterTextChanged(s: Editable?) {
-            mViewModel.room = s.toString().toInt()
+            try {
+                mViewModel.rooms = s.toString().toInt()
+            } catch (e : Exception){
+                mBinding.activityAddPropertyRoomsEt.setText(mViewModel.rooms.toString())
+                mBinding.activityAddPropertyRoomsEt.setSelection(mViewModel.rooms.toString().length)
+            }
             checkFields()
         }
     }
@@ -124,7 +150,12 @@ class AddPropertyActivity : AppCompatActivity() {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         override fun afterTextChanged(s: Editable?) {
-            mViewModel.bathroom = s.toString().toInt()
+            try {
+                mViewModel.bathrooms = s.toString().toInt()
+            } catch (e : Exception){
+                mBinding.activityAddPropertyBathroomsEt.setText(mViewModel.bathrooms.toString())
+                mBinding.activityAddPropertyBathroomsEt.setSelection(mViewModel.bathrooms.toString().length)
+            }
             checkFields()
         }
     }
@@ -133,7 +164,12 @@ class AddPropertyActivity : AppCompatActivity() {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         override fun afterTextChanged(s: Editable?) {
-            mViewModel.bedroom = s.toString().toInt()
+            try {
+                mViewModel.bedrooms = s.toString().toInt()
+            } catch (e : Exception){
+                mBinding.activityAddPropertyBedroomsEt.setText(mViewModel.bedrooms.toString())
+                mBinding.activityAddPropertyBedroomsEt.setSelection(mViewModel.bedrooms.toString().length)
+            }
             checkFields()
         }
     }
@@ -201,7 +237,27 @@ class AddPropertyActivity : AppCompatActivity() {
     }
 
     private fun saveProperty(){
+        getPropertyLocation()
         mViewModel.saveProperty()
+        finish()
+    }
+
+    private fun getPropertyLocation() {
+        val coder = Geocoder(this)
+        val addressResult: List<Address?>
+
+        try {
+            val address = "${mViewModel.address1} " +
+                    "${mViewModel.address2} " +
+                    "${mViewModel.city} " +
+                    "${mViewModel.postalCode} " +
+                    mViewModel.country
+            addressResult = coder.getFromLocationName(address, 1)
+            mViewModel.latitude = addressResult[0]?.latitude!!
+            mViewModel.longitude = addressResult[0]?.longitude!!
+        } catch (e : Exception){
+            Log.d(TAG, "getPropertyLocation: address not found")
+        }
     }
 
     private fun checkFields(){

@@ -103,13 +103,15 @@ class MapFragment : Fragment(),
         mMap.clear()
 
         for(property in it){
-            val markerOptions = MarkerOptions()
-            markerOptions.apply {
-                position(LatLng(property.latitude, property.longitude))
-                icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker))
+            if(property.latitude != 0.0 && property.longitude != 0.0) {
+                val markerOptions = MarkerOptions()
+                markerOptions.apply {
+                    position(LatLng(property.latitude, property.longitude))
+                    icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker))
+                }
+                val marker = mMap.addMarker(markerOptions)
+                marker?.tag = property.id
             }
-            val marker = mMap.addMarker(markerOptions)
-            marker?.tag = property.id
         }
     }
 

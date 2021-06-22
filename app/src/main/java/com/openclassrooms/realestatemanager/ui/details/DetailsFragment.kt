@@ -60,13 +60,13 @@ class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
 
     private val propertyObserver = Observer<Property> {
 
-        if(it.picturesUriList.isEmpty()){
+        if(it.mediaUriList.isEmpty()){
             mBinding.apply {
                 fragmentDetailMediaRv.visibility = View.GONE
                 fragmentDetailMediaTitleTv.visibility = View.GONE
             }
         } else {
-            mMediaAdapter.updateList(it.picturesUriList)
+            mMediaAdapter.updateList(it.mediaUriList)
         }
 
         if(it.pointOfInterest.isEmpty()){

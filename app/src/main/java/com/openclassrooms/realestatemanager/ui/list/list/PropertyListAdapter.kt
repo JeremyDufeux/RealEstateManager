@@ -2,10 +2,12 @@ package com.openclassrooms.realestatemanager.ui.list.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.modules.GlideApp
@@ -41,19 +43,30 @@ class PropertyListAdapter(var mPropertyListener: PropertyListener) : RecyclerVie
         mPropertyList.submitList(list)
     }
 
-    inner class PropertyViewHolder(val mBinding : FragmentListItemBinding, val mPropertyListener: PropertyListener) : RecyclerView.ViewHolder(mBinding.root) {
+    inner class PropertyViewHolder(private val mBinding : FragmentListItemBinding,
+                                   private val mPropertyListener: PropertyListener
+                                   ) : RecyclerView.ViewHolder(mBinding.root) {
 
         fun updateViewHolder(property: Property) {
             val context = mBinding.root.context
 
-            GlideApp.with(context)
-                .load(property.picturesUriList[0].first)
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(mBinding.fragmentListItemIv)
+            if (property.mediaUriList.isNotEmpty()) {
+                GlideApp.with(context)
+                    .load(property.mediaUriList[0].first)
+                    .centerCrop()
+                    .timeout(2000)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(mBinding.fragmentListItemIv)
+            } else{
+                GlideApp.with(context)
+                    .load(ResourcesCompat.getDrawable(context.resources, R.drawable.ic_building, null))
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(mBinding.fragmentListItemIv)
+            }
 
             mBinding.fragmentListItemCityTv.text = property.city
-            mBinding.fragmentListItemPriceTv.text = String.format("$%,d",property.price)
+            mBinding.fragmentListItemPriceTv.text = String.format("$%,d", property.price)
             mBinding.fragmentListItemTypeTv.text = property.type.description
 
             mBinding.root.setOnClickListener { mPropertyListener.onPropertyClick(adapterPosition) }

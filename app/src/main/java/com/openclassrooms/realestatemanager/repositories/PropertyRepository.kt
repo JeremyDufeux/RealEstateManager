@@ -10,7 +10,7 @@ class PropertyRepository @Inject constructor(private val propertyApiService: Pro
 
     suspend fun getPropertyList() : List<Property> = propertyApiService.getPropertyList()
 
-    suspend fun getPropertyWithId(propertyId: String): Property =propertyApiService.getPropertyWithId(propertyId)
+    suspend fun getPropertyWithId(propertyId: String): Property = propertyApiService.getPropertyWithId(propertyId)
 
     fun addProperty(property: Property) {
         propertyApiService.addProperty(property)
