@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.ui.list.list
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,6 +59,7 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
     }
 
     private val propertyListObserver = Observer<List<Property>> {
+        Log.d(TAG, "${it.size}: ")
         mPropertyList = it
         mAdapter.updateList(mPropertyList)
     }

@@ -242,7 +242,7 @@ class AddPropertyActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun getPropertyLocation() {
+    private fun getPropertyLocation() { // Todo
         val coder = Geocoder(this)
         val addressResult: List<Address?>
 

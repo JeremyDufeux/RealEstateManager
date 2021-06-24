@@ -24,9 +24,9 @@ fun generateProperties() : List<Property> {
                     "has a Concierge, valet, bike room, storage, and an on-site garage in which residents receive a 25% discount. " +
                     "Pied-a-terre, parent's buying for children, and co-purchasing are allowed.  There is a monthly special assessment " +
                     "of $287.24 through 2/28/22 not included in the maintenance",
-            mediaUriList = listOf(
-                Pair("https://photos.zillowstatic.com/fp/5f3b6091f47a36edac88ad461d7b5518-cc_ft_576.jpg", "Living room"),
-                Pair("https://photos.zillowstatic.com/fp/a1ac5668a4dcc1795e250b8f2779633f-o_a.jpg", "Bedroom")
+            mediaUriList = hashMapOf(
+                "https://photos.zillowstatic.com/fp/5f3b6091f47a36edac88ad461d7b5518-cc_ft_576.jpg" to "Living room",
+                "https://photos.zillowstatic.com/fp/a1ac5668a4dcc1795e250b8f2779633f-o_a.jpg" to "Bedroom"
             ),
             address = "45 Rockefeller Plaza",
             city = "Manhathan",
@@ -36,7 +36,7 @@ fun generateProperties() : List<Property> {
             longitude = -73.97983110154246,
             pointOfInterest = listOf(PointsOfInterest.SCHOOL, PointsOfInterest.PARK),
             available = true,
-            saleDate = Calendar.getInstance().also { it.set(2021, 5, 20) },
+            saleDate = Calendar.getInstance().also { it.set(2021, 5, 20) }.timeInMillis,
             agentName = "John McLaughlin",
             mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.979831,40.758941&zoom=14.8&marker=lonlat:-73.97983110154246,40.7589408497391;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
         ),
@@ -58,11 +58,11 @@ fun generateProperties() : List<Property> {
                     "and a large indoor/outdoor salt water Pool. There is a 24 hour Garage as well a 24 hour service; consisting of concierges, " +
                     "doormen and repairmen. Pets, Pied-a-terres and sublets are allowed. A fabulous public school is located across the " +
                     "street, thus easing educational costs.",
-            mediaUriList = listOf(
-                Pair("https://photos.zillowstatic.com/fp/1e71b46abea77c70303f76af0886cc30-cc_ft_768.jpg", "Living room"),
-                Pair("https://photos.zillowstatic.com/fp/d9fb3b499aee5de69f2c400c6f626d92-cc_ft_384.jpg", "Bedroom"),
-                Pair("https://photos.zillowstatic.com/fp/0dfa3f33fa13c6a6b3bcbc55894de2ce-cc_ft_384.jpg", "View"),
-                Pair("https://photos.zillowstatic.com/fp/a60feda35e489359a1f46c34fbc31106-cc_ft_384.jpg", "Living room")
+            mediaUriList = hashMapOf(
+                "https://photos.zillowstatic.com/fp/1e71b46abea77c70303f76af0886cc30-cc_ft_768.jpg" to "Living room",
+                "https://photos.zillowstatic.com/fp/d9fb3b499aee5de69f2c400c6f626d92-cc_ft_384.jpg" to "Bedroom",
+                "https://photos.zillowstatic.com/fp/0dfa3f33fa13c6a6b3bcbc55894de2ce-cc_ft_384.jpg" to "View",
+                "https://photos.zillowstatic.com/fp/a60feda35e489359a1f46c34fbc31106-cc_ft_384.jpg" to "Living room"
             ),
             address = "303 E 57th St APT 32B",
             city = "Manhathan",
@@ -70,9 +70,16 @@ fun generateProperties() : List<Property> {
             country = "USA",
             latitude = 40.759524542858905,
             longitude = -73.9648487396234,
-            pointOfInterest = listOf(PointsOfInterest.GROCERY, PointsOfInterest.PARK, PointsOfInterest.SWIMMING_POOL, PointsOfInterest.FITNESS_CLUB,PointsOfInterest.PUBLIC_TRANSPORT,PointsOfInterest.SCHOOL),
+            pointOfInterest = listOf(
+                PointsOfInterest.GROCERY,
+                PointsOfInterest.PARK,
+                PointsOfInterest.SWIMMING_POOL,
+                PointsOfInterest.FITNESS_CLUB,
+                PointsOfInterest.PUBLIC_TRANSPORT,
+                PointsOfInterest.SCHOOL
+            ),
             available = true,
-            saleDate = Calendar.getInstance().also { it.set(2021, 5, 18) },
+            saleDate = Calendar.getInstance().also { it.set(2021, 5, 18) }.timeInMillis,
             agentName = "Kristen Fortino",
             mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.9648487396234,40.759524542858905&zoom=16&marker=lonlat:-73.9648487396234,40.759524542858905;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
         ),
@@ -98,12 +105,12 @@ fun generateProperties() : List<Property> {
                     "away. There is also a South Shore Golf Course near by for golf lover to hit some ball on a beautiful green grass. " +
                     "Did I mention there's 2 community olympic size pools? Travel is super convenient because the highway is just minutes " +
                     "away. Don’t let this fantastic dream home pass you by!",
-            mediaUriList = listOf(
-                Pair("https://photos.zillowstatic.com/fp/14f1984c6ec05fb7a4356e4133934aea-cc_ft_768.jpg", "Dining room 1"),
-                Pair("https://photos.zillowstatic.com/fp/75348e9428f0589a82cb70fe52df08bd-cc_ft_384.jpg", "Living room"),
-                Pair("https://photos.zillowstatic.com/fp/d74ac5d7059bf5528659234054c21481-cc_ft_384.jpg", "Kitchen"),
-                Pair("https://photos.zillowstatic.com/fp/d3e29b38f5c0a428df23d66d07cc16cd-cc_ft_384.jpg", "Bathroom"),
-                Pair("https://photos.zillowstatic.com/fp/d041509f327311831d711545a012c856-cc_ft_384.jpg", "Dining room 2")
+            mediaUriList = hashMapOf(
+                "https://photos.zillowstatic.com/fp/14f1984c6ec05fb7a4356e4133934aea-cc_ft_768.jpg" to "Dining room 1",
+                "https://photos.zillowstatic.com/fp/75348e9428f0589a82cb70fe52df08bd-cc_ft_384.jpg" to "Living room",
+                "https://photos.zillowstatic.com/fp/d74ac5d7059bf5528659234054c21481-cc_ft_384.jpg" to "Kitchen",
+                "https://photos.zillowstatic.com/fp/d3e29b38f5c0a428df23d66d07cc16cd-cc_ft_384.jpg" to "Bathroom",
+                "https://photos.zillowstatic.com/fp/d041509f327311831d711545a012c856-cc_ft_384.jpg" to "Dining room 2"
             ),
             address = "32 Barclay Cir",
             city = "Staten Island",
@@ -111,11 +118,15 @@ fun generateProperties() : List<Property> {
             country = "USA",
             latitude = 40.553881452248525,
             longitude = -74.19466925910078,
-            pointOfInterest = listOf(PointsOfInterest.SCHOOL, PointsOfInterest.SWIMMING_POOL, PointsOfInterest.PUBLIC_TRANSPORT),
+            pointOfInterest = listOf(
+                PointsOfInterest.SCHOOL,
+                PointsOfInterest.SWIMMING_POOL,
+                PointsOfInterest.PUBLIC_TRANSPORT
+            ),
             available = true,
-            saleDate = Calendar.getInstance().also { it.set(2021, 4, 28) },
+            saleDate = Calendar.getInstance().also { it.set(2021, 4, 28) }.timeInMillis,
             agentName = "Douglas Elliman",
-            mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:40.55390377650278,-73.19467206015342&zoom=16&marker=lonlat:-73.19467206015342,40.55390377650278;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
+            mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:40.55390377650278,-73.19467206015342&zoom=16&marker=lonlat:-73.19467206015342,40.55390377650278;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}.timeInMillis"
         ),
         Property(
             id = "4",
@@ -131,12 +142,12 @@ fun generateProperties() : List<Property> {
                     "south.  The triplex boasts 7,130 of beautifully finished interior sq ft with four bedrooms and five and a half bathrooms.  " +
                     "The extraordinary private loggia is 1,367 sq ft and provides for an elevated, sheltered open-air entertaining experience " +
                     "unrivalled on Central Park South",
-            mediaUriList = listOf(
-                Pair("https://photos.zillowstatic.com/fp/82a3ef885a3722b2483e689c1a215085-cc_ft_768.jpg", "Living room 1"),
-                Pair("https://photos.zillowstatic.com/fp/85dfc4e5f85cc500d004d390337fc69e-cc_ft_384.jpg", "Stairs"),
-                Pair("https://photos.zillowstatic.com/fp/eafb244ea6f7eebb37395a4a8095354e-cc_ft_384.jpg", "Bathroom"),
-                Pair("https://photos.zillowstatic.com/fp/d25ca12dc14670087a0a186ecf1a4450-cc_ft_384.jpg", "Living room 2"),
-                Pair("https://photos.zillowstatic.com/fp/bca7129277de8af2f982c78e57be11ef-cc_ft_384.jpg", "Living room 3")
+            mediaUriList = hashMapOf(
+                "https://photos.zillowstatic.com/fp/82a3ef885a3722b2483e689c1a215085-cc_ft_768.jpg" to "Living room 1",
+                "https://photos.zillowstatic.com/fp/85dfc4e5f85cc500d004d390337fc69e-cc_ft_384.jpg" to "Stairs",
+                "https://photos.zillowstatic.com/fp/eafb244ea6f7eebb37395a4a8095354e-cc_ft_384.jpg" to "Bathroom",
+                "https://photos.zillowstatic.com/fp/d25ca12dc14670087a0a186ecf1a4450-cc_ft_384.jpg" to "Living room 2",
+                "https://photos.zillowstatic.com/fp/bca7129277de8af2f982c78e57be11ef-cc_ft_384.jpg" to "Living room 3"
             ),
             address = "111 W 57th St PENTHOUSE 72",
             city = "Manhathan",
@@ -144,11 +155,16 @@ fun generateProperties() : List<Property> {
             country = "USA",
             latitude = 40.76482158883576,
             longitude = -73.97782416556161,
-            pointOfInterest = listOf(PointsOfInterest.SCHOOL, PointsOfInterest.PARK, PointsOfInterest.GROCERY, PointsOfInterest.FITNESS_CLUB),
+            pointOfInterest = listOf(
+                PointsOfInterest.SCHOOL,
+                PointsOfInterest.PARK,
+                PointsOfInterest.GROCERY,
+                PointsOfInterest.FITNESS_CLUB
+            ),
             available = true,
-            saleDate = Calendar.getInstance().also { it.set(2021, 2, 6) },
+            saleDate = Calendar.getInstance().also { it.set(2021, 2, 6) }.timeInMillis,
             agentName = "Douglas Elliman",
-            mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.97782416556161,40.76482158883576&zoom=16&marker=lonlat:-73.97782416556161,40.76482158883576;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
+            mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.97782416556161,40.76482158883576&zoom=16&marker=lonlat:-73.97782416556161,40.76482158883576;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}.timeInMillis"
         ),
         Property(
             id = "5",
@@ -161,10 +177,10 @@ fun generateProperties() : List<Property> {
             description = "This is a 2 Family Semi-detached Residential that includes a Living Room / Dining Room, Eat-In Kitchen, 3 Bedrooms and " +
                     "2 Baths on the 1st Floor, and Living Room / Dining Room, Eat-In Kitchen, 3 Bedrooms and 2 Baths on the 2nd Floor. Also there is " +
                     "a Full Finished Basement and a Private Driveway. Don't miss out on the opportunity to own a home at an affordable price!!!",
-            mediaUriList = listOf(
-                Pair("https://photos.zillowstatic.com/fp/91c4571f75dbb3090154016b8b504e60-cc_ft_768.jpg", "Facade 1"),
-                Pair("https://photos.zillowstatic.com/fp/ecec97465481bdde4c0b095fd6ae7119-cc_ft_384.jpg", "Facade 2"),
-                Pair("https://photos.zillowstatic.com/fp/edb05161a372ba4914b63f5c96cdbcd8-cc_ft_384.jpg", "Facade 3")
+            mediaUriList = hashMapOf(
+                "https://photos.zillowstatic.com/fp/91c4571f75dbb3090154016b8b504e60-cc_ft_768.jpg" to "Facade 1",
+                "https://photos.zillowstatic.com/fp/ecec97465481bdde4c0b095fd6ae7119-cc_ft_384.jpg" to "Facade 2",
+                "https://photos.zillowstatic.com/fp/edb05161a372ba4914b63f5c96cdbcd8-cc_ft_384.jpg" to "Facade 3"
             ),
             address = "173-11 110th Ave, Jamaica",
             city = "Brooklyn",
@@ -174,9 +190,9 @@ fun generateProperties() : List<Property> {
             longitude = -73.78038285309472,
             pointOfInterest = listOf(PointsOfInterest.GROCERY, PointsOfInterest.PUBLIC_TRANSPORT),
             available = true,
-            saleDate = Calendar.getInstance().also { it.set(2021, 4, 15) },
+            saleDate = Calendar.getInstance().also { it.set(2021, 4, 15) }.timeInMillis,
             agentName = "John McLaughlin",
-            mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.78038285309472,40.697167874862615&zoom=16&marker=lonlat:-73.78038285309472,40.697167874862615;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
+            mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.78038285309472,40.697167874862615&zoom=16&marker=lonlat:-73.78038285309472,40.697167874862615;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}.timeInMillis"
         ),
         Property(
             id = "6",
@@ -187,11 +203,11 @@ fun generateProperties() : List<Property> {
             bathroomsAmount = 1,
             bedroomsAmount = 1,
             description = "This 800 square foot condo home has 2 bedrooms and 1.0 bathrooms. This home is located at 323 Edgecombe Ave APT 7, New York, NY 10031",
-            mediaUriList = listOf(
-                Pair("https://photos.zillowstatic.com/fp/8e335a55b050bf45a3d2777fd1060659-cc_ft_768.jpg", "Dining room"),
-                Pair("https://photos.zillowstatic.com/fp/85b8b974a55f0882752ad29014522770-cc_ft_384.jpg", "Living room 1"),
-                Pair("https://photos.zillowstatic.com/fp/58cab65439d54afab2b5121a31f1bff8-cc_ft_384.jpg", "Living room 2"),
-                Pair("https://photos.zillowstatic.com/fp/241437edd3e02feb8f9518f59a18d875-cc_ft_384.jpg", "Kitchen")
+            mediaUriList = hashMapOf(
+                "https://photos.zillowstatic.com/fp/8e335a55b050bf45a3d2777fd1060659-cc_ft_768.jpg" to "Dining room",
+                "https://photos.zillowstatic.com/fp/85b8b974a55f0882752ad29014522770-cc_ft_384.jpg" to "Living room 1",
+                "https://photos.zillowstatic.com/fp/58cab65439d54afab2b5121a31f1bff8-cc_ft_384.jpg" to "Living room 2",
+                "https://photos.zillowstatic.com/fp/241437edd3e02feb8f9518f59a18d875-cc_ft_384.jpg" to "Kitchen"
             ),
             address = "323 Edgecombe Ave APT 7",
             city = "Harlem",
@@ -199,11 +215,15 @@ fun generateProperties() : List<Property> {
             country = "USA",
             latitude = 40.82568643585645,
             longitude = -73.94261050737286,
-            pointOfInterest = listOf(PointsOfInterest.SCHOOL, PointsOfInterest.PUBLIC_TRANSPORT, PointsOfInterest.FITNESS_CLUB),
+            pointOfInterest = listOf(
+                PointsOfInterest.SCHOOL,
+                PointsOfInterest.PUBLIC_TRANSPORT,
+                PointsOfInterest.FITNESS_CLUB
+            ),
             available = true,
-            saleDate = Calendar.getInstance().also { it.set(2021, 3, 10) },
+            saleDate = Calendar.getInstance().also { it.set(2021, 3, 10) }.timeInMillis,
             agentName = "Kristen Fortino",
-            mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.94261050737286,40.82568643585645&zoom=16&marker=lonlat:-73.94261050737286,40.82568643585645;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
+            mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.94261050737286,40.82568643585645&zoom=16&marker=lonlat:-73.94261050737286,40.82568643585645;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}.timeInMillis"
         ),
         Property(
             id = "7",
@@ -222,12 +242,12 @@ fun generateProperties() : List<Property> {
                     "Boasting a full basement with laundry and an expansive backyard- even a pool !\n" +
                     "Located in Prime Greenpoint on a picturesque tree lined block minutes from transport, restaurants, bars, shops and McCarren Park.\n" +
                     "This gem won't last - schedule your viewing today.",
-            mediaUriList = listOf(
-                Pair("https://photos.zillowstatic.com/fp/f259812ea3129d47389a09ca7d51a53c-cc_ft_768.jpg", "Facade"),
-                Pair("https://photos.zillowstatic.com/fp/f27d3b7c4ae9c447331dddefa79e85b3-cc_ft_384.jpg", "Living room 1"),
-                Pair("https://photos.zillowstatic.com/fp/bb4e835dc40cef310d690fae2296a972-cc_ft_384.jpg", "Living room 2"),
-                Pair("https://photos.zillowstatic.com/fp/cbde3883e38a4e44919cc079ace4f232-cc_ft_384.jpg", "Hall"),
-                Pair("https://photos.zillowstatic.com/fp/f2dfb51bae1056b64b772e3b504928b5-cc_ft_384.jpg", "Bedroom")
+            mediaUriList = hashMapOf(
+                "https://photos.zillowstatic.com/fp/f259812ea3129d47389a09ca7d51a53c-cc_ft_768.jpg" to "Facade",
+                "https://photos.zillowstatic.com/fp/f27d3b7c4ae9c447331dddefa79e85b3-cc_ft_384.jpg" to "Living room 1",
+                "https://photos.zillowstatic.com/fp/bb4e835dc40cef310d690fae2296a972-cc_ft_384.jpg" to "Living room 2",
+                "https://photos.zillowstatic.com/fp/cbde3883e38a4e44919cc079ace4f232-cc_ft_384.jpg" to "Hall",
+                "https://photos.zillowstatic.com/fp/f2dfb51bae1056b64b772e3b504928b5-cc_ft_384.jpg" to "Bedroom"
             ),
             address = "651 Leonard St",
             city = "Greenpoint",
@@ -235,11 +255,15 @@ fun generateProperties() : List<Property> {
             country = "USA",
             latitude = 40.7267017136229,
             longitude = -73.95191893544883,
-            pointOfInterest = listOf(PointsOfInterest.SCHOOL, PointsOfInterest.PUBLIC_TRANSPORT, PointsOfInterest.FITNESS_CLUB),
+            pointOfInterest = listOf(
+                PointsOfInterest.SCHOOL,
+                PointsOfInterest.PUBLIC_TRANSPORT,
+                PointsOfInterest.FITNESS_CLUB
+            ),
             available = true,
-            saleDate = Calendar.getInstance().also { it.set(2021, 4, 20) },
+            saleDate = Calendar.getInstance().also { it.set(2021, 4, 20) }.timeInMillis,
             agentName = "Douglas Elliman",
-            mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.95191893544883,40.7267017136229&zoom=16&marker=lonlat:-73.95191893544883,40.7267017136229;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
+            mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.95191893544883,40.7267017136229&zoom=16&marker=lonlat:-73.95191893544883,40.7267017136229;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}.timeInMillis"
         )
     )
 }

@@ -19,7 +19,7 @@ private const val TAG = "AddActivityViewModel"
 class AddActivityViewModel @Inject constructor(private val mPropertyRepository: PropertyRepository) : ViewModel(){
 
     var propertyType : PropertyType = PropertyType.FLAT
-    var mediaList : List<Pair<String, String>> = emptyList()
+    var mediaList : HashMap<String, String?> = hashMapOf()
     var price by Delegates.notNull<Long>()
     var surface by Delegates.notNull<Int>()
     var rooms by Delegates.notNull<Int>()
@@ -58,7 +58,7 @@ class AddActivityViewModel @Inject constructor(private val mPropertyRepository: 
                 mapPictureUrl = getGeoApifyUrl(latitude, longitude),
                 pointOfInterest = pointOfInterestList,
                 available = true,
-                saleDate = Calendar.getInstance(),
+                saleDate = Calendar.getInstance().timeInMillis,
                 dateOfSale = null,
                 agentName = agent
                 )

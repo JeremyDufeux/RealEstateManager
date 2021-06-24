@@ -66,7 +66,12 @@ class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
                 fragmentDetailMediaTitleTv.visibility = View.GONE
             }
         } else {
-            mMediaAdapter.updateList(it.mediaUriList)
+            val listOfPairs : MutableList<Pair<String, String?>> = mutableListOf()
+
+            for(entry in it.mediaUriList){
+                listOfPairs.add(Pair(entry.key, entry.value))
+            }
+            mMediaAdapter.updateList(listOfPairs)
         }
 
         if(it.pointOfInterest.isEmpty()){
@@ -105,7 +110,7 @@ class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
             fragmentDetailBedroomsTv.text = it.bedroomsAmount.toString()
             val address = "${it.address}\n${it.city}\n${it.postalCode}\n${it.country}"
             fragmentDetailLocationTv.text = address
-            fragmentDetailAvailableTv.text = formatCalendarToString(it.saleDate.time)
+            fragmentDetailAvailableTv.text = formatCalendarToString(it.saleDate)
             fragmentDetailAgentTv.text = it.agentName
         }
 

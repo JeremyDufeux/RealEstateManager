@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -28,6 +29,10 @@ import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.ui.details.DetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 private const val TAG = "MapFragment"
@@ -163,15 +168,12 @@ class MapFragment : Fragment(),
     }
 
     @SuppressLint("MissingPermission")
-    private fun configureLocation() {
+    private fun configureLocation() { // Todo
         mMap.isMyLocationEnabled = true
 
-
-        mFusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            if (location != null) {
-                mLocation = location
-                focusToLocation()
-            }
+        lifecycleScope.launch(Dispatchers.Main) {
+            getLastLoc()
+            focusToLocation()
         }
 
         val locationRequest = LocationRequest.create()
@@ -183,6 +185,16 @@ class MapFragment : Fragment(),
             locationCallback,
             Looper.getMainLooper()
         )
+    }
+
+    @SuppressLint("MissingPermission")
+    private suspend fun getLastLoc() : Unit = suspendCoroutine { continuation ->
+        mFusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            if (location != null) {
+                mLocation = location
+           }
+            continuation.resume(Unit)
+        }
     }
 
     private fun showLocationRequestDialog() {

@@ -12,7 +12,9 @@ import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.modules.GlideApp
 
-class PropertyListAdapter(var mPropertyListener: PropertyListener) : RecyclerView.Adapter<PropertyListAdapter.PropertyViewHolder>() {
+private const val TAG = "PropertyListAdapter"
+
+class PropertyListAdapter(private var mPropertyListener: PropertyListener) : RecyclerView.Adapter<PropertyListAdapter.PropertyViewHolder>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<Property>() {
         override fun areItemsTheSame(oldItem: Property, newItem: Property): Boolean {
@@ -50,9 +52,11 @@ class PropertyListAdapter(var mPropertyListener: PropertyListener) : RecyclerVie
         fun updateViewHolder(property: Property) {
             val context = mBinding.root.context
 
+            val mediaKeys = property.mediaUriList.keys
+
             if (property.mediaUriList.isNotEmpty()) {
                 GlideApp.with(context)
-                    .load(property.mediaUriList[0].first)
+                    .load(mediaKeys.first())
                     .centerCrop()
                     .timeout(2000)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
