@@ -1,12 +1,9 @@
 package com.openclassrooms.realestatemanager.ui.add
 
 import android.annotation.SuppressLint
-import android.location.Address
-import android.location.Geocoder
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.widget.AdapterView
@@ -14,12 +11,15 @@ import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBinding
 import com.openclassrooms.realestatemanager.models.PointsOfInterest
 import com.openclassrooms.realestatemanager.models.PropertyType
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 private const val TAG = "AddPropertyActivity"
@@ -237,28 +237,13 @@ class AddPropertyActivity : AppCompatActivity() {
     }
 
     private fun saveProperty(){
-        getPropertyLocation()
-        mViewModel.saveProperty()
-        finish()
-    }
-
-    private fun getPropertyLocation() { // Todo
-        val coder = Geocoder(this)
-        val addressResult: List<Address?>
-
-        try {
-            val address = "${mViewModel.address1} " +
-                    "${mViewModel.address2} " +
-                    "${mViewModel.city} " +
-                    "${mViewModel.postalCode} " +
-                    mViewModel.country
-            addressResult = coder.getFromLocationName(address, 1)
-            mViewModel.latitude = addressResult[0]?.latitude!!
-            mViewModel.longitude = addressResult[0]?.longitude!!
-        } catch (e : Exception){
-            Log.d(TAG, "getPropertyLocation: address not found")
+        lifecycleScope.launch(Dispatchers.Main) {
+            mViewModel.saveProperty()
+            finish()
         }
     }
+
+
 
     private fun checkFields(){
         mBinding.apply {

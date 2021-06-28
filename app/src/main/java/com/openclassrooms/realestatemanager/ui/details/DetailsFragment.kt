@@ -14,7 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding
-import com.openclassrooms.realestatemanager.extensions.formatCalendarToString
+import com.openclassrooms.realestatemanager.utils.formatCalendarToString
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.modules.GlideApp
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.extensions
+package com.openclassrooms.realestatemanager.utils
 
 import com.openclassrooms.realestatemanager.BuildConfig
 
