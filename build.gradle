@@ -32,6 +32,15 @@ allprojects {
     }
 }
 
+subprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            // Enable experimental coroutines APIs
+            freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
+        }
+    }
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
