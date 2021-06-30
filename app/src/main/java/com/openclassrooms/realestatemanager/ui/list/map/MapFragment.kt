@@ -4,9 +4,7 @@ import android.Manifest.permission
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -29,14 +25,11 @@ import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.ui.details.DetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 
 private const val TAG = "MapFragment"
 const val DEFAULT_ZOOM_VALUE = 15f
+const val LOCATION_PERMISSION = permission.ACCESS_FINE_LOCATION
 
 @AndroidEntryPoint
 class MapFragment : Fragment(),
@@ -46,31 +39,9 @@ class MapFragment : Fragment(),
     private val mViewModel: MapFragmentViewModel by viewModels()
     private lateinit var mBinding : FragmentMapBinding
     private lateinit var mMap : GoogleMap
-    lateinit var mLocation: Location
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationCallback: LocationCallback
 
     companion object {
         fun newInstance() = MapFragment()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        configureLocationClient()
-    }
-
-    private fun configureLocationClient() {
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-
-                locationResult ?: return
-                for (location in locationResult.locations){
-                    mLocation = location
-                }
-            }
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -135,11 +106,8 @@ class MapFragment : Fragment(),
 
     private fun requestFocusToLocation() {
         if (hasLocationPermission()) {
-            if(this::mLocation.isInitialized) {
+            if(!mViewModel.locationStarted) {
                 focusToLocation()
-            }
-            else{
-                configureLocation()
             }
         } else {
             enableLocation()
@@ -147,53 +115,30 @@ class MapFragment : Fragment(),
     }
 
     private fun focusToLocation() {
-        val latLng = LatLng(mLocation.latitude, mLocation.longitude)
-        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM_VALUE)
-        mMap.animateCamera(cameraUpdate)
+        val location = mViewModel.location.value
+        location?.let {
+            val latLng = LatLng(location.latitude, location.longitude)
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM_VALUE)
+            mMap.animateCamera(cameraUpdate)
+        }
     }
 
     // ---------------
     // Location permissions
     // ---------------
 
+    @SuppressLint("MissingPermission")
     private fun enableLocation() {
         when {
             hasLocationPermission() -> {
-                configureLocation()
+                if(!mViewModel.locationStarted) {
+                    mViewModel.startLocationUpdates()
+                }
+                mMap.isMyLocationEnabled = true
             }
             else -> {
                 showLocationRequestDialog()
             }
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun configureLocation() { // Todo
-        mMap.isMyLocationEnabled = true
-
-        lifecycleScope.launch(Dispatchers.Main) {
-            getLastLoc()
-            focusToLocation()
-        }
-
-        val locationRequest = LocationRequest.create()
-        locationRequest.interval = 5000
-        locationRequest.fastestInterval = 1000
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        mFusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.getMainLooper()
-        )
-    }
-
-    @SuppressLint("MissingPermission")
-    private suspend fun getLastLoc() : Unit = suspendCoroutine { continuation ->
-        mFusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            if (location != null) {
-                mLocation = location
-           }
-            continuation.resume(Unit)
         }
     }
 
@@ -212,14 +157,13 @@ class MapFragment : Fragment(),
     }
 
     private fun openRequestPermissionLauncher(){
-        requestPermissionLauncher.launch(
-            permission.ACCESS_COARSE_LOCATION)
+        requestPermissionLauncher.launch(LOCATION_PERMISSION)
     }
 
     private fun hasLocationPermission() : Boolean{
         return ContextCompat.checkSelfPermission(
             requireContext(),
-            permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED
     }
 
     val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission())
@@ -248,12 +192,12 @@ class MapFragment : Fragment(),
     // On pause actions
     // ---------------
 
-    override fun onPause() {
-        super.onPause()
+    override fun onDestroy() {
+        super.onDestroy()
         stopLocationUpdates()
     }
 
     private fun stopLocationUpdates() {
-        mFusedLocationClient.removeLocationUpdates(locationCallback)
+        mViewModel.stopLocationUpdates()
     }
 }
