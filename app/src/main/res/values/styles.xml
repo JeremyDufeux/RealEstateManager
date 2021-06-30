@@ -33,8 +33,16 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="editText">
+    <style name="editText" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="fontFamily">@font/roboto</item>
+        <item name="boxStrokeColor">@color/colorAccent</item>
+        <item name="hintTextColor">@color/colorAccent</item>
+    </style>
+
+    <style name="dropdownMenu" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="fontFamily">@font/roboto</item>
+        <item name="boxStrokeColor">@color/colorAccent</item>
+        <item name="hintTextColor">@color/colorAccent</item>
     </style>
 
     <style name="pointsOfInterestChip" parent="@style/Widget.MaterialComponents.Chip.Filter">

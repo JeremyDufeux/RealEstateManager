@@ -2,31 +2,23 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_width="@dimen/fragment_add_property_media_size"
+    android:layout_height="@dimen/fragment_add_property_media_size"
     android:layout_margin="2dp"
-    app:cardUseCompatPadding="true"
-    tools:ignore="UseCompoundDrawables">
+    app:cardUseCompatPadding="true">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    <ImageView
+        android:id="@+id/activity_add_property_media_item_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/media"
+        tools:srcCompat="@sample/properties" />
 
-        <ImageView
-            android:id="@+id/activity_add_property_media_item_iv"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:contentDescription="@string/media"
-            tools:srcCompat="@sample/properties" />
-
-        <TextView
-            android:id="@+id/activity_add_property_media_item_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textAlignment="center"
-            tools:text="@sample/properties.json/names/media_name/value" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/activity_add_property_media_item_tv"
+        style="@style/detailMediaText"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_gravity="center_horizontal|bottom"
+        tools:text="@sample/properties.json/names/media_name/value" />
 </androidx.cardview.widget.CardView>

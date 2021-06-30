@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"
-            android:textSize="@dimen/fragment_list_item_type_tv_text_size"
+            android:textSize="@dimen/text_size"
             android:textColor="@color/black"
             tools:text="@sample/properties.json/names/type/value" />
 
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_medium"
-            android:textSize="@dimen/fragment_list_item_type_tv_text_size"
+            android:textSize="@dimen/text_size"
             tools:text="@sample/properties.json/names/city/value" />
 
         <TextView
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto"
-            android:textSize="@dimen/fragment_list_item_type_tv_text_size"
+            android:textSize="@dimen/text_size"
             android:textColor="@color/colorAccent"
             tools:text="@sample/properties.json/names/price/value" />
     </LinearLayout>
