@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.list.map
+package com.openclassrooms.realestatemanager.ui.list
 
 import android.location.Location
 import androidx.lifecycle.LiveData
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MapFragmentViewModel @Inject constructor(
+class ListViewModel @Inject constructor(
     private val mPropertyRepository: PropertyRepository,
     private val mLocationService: LocationService,
     ) : ViewModel(){

@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.list.map
+package com.openclassrooms.realestatemanager.ui.list
 
 import android.Manifest.permission
 import android.annotation.SuppressLint
@@ -12,7 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -37,7 +37,7 @@ class MapFragment : Fragment(),
     OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener{
 
-    private val mViewModel: MapFragmentViewModel by viewModels()
+    private val mViewModel: ListViewModel by activityViewModels()
     private lateinit var mBinding : FragmentMapBinding
     private lateinit var mMap : GoogleMap
 

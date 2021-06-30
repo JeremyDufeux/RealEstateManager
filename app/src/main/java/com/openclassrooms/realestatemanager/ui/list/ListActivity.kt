@@ -9,8 +9,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityListBinding
 import com.openclassrooms.realestatemanager.ui.add.AddPropertyActivity
-import com.openclassrooms.realestatemanager.ui.list.list.ListFragment
-import com.openclassrooms.realestatemanager.ui.list.map.MapFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
