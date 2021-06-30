@@ -38,11 +38,13 @@ class ListActivity : AppCompatActivity() {
         pagerAdapter.addFragment(ListFragment.newInstance())
         pagerAdapter.addFragment(MapFragment.newInstance())
 
-        mBinding.activityListViewPager.adapter = pagerAdapter
-        mBinding.activityListViewPager.isUserInputEnabled = false
+        mBinding.activityListViewPager.apply {
+            adapter= pagerAdapter
+            isUserInputEnabled = false
+            offscreenPageLimit = 2
+        }
 
-        TabLayoutMediator(mBinding.activityListTabLayout, mBinding.activityListViewPager
-        ) { tab, position ->
+        TabLayoutMediator(mBinding.activityListTabLayout, mBinding.activityListViewPager) { tab, position ->
             when (position) {
                 0 -> tab.text = resources.getString(R.string.list_tab)
                 1 -> tab.text = resources.getString(R.string.map_tab)
