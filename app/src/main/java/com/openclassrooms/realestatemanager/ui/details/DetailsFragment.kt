@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +13,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding
-import com.openclassrooms.realestatemanager.utils.formatCalendarToString
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.modules.GlideApp
+import com.openclassrooms.realestatemanager.utils.formatCalendarToString
 import dagger.hilt.android.AndroidEntryPoint
-
-private const val TAG = "DetailsFragment"
+import timber.log.Timber
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
@@ -117,9 +115,7 @@ class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
     }
 
     override fun onMediaClick(position: Int) {
-        Log.d(TAG, "onMediaClick: $position")
-
-
+        Timber.d("Debug onMediaClick: $position")
     }
 
 }

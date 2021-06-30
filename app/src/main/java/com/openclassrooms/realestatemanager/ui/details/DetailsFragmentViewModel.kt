@@ -15,8 +15,6 @@ class DetailsFragmentViewModel @Inject constructor(
     private val mPropertyRepository: PropertyRepository
     ) : ViewModel(){
 
-    private val TAG = "DetailsFragmentViewMode"
-
     private val mPropertyMutableLiveData : MutableLiveData<Property> = MutableLiveData()
     val propertyLiveData: LiveData<Property> = mPropertyMutableLiveData
 

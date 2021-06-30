@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.models.State
 import com.openclassrooms.realestatemanager.repositories.PropertyRepository
 import com.openclassrooms.realestatemanager.services.LocationService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,16 +14,14 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val TAG = "MapFragmentViewModel"
-
 @HiltViewModel
 class MapFragmentViewModel @Inject constructor(
     private val mPropertyRepository: PropertyRepository,
     private val mLocationService: LocationService,
     ) : ViewModel(){
 
-    private var mPropertyListMutableLiveData : MutableLiveData<List<Property>> = MutableLiveData()
-    val propertyListLiveData: LiveData<List<Property>> = mPropertyListMutableLiveData
+    private var mPropertyListMutableLiveData : MutableLiveData<State<List<Property>>> = MutableLiveData()
+    val propertyListLiveData: LiveData<State<List<Property>>> = mPropertyListMutableLiveData
 
     private val _location: MutableLiveData<Location> = MutableLiveData()
     val location: LiveData<Location> = _location
@@ -31,7 +30,8 @@ class MapFragmentViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            mPropertyRepository.getProperties().collect { list ->
+            mPropertyRepository.fetchProperties()
+            mPropertyRepository.propertiesFlow.collect { list ->
                 mPropertyListMutableLiveData.postValue(list)
             }
         }
@@ -40,8 +40,8 @@ class MapFragmentViewModel @Inject constructor(
     fun startLocationUpdates(){
         viewModelScope.launch {
             mLocationService.startLocationUpdates()
-            mLocationService.locationFlow.collect(){
-                _location.postValue(it)
+            mLocationService.locationFlow.collect(){ location ->
+                _location.postValue(location)
             }
         }
     }

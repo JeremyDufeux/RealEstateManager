@@ -21,9 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
-private const val TAG = "AddPropertyActivity"
-
 @AndroidEntryPoint
 class AddPropertyActivity : AppCompatActivity() {
     private val mViewModel: AddActivityViewModel by viewModels()

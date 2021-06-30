@@ -14,8 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val TAG = "LocationRepository"
-
 @Singleton
 class LocationService @Inject constructor(@ApplicationContext private val mContext: Context) : LocationCallback(){
 

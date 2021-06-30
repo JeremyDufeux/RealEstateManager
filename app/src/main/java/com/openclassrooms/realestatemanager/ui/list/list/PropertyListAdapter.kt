@@ -12,8 +12,6 @@ import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.modules.GlideApp
 
-private const val TAG = "PropertyListAdapter"
-
 class PropertyListAdapter(private var mPropertyListener: PropertyListener) : RecyclerView.Adapter<PropertyListAdapter.PropertyViewHolder>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<Property>() {

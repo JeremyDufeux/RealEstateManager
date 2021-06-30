@@ -11,16 +11,18 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.models.State
 import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.ui.details.DetailsActivity
+import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
-    private val TAG = "ListFragment"
-
     private val mViewModel: ListFragmentViewModel by viewModels()
     private lateinit var mBinding : FragmentListBinding
     private val mAdapter = PropertyListAdapter(this)
@@ -57,9 +59,24 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
         mBinding.fragmentListRv.addItemDecoration(itemDecoration)
     }
 
-    private val propertyListObserver = Observer<List<Property>> {
-        mPropertyList = it
-        mAdapter.updateList(mPropertyList)
+    private val propertyListObserver = Observer<State<List<Property>>> { state ->
+        when(state) {
+            is State.Loading -> {
+                mBinding.fragmentListPb.visibility = View.VISIBLE
+                mBinding.fragmentListRv.visibility = View.GONE
+            }
+            is State.Success -> {
+                mPropertyList = state.value
+                mAdapter.updateList(mPropertyList)
+                mBinding.fragmentListPb.visibility = View.GONE
+                mBinding.fragmentListRv.visibility = View.VISIBLE
+            }
+            is State.Failure -> {
+                mBinding.fragmentListPb.visibility = View.GONE
+                showToast(requireContext(), R.string.an_error_append)
+                Timber.e("Error ListFragment.propertyListObserver: ${state.throwable.toString()}")
+            }
+        }
     }
 
     override fun onPropertyClick(position: Int) {

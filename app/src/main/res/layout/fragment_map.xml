@@ -15,6 +15,12 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
     />
 
+    <ProgressBar
+        android:id="@+id/map_view_fragment_pb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
     android:id="@+id/map_view_fragment_location_btn"
     android:layout_width="wrap_content"

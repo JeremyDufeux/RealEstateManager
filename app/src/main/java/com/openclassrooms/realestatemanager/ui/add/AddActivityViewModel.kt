@@ -15,9 +15,6 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
-
-private const val TAG = "AddActivityViewModel"
-
 @HiltViewModel
 class AddActivityViewModel @Inject constructor(
     private val mPropertyRepository: PropertyRepository,
@@ -75,6 +72,6 @@ class AddActivityViewModel @Inject constructor(
             dateOfSale = null,
             agentName = agent
         )
-        mPropertyRepository.addProperty(property)
+        mPropertyRepository.addPropertyAndFetch(property)
     }
 }

@@ -13,8 +13,6 @@ import com.openclassrooms.realestatemanager.ui.list.list.ListFragment
 import com.openclassrooms.realestatemanager.ui.list.map.MapFragment
 import dagger.hilt.android.AndroidEntryPoint
 
-private const val TAG = "ListActivity"
-
 @AndroidEntryPoint
 class ListActivity : AppCompatActivity() {
     private lateinit var mBinding : ActivityListBinding

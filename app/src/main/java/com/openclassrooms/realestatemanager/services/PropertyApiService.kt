@@ -2,13 +2,16 @@ package com.openclassrooms.realestatemanager.services
 
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Source
 import com.openclassrooms.realestatemanager.models.Property
-import kotlinx.coroutines.channels.awaitClose
+import com.openclassrooms.realestatemanager.models.State
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-private const val TAG = "PropertyApiService"
 private const val COLLECTION_NAME = "Properties"
 
 class PropertyApiService @Inject constructor() {
@@ -17,28 +20,18 @@ class PropertyApiService @Inject constructor() {
         return FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
     }
 
-    fun getProperties() : Flow<List<Property>> = callbackFlow {
+    fun fetchProperties() : Flow<State<List<Property>>> = flow {
+        try {
+            val snapshot = getPropertiesCollection().get(Source.SERVER).await()
+            val properties = snapshot.toObjects(Property::class.java)
 
-        val subscription = getPropertiesCollection().addSnapshotListener { snapshot, _ ->
-            if(snapshot != null) {
-                val properties = mutableListOf<Property>()
-
-                for (document in snapshot.documents) {
-                    val property: Property? = document.toObject(Property::class.java)
-                    if (property != null) {
-                        properties.add(property)
-                    }
-                }
-                offer(properties)
-            } else{
-                return@addSnapshotListener
-            }
+            emit(State.Success(properties))
+        }catch (e: Exception){
+            emit(State.Failure(e))
         }
-        awaitClose { subscription.remove() }
-    }
+    }.flowOn(Dispatchers.IO)
 
     fun addProperty(property: Property) {
         getPropertiesCollection().document(property.id).set(property)
     }
-
 }

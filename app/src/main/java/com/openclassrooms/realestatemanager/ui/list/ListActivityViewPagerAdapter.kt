@@ -8,7 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 class ListActivityViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    val fragmentList = mutableListOf<Fragment>()
+    private val fragmentList = mutableListOf<Fragment>()
 
     fun addFragment(fragment: Fragment){
         fragmentList.add(fragment)

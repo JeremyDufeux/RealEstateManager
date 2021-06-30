@@ -22,12 +22,13 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentMapBinding
 import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.models.State
 import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.ui.details.DetailsActivity
+import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
-
-private const val TAG = "MapFragment"
 const val DEFAULT_ZOOM_VALUE = 15f
 const val LOCATION_PERMISSION = permission.ACCESS_FINE_LOCATION
 
@@ -75,10 +76,27 @@ class MapFragment : Fragment(),
         mViewModel.propertyListLiveData.observe(this, propertyListObserver)
     }
 
-    private val propertyListObserver = Observer<List<Property>> {
+    private val propertyListObserver = Observer<State<List<Property>>> { state ->
+        when(state){
+            is State.Loading -> {
+                mBinding.mapViewFragmentPb.visibility = View.VISIBLE
+            }
+            is State.Success -> {
+                mBinding.mapViewFragmentPb.visibility = View.GONE
+                updateMap(state.value)
+            }
+            is State.Failure -> {
+                mBinding.mapViewFragmentPb.visibility = View.GONE
+                showToast(requireContext(), R.string.an_error_append)
+                Timber.e("Error MapFragment.propertyListObserver: ${state.throwable.toString()}")
+            }
+        }
+    }
+
+    private fun updateMap(properties: List<Property>){
         mMap.clear()
 
-        for(property in it){
+        for(property in properties){
             if(property.latitude != 0.0 && property.longitude != 0.0) {
                 val markerOptions = MarkerOptions()
                 markerOptions.apply {
@@ -168,14 +186,13 @@ class MapFragment : Fragment(),
 
     val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission())
     {
-            isGranted: Boolean ->
-                if (isGranted) {
-                    enableLocation()
-                }
-                else {
-                    showLocationDenialDialog()
-                }
-
+        isGranted: Boolean ->
+            if (isGranted) {
+                enableLocation()
+            }
+            else {
+                showLocationDenialDialog()
+            }
     }
 
     private fun showLocationDenialDialog() {

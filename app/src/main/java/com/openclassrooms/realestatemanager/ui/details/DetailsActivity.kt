@@ -8,7 +8,6 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-private const val TAG = "DetailsActivity"
 const val BUNDLE_KEY_PROPERTY_ID = "BUNDLE_KEY_PROPERTY_ID"
 
 @AndroidEntryPoint

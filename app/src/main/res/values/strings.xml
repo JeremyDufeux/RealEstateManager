@@ -41,4 +41,5 @@
     <string name="location_request_dialog_message">Your location is needed to locate you on the map, do you allow this app to use your location?</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="an_error_append">An error append</string>
 </resources>

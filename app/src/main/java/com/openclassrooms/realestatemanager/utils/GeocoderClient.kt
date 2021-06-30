@@ -3,20 +3,18 @@ package com.openclassrooms.realestatemanager.utils
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
-import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ViewModelScoped
+import timber.log.Timber
 import javax.inject.Inject
-
-private const val TAG = "GeocoderClient"
 
 @ViewModelScoped
 class GeocoderClient @Inject constructor(@ApplicationContext private val mContext : Context) {
 
     val coder = Geocoder(mContext)
 
-    fun getPropertyLocation(address1 : String, address2: String, city : String, postalCode : String, country : String) : LatLng?{ // Todo
+    fun getPropertyLocation(address1 : String, address2: String, city : String, postalCode : String, country : String) : LatLng?{
         val addressResult: List<Address?>
 
         return try {
@@ -30,7 +28,7 @@ class GeocoderClient @Inject constructor(@ApplicationContext private val mContex
             val longitude = addressResult[0]?.longitude!!
             LatLng(latitude, longitude)
         } catch (e: Exception) {
-            Log.d(TAG, "getPropertyLocation: address not found")
+            Timber.d("getPropertyLocation: address not found")
             null
         }
     }
