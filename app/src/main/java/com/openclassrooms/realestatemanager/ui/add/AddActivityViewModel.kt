@@ -1,6 +1,9 @@
 package com.openclassrooms.realestatemanager.ui.add
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.models.PointsOfInterest
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.PropertyType
@@ -9,10 +12,13 @@ import com.openclassrooms.realestatemanager.utils.GeocoderClient
 import com.openclassrooms.realestatemanager.utils.getGeoApifyUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
+import kotlin.collections.set
 import kotlin.properties.Delegates
 
 @HiltViewModel
@@ -38,6 +44,9 @@ class AddActivityViewModel @Inject constructor(
     var longitude : Double = 0.0
     var agent = String()
     var pointOfInterestList : MutableList<PointsOfInterest> = ArrayList()
+
+    private val _mediaListLiveData = MutableLiveData<MutableList<Pair<String, String?>>>()
+    val mediaListLiveData : LiveData<MutableList<Pair<String, String?>>> = _mediaListLiveData
     
     suspend fun saveProperty() = withContext(Dispatchers.IO) {
         val latLng =
@@ -73,5 +82,19 @@ class AddActivityViewModel @Inject constructor(
             agentName = agent
         )
         mPropertyRepository.addPropertyAndFetch(property)
+    }
+
+    fun addMediaUri(uri: String, description: String?) {
+        viewModelScope.launch(Dispatchers.IO) {
+            mediaList[uri] = description
+            Timber.d( "addMediaUri: $uri $description")
+
+            val pairList: MutableList<Pair<String, String?>> = mutableListOf()
+            for (entry in mediaList) {
+                pairList.add(Pair(entry.key, entry.value))
+            }
+
+            _mediaListLiveData.postValue(pairList)
+        }
     }
 }

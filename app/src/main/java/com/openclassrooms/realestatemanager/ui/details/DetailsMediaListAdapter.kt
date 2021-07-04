@@ -7,7 +7,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsMediaItemBinding
 import com.openclassrooms.realestatemanager.modules.GlideApp
 
-class MediaListAdapter(var mMediaListener: MediaListener) : RecyclerView.Adapter<MediaListAdapter.PropertyViewHolder>() {
+class DetailsMediaListAdapter(var mMediaListener: MediaListener) : RecyclerView.Adapter<DetailsMediaListAdapter.PropertyViewHolder>() {
 
     private var mMediaList : List<Pair<String, String?>> = listOf()
 

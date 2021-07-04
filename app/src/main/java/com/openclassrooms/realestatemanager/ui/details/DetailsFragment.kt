@@ -20,10 +20,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
+class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
     private val mViewModel: DetailsFragmentViewModel by viewModels()
     private lateinit var mBinding : FragmentDetailsBinding
-    private val mMediaAdapter = MediaListAdapter(this)
+    private val mMediaAdapter = DetailsMediaListAdapter(this)
 
     companion object {
         fun newInstance() = DetailsFragment()
@@ -56,9 +56,9 @@ class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
         mViewModel.setPropertyId(propertyId)
     }
 
-    private val propertyObserver = Observer<Property> {
+    private val propertyObserver = Observer<Property> { property ->
 
-        if(it.mediaUriList.isEmpty()){
+        if(property.mediaUriList.isEmpty()){
             mBinding.apply {
                 fragmentDetailMediaRv.visibility = View.GONE
                 fragmentDetailMediaTitleTv.visibility = View.GONE
@@ -66,20 +66,20 @@ class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
         } else {
             val listOfPairs : MutableList<Pair<String, String?>> = mutableListOf()
 
-            for(entry in it.mediaUriList){
+            for(entry in property.mediaUriList){
                 listOfPairs.add(Pair(entry.key, entry.value))
             }
             mMediaAdapter.updateList(listOfPairs)
         }
 
-        if(it.pointOfInterest.isEmpty()){
+        if(property.pointOfInterest.isEmpty()){
             mBinding.apply {
                 fragmentDetailPointOfInterestCg.visibility = View.GONE
                 fragmentDetailPointOfInterestIv.visibility = View.GONE
                 fragmentDetailPointOfInterestTitleTv.visibility = View.GONE
             }
         } else {
-            it.pointOfInterest.map {
+            property.pointOfInterest.map {
                 val image = ResourcesCompat.getDrawable(mBinding.root.context.resources, it.icon, null)
                 val chip = Chip(requireContext())
                 chip.text = it.description
@@ -92,24 +92,24 @@ class DetailsFragment : Fragment(), MediaListAdapter.MediaListener {
         }
 
         GlideApp.with(this)
-            .load(it.mapPictureUrl)
+            .load(property.mapPictureUrl)
             .centerCrop()
             .timeout(2000)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(mBinding.fragmentDetailMapIv)
 
         mBinding.apply {
-            fragmentDetailTypeTv.text = it.type.description
-            fragmentDetailPriceTv.text = String.format("$%,d",it.price)
-            fragmentDetailDescriptionTv.text = it.description
-            fragmentDetailSurfaceTv.text = it.surface
-            fragmentDetailRoomsTv.text = it.roomsAmount.toString()
-            fragmentDetailBathroomsTv.text = it.bathroomsAmount.toString()
-            fragmentDetailBedroomsTv.text = it.bedroomsAmount.toString()
-            val address = "${it.address}\n${it.city}\n${it.postalCode}\n${it.country}"
+            fragmentDetailTypeTv.text = property.type.description
+            fragmentDetailPriceTv.text = String.format("$%,d",property.price)
+            fragmentDetailDescriptionTv.text = property.description
+            fragmentDetailSurfaceTv.text = property.surface
+            fragmentDetailRoomsTv.text = property.roomsAmount.toString()
+            fragmentDetailBathroomsTv.text = property.bathroomsAmount.toString()
+            fragmentDetailBedroomsTv.text = property.bedroomsAmount.toString()
+            val address = "${property.address}\n${property.city}\n${property.postalCode}\n${property.country}"
             fragmentDetailLocationTv.text = address
-            fragmentDetailAvailableTv.text = formatCalendarToString(it.saleDate)
-            fragmentDetailAgentTv.text = it.agentName
+            fragmentDetailAvailableTv.text = formatCalendarToString(property.saleDate)
+            fragmentDetailAgentTv.text = property.agentName
         }
 
     }

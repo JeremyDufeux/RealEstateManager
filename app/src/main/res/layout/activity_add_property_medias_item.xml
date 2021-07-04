@@ -19,6 +19,7 @@
         style="@style/detailMediaText"
         android:layout_width="match_parent"
         android:layout_height="30dp"
+        android:visibility="gone"
         android:layout_gravity="center_horizontal|bottom"
         tools:text="@sample/properties.json/names/media_name/value" />
 </androidx.cardview.widget.CardView>

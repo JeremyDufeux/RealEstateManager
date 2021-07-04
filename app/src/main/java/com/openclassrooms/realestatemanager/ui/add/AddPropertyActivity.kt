@@ -1,29 +1,41 @@
 package com.openclassrooms.realestatemanager.ui.add
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBinding
 import com.openclassrooms.realestatemanager.models.PointsOfInterest
 import com.openclassrooms.realestatemanager.models.PropertyType
+import com.openclassrooms.realestatemanager.ui.camera.CameraActivity
+import com.openclassrooms.realestatemanager.ui.camera.URI_RESULT_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
-class AddPropertyActivity : AppCompatActivity() {
+class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.MediaListener {
     private val mViewModel: AddActivityViewModel by viewModels()
     private lateinit var mBinding: ActivityAddPropertyBinding
+
+    private val mAdapter = AddPropertyMediaListAdapter(this)
 
     override fun onCreate(savedInstancProperty: Bundle?) {
         super.onCreate(savedInstancProperty)
@@ -33,11 +45,13 @@ class AddPropertyActivity : AppCompatActivity() {
 
         configureUi()
         configureListeners()
+        configureRecyclerView()
 
         setSupportActionBar(mBinding.activityAddPropertyToolbar)
     }
 
     private fun configureUi() {
+        // Property type dropdown list
         val adapter: ArrayAdapter<PropertyType> = ArrayAdapter<PropertyType>(
             this,
             R.layout.list_item,
@@ -48,6 +62,7 @@ class AddPropertyActivity : AppCompatActivity() {
             setText(adapter.getItem(0).toString(), false)
         }
 
+        // Points of interest chips
         for (point in PointsOfInterest.values()) {
             val chip = layoutInflater.inflate(
                 R.layout.single_chip_layout,
@@ -77,6 +92,7 @@ class AddPropertyActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     private fun configureListeners() {
         mBinding.apply {
+            activityAddPropertyAddMediaIb.setOnClickListener{ startCameraActivity() }
             activityAddPropertyTypeTvInput.onItemClickListener = dropdownListener()
             activityAddPropertyPriceEtInput.addTextChangedListener(priceTextWatcher())
             activityAddPropertySurfaceEtInput.addTextChangedListener(surfaceTextWatcher())
@@ -91,6 +107,31 @@ class AddPropertyActivity : AppCompatActivity() {
             activityAddPropertyAddressCountryEtInput.addTextChangedListener(countryTextWatcher())
             activityAddPropertyAgentEtInput.addTextChangedListener(agentTextWatcher())
             activityAddPropertySaveBtn.setOnClickListener { saveProperty() }
+        }
+    }
+
+    private fun configureRecyclerView() {
+        mBinding.activityAddPropertyMediasRv.adapter = mAdapter
+        mBinding.activityAddPropertyMediasRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        mViewModel.mediaListLiveData.observe(this, propertyMediaListObserver)
+    }
+
+    private val propertyMediaListObserver = Observer<List<Pair<String, String?>>> { list ->
+        Timber.d("Debug propertyMediaListObserver : ${list.size}")
+        mAdapter.submitList(list)
+    }
+
+    private fun startCameraActivity() {
+        if (hasCameraPermission()) {
+            val intent = Intent(this, CameraActivity::class.java)
+            resultLauncher.launch(intent)
+        } else {
+            requestPermissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ))
         }
     }
 
@@ -287,5 +328,40 @@ class AddPropertyActivity : AppCompatActivity() {
         mBinding.activityAddPropertyToolbar.title = resources.getString(R.string.toolbar_title_add_property)
         mBinding.activityAddPropertyToolbar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_back_arrow, null)
         mBinding.activityAddPropertyToolbar.setNavigationOnClickListener { finish() }
+    }
+
+    // ---------------
+    // Camera permissions
+    // ---------------
+
+    private fun hasCameraPermission() : Boolean{
+        return ContextCompat.checkSelfPermission(this,
+            Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this,
+            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+    }
+
+    val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        var isGranted = true
+        permissions.entries.forEach {
+            isGranted = isGranted && it.value
+        }
+        if(isGranted){
+            startCameraActivity()
+        }
+    }
+
+    private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val data: Intent? = result.data
+
+            data?.getStringExtra(URI_RESULT_KEY)?.let { mViewModel.addMediaUri(it, null) }
+        }
+    }
+
+    override fun onMediaClick(position: Int) {
+        TODO("Not yet implemented")
     }
 }
