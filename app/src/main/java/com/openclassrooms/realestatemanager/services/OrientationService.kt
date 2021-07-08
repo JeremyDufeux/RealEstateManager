@@ -13,6 +13,9 @@ class OrientationService @Inject constructor(context: Context)
     private var _orientationModeFlow = MutableStateFlow(OrientationMode.ORIENTATION_PORTRAIT_NORMAL)
     val orientationModeFlow = _orientationModeFlow
 
+    private var _rotationFlow: MutableStateFlow<Float?> = MutableStateFlow(null)
+    val rotationFlow = _rotationFlow
+
     override fun onOrientationChanged(orientation: Int) {
         val lastOrientation = _orientationModeFlow.value
         var orientationMode = lastOrientation
@@ -42,7 +45,58 @@ class OrientationService @Inject constructor(context: Context)
 
         if (lastOrientation != orientationMode) {
             _orientationModeFlow.value = orientationMode
+
+            if(_rotationFlow.value == null){
+                _rotationFlow.value = initRotation(orientationMode)
+            }
+            else{
+                calculateRotation(lastOrientation, orientationMode)
+            }
         }
+    }
+
+    private fun initRotation(orientation: OrientationMode): Float {
+         return when(orientation){
+            OrientationMode.ORIENTATION_PORTRAIT_NORMAL -> 0f
+            OrientationMode.ORIENTATION_PORTRAIT_INVERTED -> 180f
+            OrientationMode.ORIENTATION_LANDSCAPE_NORMAL -> 90f
+            OrientationMode.ORIENTATION_LANDSCAPE_INVERTED -> -90f
+        }
+    }
+
+    private fun calculateRotation(lastOrientation: OrientationMode, orientation: OrientationMode) {
+        var rotation: Float = _rotationFlow.value!!
+        when (lastOrientation) {
+            OrientationMode.ORIENTATION_PORTRAIT_NORMAL -> {
+                if (orientation == OrientationMode.ORIENTATION_LANDSCAPE_NORMAL) {
+                    rotation += 90
+                } else if (orientation == OrientationMode.ORIENTATION_LANDSCAPE_INVERTED) {
+                    rotation -= 90
+                }
+            }
+            OrientationMode.ORIENTATION_PORTRAIT_INVERTED -> {
+                if (orientation == OrientationMode.ORIENTATION_LANDSCAPE_NORMAL) {
+                    rotation -= 90
+                } else if (orientation == OrientationMode.ORIENTATION_LANDSCAPE_INVERTED) {
+                    rotation += 90
+                }
+            }
+            OrientationMode.ORIENTATION_LANDSCAPE_NORMAL -> {
+                if (orientation == OrientationMode.ORIENTATION_PORTRAIT_NORMAL) {
+                    rotation -= 90
+                } else if (orientation == OrientationMode.ORIENTATION_PORTRAIT_INVERTED) {
+                    rotation += 90
+                }
+            }
+            OrientationMode.ORIENTATION_LANDSCAPE_INVERTED -> {
+                if (orientation == OrientationMode.ORIENTATION_PORTRAIT_NORMAL) {
+                    rotation += 90
+                } else if (orientation == OrientationMode.ORIENTATION_PORTRAIT_INVERTED) {
+                    rotation -= 90
+                }
+            }
+        }
+        _rotationFlow.value = rotation
     }
 
     fun enableOrientationService(){

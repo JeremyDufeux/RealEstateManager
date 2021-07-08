@@ -28,6 +28,8 @@ import javax.inject.Inject
 class ImageSaver @Inject constructor(private val mContext: Context) : Camera.PictureCallback{
 
     private var mOrientationMode = OrientationMode.ORIENTATION_PORTRAIT_NORMAL
+    private var mLastOrientationMode = OrientationMode.ORIENTATION_PORTRAIT_NORMAL
+
     private val _fileStateFlow = MutableStateFlow<FileState>(FileState.Empty)
     val fileStateFlow = _fileStateFlow.asStateFlow()
 
@@ -42,6 +44,7 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
 
     override fun onPictureTaken(data: ByteArray, camera: Camera?) {
         mPictureBytes = data
+        mLastOrientationMode = mOrientationMode
     }
 
     fun savePicture(){
@@ -105,7 +108,7 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
         if(mContext.resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
             var thePicture = BitmapFactory.decodeByteArray(mPictureBytes, 0, mPictureBytes.size)
             val m = Matrix()
-            m.postRotate(mOrientationMode.rotation.toFloat())
+            m.postRotate(mLastOrientationMode.rotation.toFloat())
             thePicture =
                 Bitmap.createBitmap(thePicture, 0, 0, thePicture.width, thePicture.height, m, true)
 

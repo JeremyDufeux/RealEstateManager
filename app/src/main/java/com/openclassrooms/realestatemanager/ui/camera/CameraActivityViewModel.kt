@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.ui.camera
 
 import android.hardware.Camera
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.services.ImageSaver
 import com.openclassrooms.realestatemanager.services.OrientationService
@@ -15,8 +16,10 @@ import javax.inject.Inject
 class CameraActivityViewModel @Inject constructor(
     private val mOrientationService: OrientationService,
     private val mImageSaver: ImageSaver
-)
-    : ViewModel(){
+): ViewModel(){
+
+    val rotationLiveData = mOrientationService.rotationFlow.asLiveData()
+    val fileStateFlow = mImageSaver.fileStateFlow.asLiveData()
 
     fun startOrientationService() {
         mOrientationService.enableOrientationService()
@@ -27,7 +30,9 @@ class CameraActivityViewModel @Inject constructor(
         }
     }
 
-    val fileStateFlow = mImageSaver.fileStateFlow
+    fun enableOrientationService() {
+        mOrientationService.enableOrientationService()
+    }
 
     fun disableOrientationService() {
         mOrientationService.disableOrientationService()

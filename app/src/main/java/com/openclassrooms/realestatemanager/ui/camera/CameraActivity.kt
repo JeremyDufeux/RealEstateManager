@@ -9,13 +9,12 @@ import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityCameraBinding
 import com.openclassrooms.realestatemanager.services.ImageSaver
 import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 
 const val URI_RESULT_KEY = "URI_RESULT_KEY"
@@ -55,18 +54,25 @@ class CameraActivity : AppCompatActivity() {
 
     private fun configureViewModel() {
         mViewModel.startOrientationService()
+        mViewModel.fileStateFlow.observe(this, fileStateObserver)
+        mViewModel.rotationLiveData.observe(this, rotationObserver)
+    }
 
-        lifecycleScope.launchWhenStarted {
-            mViewModel.fileStateFlow.collect { state ->
-                when(state){
-                    is ImageSaver.FileState.Success -> finishActivityOk(state.file.absolutePath)
-                    is ImageSaver.FileState.Error -> {
-                        showToast(this@CameraActivity, R.string.error_saving_file)
-                        finishActivityError()
-                    }
-                    is ImageSaver.FileState.Empty -> {}
-                }
+    private val rotationObserver = Observer<Float?> { rotation ->
+        if(rotation != null) {
+            mBinding.activityCameraGalleryBtn.animate().rotation(rotation).setDuration(500).start()
+            mBinding.activityCameraCheckBtn.animate().rotation(rotation).setDuration(500).start()
+        }
+    }
+
+    private val fileStateObserver = Observer<ImageSaver.FileState> { state ->
+        when(state){
+            is ImageSaver.FileState.Success -> finishActivityOk(state.file.absolutePath)
+            is ImageSaver.FileState.Error -> {
+                showToast(this@CameraActivity, R.string.error_saving_file)
+                finishActivityError()
             }
+            is ImageSaver.FileState.Empty -> {}
         }
     }
 
@@ -121,6 +127,7 @@ class CameraActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        mViewModel.enableOrientationService()
         try {
             configureCamera()
         } catch (e: RuntimeException) {
