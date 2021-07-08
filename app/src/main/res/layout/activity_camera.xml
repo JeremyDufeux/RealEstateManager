@@ -20,4 +20,15 @@
         android:background="@drawable/ic_shutter"
         android:contentDescription="@string/capture"
         />
+
+    <ImageButton
+        android:id="@+id/activity_camera_gallery_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:layout_gravity="bottom|start"
+        android:scaleType="fitCenter"
+        android:background="@drawable/ic_picture"
+        android:contentDescription="@string/gallery"
+        />
 </FrameLayout>

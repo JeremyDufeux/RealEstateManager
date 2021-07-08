@@ -2,8 +2,10 @@ package com.openclassrooms.realestatemanager.ui.camera
 
 import android.content.Intent
 import android.hardware.Camera
+import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -14,7 +16,6 @@ import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
-import java.io.File
 
 const val URI_RESULT_KEY = "URI_RESULT_KEY"
 
@@ -38,6 +39,9 @@ class CameraActivity : AppCompatActivity() {
                 mBinding.activityCameraCaptureBtn.setImageResource(R.drawable.ic_shutter_pressed)
                 mViewModel.takePicture(mCamera)
         }
+        mBinding.activityCameraGalleryBtn.setOnClickListener {
+            openGallery()
+        }
 
         configureViewModel()
     }
@@ -48,7 +52,7 @@ class CameraActivity : AppCompatActivity() {
         lifecycleScope.launchWhenStarted {
             mViewModel.fileStateFlow.collect { state ->
                 when(state){
-                    is ImageSaver.FileState.Success -> finishActivityOk(state.file)
+                    is ImageSaver.FileState.Success -> finishActivityOk(state.file.absolutePath)
                     is ImageSaver.FileState.Error -> {
                         showToast(this@CameraActivity, R.string.error_saving_file)
                         finishActivityError()
@@ -82,9 +86,17 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun finishActivityOk(file: File ){
+    private fun openGallery(){
+        resultLauncher.launch("image/*")
+    }
+
+    private var resultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri ->
+        finishActivityOk(uri.toString())
+    }
+
+    private fun finishActivityOk(file: String ){
         val data = Intent()
-        data.putExtra(URI_RESULT_KEY, file.absolutePath)
+        data.putExtra(URI_RESULT_KEY, file)
         setResult(RESULT_OK, data)
         finish()
     }
