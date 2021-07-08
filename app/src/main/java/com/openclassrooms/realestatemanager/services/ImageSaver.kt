@@ -3,11 +3,13 @@ package com.openclassrooms.realestatemanager.services
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.hardware.Camera
+import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
@@ -29,6 +31,8 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
     private val _fileStateFlow = MutableStateFlow<FileState>(FileState.Empty)
     val fileStateFlow = _fileStateFlow.asStateFlow()
 
+    private lateinit var mPictureFile: File
+
     sealed class FileState{
         data class Success(val file: File) : FileState()
         data class Error(val StringId: Int) : FileState()
@@ -36,44 +40,18 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
     }
 
     override fun onPictureTaken(data: ByteArray, camera: Camera?) {
-        val pictureFile: File = getOutputMediaFile(MEDIA_TYPE_IMAGE) ?: kotlin.run {
+        mPictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE) ?: kotlin.run {
             Timber.e("Error: creating media file, check storage permissions")
             _fileStateFlow.value = FileState.Error(R.string.error_saving_file)
             return
         }
 
-        val pictureBytes: ByteArray
-
-        if(mContext.resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
-            var thePicture = BitmapFactory.decodeByteArray(data, 0, data.size)
-            val m = Matrix()
-            m.postRotate(mOrientationMode.rotation.toFloat())
-            thePicture =
-                Bitmap.createBitmap(thePicture, 0, 0, thePicture.width, thePicture.height, m, true)
-
-            val bos = ByteArrayOutputStream()
-            thePicture.compress(Bitmap.CompressFormat.JPEG, 100, bos)
-            pictureBytes = bos.toByteArray()
-        }
-        else{
-            pictureBytes = data
-        }
-
         try {
-            FileOutputStream(pictureFile).apply {
-                write(pictureBytes)
-                close()
-            }
+            writeFile(data)
 
-            val contentResolver = ContentValues().apply {
-                put(MediaStore.MediaColumns.DATE_ADDED, System.currentTimeMillis())
-                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-                put(MediaStore.MediaColumns.DATA, pictureFile.absolutePath)
-            }
+            addPictureToGallery()
 
-            mContext.contentResolver.insert(EXTERNAL_CONTENT_URI, contentResolver)
-
-            _fileStateFlow.value = FileState.Success(pictureFile)
+            _fileStateFlow.value = FileState.Success(mPictureFile)
 
         }
         catch (e: FileNotFoundException){
@@ -93,14 +71,13 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
     @SuppressLint("SimpleDateFormat")
     private fun getOutputMediaFile(type: Int): File? {
         val mediaStorageDir = File(
-            mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
             mContext.getString(R.string.app_name)
         )
 
         mediaStorageDir.apply {
             if(!exists()){
                 if(!mkdirs()){
-                    Timber.e("Error: failed to create directory")
                     _fileStateFlow.value = FileState.Error(R.string.error_creating_folder)
                 }
             }
@@ -116,5 +93,46 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
             }
             else -> null
         }
+    }
+
+    private fun writeFile(data: ByteArray){
+
+        val pictureBytes: ByteArray
+
+        if(mContext.resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+            var thePicture = BitmapFactory.decodeByteArray(data, 0, data.size)
+            val m = Matrix()
+            m.postRotate(mOrientationMode.rotation.toFloat())
+            thePicture =
+                Bitmap.createBitmap(thePicture, 0, 0, thePicture.width, thePicture.height, m, true)
+
+            val bos = ByteArrayOutputStream()
+            thePicture.compress(Bitmap.CompressFormat.JPEG, 100, bos)
+            pictureBytes = bos.toByteArray()
+        }
+        else{
+            pictureBytes = data
+        }
+
+        FileOutputStream(mPictureFile).apply {
+            write(pictureBytes)
+            close()
+        }
+    }
+
+    private fun addPictureToGallery() {
+        val contentResolver = ContentValues().apply {
+            put(MediaStore.MediaColumns.DATE_ADDED, System.currentTimeMillis())
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            put(MediaStore.MediaColumns.DATA, mPictureFile.absolutePath)
+        }
+        mContext.contentResolver.insert(EXTERNAL_CONTENT_URI, contentResolver)
+
+        mContext.sendBroadcast(
+            Intent(
+                Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                Uri.parse("file://" + Environment.getExternalStorageDirectory())
+            )
+        )
     }
 }

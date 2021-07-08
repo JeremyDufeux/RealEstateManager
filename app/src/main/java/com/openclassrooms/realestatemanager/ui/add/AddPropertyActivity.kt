@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -28,7 +29,6 @@ import com.openclassrooms.realestatemanager.ui.camera.URI_RESULT_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.MediaListener {
@@ -117,22 +117,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
     }
 
     private val propertyMediaListObserver = Observer<List<Pair<String, String?>>> { list ->
-        Timber.d("Debug propertyMediaListObserver : ${list.size}")
         mAdapter.submitList(list)
-    }
-
-    private fun startCameraActivity() {
-        if (hasCameraPermission()) {
-            val intent = Intent(this, CameraActivity::class.java)
-            resultLauncher.launch(intent)
-        } else {
-            requestPermissionLauncher.launch(
-                arrayOf(
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ))
-        }
     }
 
     private fun dropdownListener() =
@@ -331,24 +316,50 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
     }
 
     // ---------------
-    // Camera permissions
+    // Camera activity
     // ---------------
 
-    private fun hasCameraPermission() : Boolean{
-        return ContextCompat.checkSelfPermission(this,
+    private fun startCameraActivity() {
+        if (hasPermission()) {
+            val intent = Intent(this, CameraActivity::class.java)
+            resultLauncher.launch(intent)
+        } else {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                requestPermissionLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
+                )
+            } else {
+                requestPermissionLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )
+                )
+            }
+        }
+    }
+
+    private fun hasPermission() : Boolean{
+        var perms = ContextCompat.checkSelfPermission(this,
             Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this,
             Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            perms = perms && ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+        return perms
     }
 
-    val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-        var isGranted = true
-        permissions.entries.forEach {
-            isGranted = isGranted && it.value
-        }
-        if(isGranted){
+    val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+        if(hasPermission()){
             startCameraActivity()
         }
     }
