@@ -39,4 +39,8 @@ class CameraActivityViewModel @Inject constructor(
             mCamera?.takePicture(null, null, mImageSaver)
         }
     }
+
+    fun savePicture() {
+        mImageSaver.savePicture()
+    }
 }

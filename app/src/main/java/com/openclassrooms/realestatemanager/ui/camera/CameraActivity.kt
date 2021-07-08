@@ -4,6 +4,7 @@ import android.content.Intent
 import android.hardware.Camera
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -35,12 +36,18 @@ class CameraActivity : AppCompatActivity() {
         setContentView(mBinding.root)
 
         mBinding.activityCameraCaptureBtn.setOnClickListener {
-                mBinding.activityCameraCaptureBtn.isEnabled = false
-                mBinding.activityCameraCaptureBtn.setImageResource(R.drawable.ic_shutter_pressed)
-                mViewModel.takePicture(mCamera)
+            mViewModel.takePicture(mCamera)
+            showCheckButton()
         }
         mBinding.activityCameraGalleryBtn.setOnClickListener {
             openGallery()
+        }
+        mBinding.activityCameraCheckBtn.setOnClickListener {
+            mViewModel.savePicture()
+        }
+        mBinding.activityCameraCancelBtn.setOnClickListener {
+            mCamera?.startPreview()
+            hideCheckButton()
         }
 
         configureViewModel()
@@ -63,15 +70,18 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        try {
-            configureCamera()
-        } catch (e: RuntimeException) {
-            Timber.e("Error configureCamera : ${e.message.toString()}")
-            showToast(this, R.string.error_opening_camera)
-            finishActivityError()
-        }
+    private fun showCheckButton() {
+        mBinding.activityCameraCheckBtn.visibility = View.VISIBLE
+        mBinding.activityCameraCancelBtn.visibility = View.VISIBLE
+        mBinding.activityCameraCaptureBtn.visibility = View.GONE
+        mBinding.activityCameraGalleryBtn.visibility = View.GONE
+    }
+
+    private fun hideCheckButton() {
+        mBinding.activityCameraCheckBtn.visibility = View.GONE
+        mBinding.activityCameraCancelBtn.visibility = View.GONE
+        mBinding.activityCameraCaptureBtn.visibility = View.VISIBLE
+        mBinding.activityCameraGalleryBtn.visibility = View.VISIBLE
     }
 
     private fun configureCamera(){
@@ -90,8 +100,10 @@ class CameraActivity : AppCompatActivity() {
         resultLauncher.launch("image/*")
     }
 
-    private var resultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri ->
-        finishActivityOk(uri.toString())
+    private var resultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        if (uri != null) {
+            finishActivityOk(uri.toString())
+        }
     }
 
     private fun finishActivityOk(file: String ){
@@ -107,6 +119,17 @@ class CameraActivity : AppCompatActivity() {
         finish()
     }
 
+    override fun onResume() {
+        super.onResume()
+        try {
+            configureCamera()
+        } catch (e: RuntimeException) {
+            Timber.e("Error configureCamera : ${e.message.toString()}")
+            showToast(this, R.string.error_opening_camera)
+            finishActivityError()
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         mViewModel.disableOrientationService()
@@ -117,5 +140,6 @@ class CameraActivity : AppCompatActivity() {
         mCamera?.stopPreview()
         mCamera?.release()
         mCamera = null
+        mPreview?.holder?.removeCallback(mPreview)
     }
 }

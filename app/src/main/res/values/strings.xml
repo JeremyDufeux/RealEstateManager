@@ -47,4 +47,5 @@
     <string name="error_opening_camera">Error when opening camera</string>
     <string name="capture">Capture</string>
     <string name="gallery">Gallery</string>
+    <string name="check">Check</string>
 </resources>

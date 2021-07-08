@@ -32,6 +32,7 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
     val fileStateFlow = _fileStateFlow.asStateFlow()
 
     private lateinit var mPictureFile: File
+    private lateinit var mPictureBytes: ByteArray
 
     sealed class FileState{
         data class Success(val file: File) : FileState()
@@ -40,6 +41,10 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
     }
 
     override fun onPictureTaken(data: ByteArray, camera: Camera?) {
+        mPictureBytes = data
+    }
+
+    fun savePicture(){
         mPictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE) ?: kotlin.run {
             Timber.e("Error: creating media file, check storage permissions")
             _fileStateFlow.value = FileState.Error(R.string.error_saving_file)
@@ -47,7 +52,7 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
         }
 
         try {
-            writeFile(data)
+            writeFile()
 
             addPictureToGallery()
 
@@ -95,12 +100,10 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
         }
     }
 
-    private fun writeFile(data: ByteArray){
-
-        val pictureBytes: ByteArray
+    private fun writeFile(){
 
         if(mContext.resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
-            var thePicture = BitmapFactory.decodeByteArray(data, 0, data.size)
+            var thePicture = BitmapFactory.decodeByteArray(mPictureBytes, 0, mPictureBytes.size)
             val m = Matrix()
             m.postRotate(mOrientationMode.rotation.toFloat())
             thePicture =
@@ -108,14 +111,11 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
 
             val bos = ByteArrayOutputStream()
             thePicture.compress(Bitmap.CompressFormat.JPEG, 100, bos)
-            pictureBytes = bos.toByteArray()
-        }
-        else{
-            pictureBytes = data
+            mPictureBytes = bos.toByteArray()
         }
 
         FileOutputStream(mPictureFile).apply {
-            write(pictureBytes)
+            write(mPictureBytes)
             close()
         }
     }
