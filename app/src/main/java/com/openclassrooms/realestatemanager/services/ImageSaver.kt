@@ -12,10 +12,9 @@ import android.hardware.Camera
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
-import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
-import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 import android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.models.FileState
 import com.openclassrooms.realestatemanager.models.OrientationMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,23 +35,13 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
     private lateinit var mPictureFile: File
     private lateinit var mPictureBytes: ByteArray
 
-    sealed class FileState{
-        data class Success(val file: File) : FileState()
-        data class Error(val StringId: Int) : FileState()
-        object Empty : FileState()
-    }
-
     override fun onPictureTaken(data: ByteArray, camera: Camera?) {
         mPictureBytes = data
         mLastOrientationMode = mOrientationMode
     }
 
     fun savePicture(){
-        mPictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE) ?: kotlin.run {
-            Timber.e("Error: creating media file, check storage permissions")
-            _fileStateFlow.value = FileState.Error(R.string.error_saving_file)
-            return
-        }
+        mPictureFile = getOutputMediaFile()
 
         try {
             writeFile()
@@ -77,7 +66,7 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun getOutputMediaFile(type: Int): File? {
+    fun getOutputMediaFile(): File {
         val mediaStorageDir = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
             mContext.getString(R.string.app_name)
@@ -92,15 +81,7 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
         }
 
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        return when (type) {
-            MEDIA_TYPE_IMAGE -> {
-                File("${mediaStorageDir.path}${File.separator}IMG_$timeStamp.jpg")
-            }
-            MEDIA_TYPE_VIDEO -> {
-                File("${mediaStorageDir.path}${File.separator}VID_$timeStamp.mp4")
-            }
-            else -> null
-        }
+        return File("${mediaStorageDir.path}${File.separator}IMG_$timeStamp.jpg")
     }
 
     private fun writeFile(){

@@ -2,12 +2,8 @@ package com.openclassrooms.realestatemanager.ui.camera
 
 import android.content.Intent
 import android.hardware.Camera
-import android.media.CamcorderProfile
-import android.media.MediaRecorder
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,12 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityCameraBinding
-import com.openclassrooms.realestatemanager.services.ImageSaver
+import com.openclassrooms.realestatemanager.models.FileState
 import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import java.io.File
-import java.io.IOException
 
 const val URI_RESULT_KEY = "URI_RESULT_KEY"
 
@@ -34,8 +28,6 @@ class CameraActivity : AppCompatActivity() {
 
     private var mCamera: Camera? = null
     private var mPreview: CameraPreview? = null
-    private var mRecorder: MediaRecorder? = null
-    private var mVideoFile: File? = null
 
     enum class CameraMode{
         PHOTO, VIDEO
@@ -76,6 +68,9 @@ class CameraActivity : AppCompatActivity() {
                 mViewModel.cameraMode = CameraMode.PHOTO
                 displayActualMode()
             }
+            activityCameraFl.setOnClickListener {
+                mCamera?.autoFocus(null)
+            }
         }
     }
 
@@ -111,7 +106,7 @@ class CameraActivity : AppCompatActivity() {
 
     private fun configureViewModel() {
         mViewModel.startOrientationService()
-        mViewModel.fileStateFlow.observe(this, fileStateObserver)
+        mViewModel.pictureFileStateFlow.observe(this, fileStateObserver)
         mViewModel.rotationLiveData.observe(this, rotationObserver)
     }
 
@@ -126,14 +121,14 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private val fileStateObserver = Observer<ImageSaver.FileState> { state ->
+    private val fileStateObserver = Observer<FileState> { state ->
         when(state){
-            is ImageSaver.FileState.Success -> finishActivityOk(state.file.absolutePath)
-            is ImageSaver.FileState.Error -> {
+            is FileState.Success -> finishActivityOk(state.file.absolutePath)
+            is FileState.Error -> {
                 showToast(this@CameraActivity, R.string.error_saving_file)
                 finishActivityError()
             }
-            is ImageSaver.FileState.Empty -> {}
+            is FileState.Empty -> {}
         }
     }
 
@@ -173,45 +168,21 @@ class CameraActivity : AppCompatActivity() {
 
     private fun takePicture() {
         mCamera?.autoFocus(null)
-        mCamera?.takePicture(null, null, mViewModel.imageSaver)
+        mCamera?.takePicture(null, null, mViewModel.mPictureSaver)
     }
 
     private fun savePicture() {
-        mViewModel.imageSaver.savePicture()
+        mViewModel.mPictureSaver.savePicture()
     }
 
     private fun startRecording() {
+        mCamera?.autoFocus(null)
         mCamera?.unlock()
-        mRecorder = MediaRecorder().apply {
-            setCamera(mCamera)
-            setAudioSource(MediaRecorder.AudioSource.CAMCORDER)
-            setVideoSource(MediaRecorder.VideoSource.CAMERA)
-
-            setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P))
-
-            mVideoFile = mViewModel.imageSaver.getOutputMediaFile(MEDIA_TYPE_VIDEO)
-            if(Build.VERSION.SDK_INT < 26) {
-                setOutputFile(mVideoFile?.absolutePath)
-            }else{
-                setOutputFile(mVideoFile)
-            }
-
-            try {
-                prepare()
-            } catch (e: IOException) {
-                Timber.e("Debug startRecording : ${e.message}")
-            }
-            start()
-        }
+        mCamera?.let { mViewModel.mVideoRecorder.startRecording(it) }
     }
 
     private fun stopRecording() {
-        mRecorder?.apply {
-            stop()
-            reset()
-            release()
-        }
-        mRecorder = null
+        mViewModel.mVideoRecorder.stopRecording()
         configureCamera()
     }
 

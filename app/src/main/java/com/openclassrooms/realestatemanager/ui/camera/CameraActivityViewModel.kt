@@ -5,6 +5,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.services.ImageSaver
 import com.openclassrooms.realestatemanager.services.OrientationService
+import com.openclassrooms.realestatemanager.services.VideoRecorder
 import com.openclassrooms.realestatemanager.ui.camera.CameraActivity.CameraMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,11 +16,13 @@ import javax.inject.Inject
 @HiltViewModel
 class CameraActivityViewModel @Inject constructor(
     private val mOrientationService: OrientationService,
-    val imageSaver: ImageSaver
+    val mPictureSaver: ImageSaver,
+    val mVideoRecorder: VideoRecorder
 ): ViewModel(){
 
     val rotationLiveData = mOrientationService.rotationFlow.asLiveData()
-    val fileStateFlow = imageSaver.fileStateFlow.asLiveData()
+    val pictureFileStateFlow = mPictureSaver.fileStateFlow.asLiveData()
+    val videoFileStateFlow = mVideoRecorder.fileStateFlow.asLiveData()
 
     var cameraMode: CameraMode = CameraMode.PHOTO
     var recording = false
@@ -28,7 +31,8 @@ class CameraActivityViewModel @Inject constructor(
         mOrientationService.enableOrientationService()
         viewModelScope.launch(Dispatchers.Default) {
             mOrientationService.orientationModeFlow.collect { orientation ->
-                imageSaver.setOrientationMode(orientation)
+                mPictureSaver.setOrientationMode(orientation)
+                mVideoRecorder.setOrientationMode(orientation)
             }
         }
     }
