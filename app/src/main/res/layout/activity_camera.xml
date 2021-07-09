@@ -11,14 +11,26 @@
         android:layout_height="match_parent" />
 
     <ImageButton
-        android:id="@+id/activity_camera_capture_btn"
+        android:id="@+id/activity_camera_capture_photo_btn"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:layout_margin="5dp"
+        android:layout_margin="20dp"
         android:layout_gravity="bottom|center_horizontal"
         android:scaleType="fitCenter"
-        android:background="@drawable/ic_shutter_normal"
+        android:background="@drawable/ic_shutter"
         android:contentDescription="@string/capture"
+        />
+
+    <ImageButton
+        android:id="@+id/activity_camera_capture_video_btn"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_margin="20dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:scaleType="fitCenter"
+        android:background="@drawable/ic_shutter_video_normal"
+        android:contentDescription="@string/record"
+        android:visibility="gone"
         />
 
     <ImageButton
@@ -30,6 +42,29 @@
         android:scaleType="fitCenter"
         android:background="@drawable/ic_picture"
         android:contentDescription="@string/gallery"
+        />
+
+    <ImageButton
+        android:id="@+id/activity_camera_photo_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:layout_gravity="bottom|end"
+        android:scaleType="fitCenter"
+        android:background="@drawable/ic_photo"
+        android:contentDescription="@string/photo"
+        android:visibility="gone"
+        />
+
+    <ImageButton
+        android:id="@+id/activity_camera_video_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:layout_gravity="bottom|end"
+        android:scaleType="fitCenter"
+        android:background="@drawable/ic_video"
+        android:contentDescription="@string/video"
         />
 
     <ImageButton

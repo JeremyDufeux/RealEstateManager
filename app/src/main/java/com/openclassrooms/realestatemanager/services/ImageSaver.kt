@@ -77,7 +77,7 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun getOutputMediaFile(type: Int): File? {
+    fun getOutputMediaFile(type: Int): File? {
         val mediaStorageDir = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
             mContext.getString(R.string.app_name)

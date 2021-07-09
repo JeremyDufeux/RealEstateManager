@@ -2,8 +2,12 @@ package com.openclassrooms.realestatemanager.ui.camera
 
 import android.content.Intent
 import android.hardware.Camera
+import android.media.CamcorderProfile
+import android.media.MediaRecorder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,6 +20,8 @@ import com.openclassrooms.realestatemanager.services.ImageSaver
 import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.io.File
+import java.io.IOException
 
 const val URI_RESULT_KEY = "URI_RESULT_KEY"
 
@@ -28,28 +34,79 @@ class CameraActivity : AppCompatActivity() {
 
     private var mCamera: Camera? = null
     private var mPreview: CameraPreview? = null
+    private var mRecorder: MediaRecorder? = null
+    private var mVideoFile: File? = null
+
+    enum class CameraMode{
+        PHOTO, VIDEO
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-
-        mBinding.activityCameraCaptureBtn.setOnClickListener {
-            mViewModel.takePicture(mCamera)
-            showCheckButton()
-        }
-        mBinding.activityCameraGalleryBtn.setOnClickListener {
-            openGallery()
-        }
-        mBinding.activityCameraCheckBtn.setOnClickListener {
-            mViewModel.savePicture()
-        }
-        mBinding.activityCameraCancelBtn.setOnClickListener {
-            mCamera?.startPreview()
-            hideCheckButton()
-        }
-
+        configureUi()
         configureViewModel()
+    }
+
+    private fun configureUi(){
+        mBinding.apply {
+            activityCameraCapturePhotoBtn.setOnClickListener {
+                takePicture()
+                showCheckButton()
+            }
+            activityCameraCaptureVideoBtn.setOnClickListener {
+                toggleCaptureVideoButton()
+            }
+            activityCameraGalleryBtn.setOnClickListener {
+                openGallery()
+            }
+            activityCameraCheckBtn.setOnClickListener {
+                savePicture()
+            }
+            activityCameraCancelBtn.setOnClickListener {
+                mCamera?.startPreview()
+                hideCheckButton()
+            }
+            activityCameraVideoBtn.setOnClickListener {
+                mViewModel.cameraMode = CameraMode.VIDEO
+                displayActualMode()
+            }
+            activityCameraPhotoBtn.setOnClickListener {
+                mViewModel.cameraMode = CameraMode.PHOTO
+                displayActualMode()
+            }
+        }
+    }
+
+    private fun toggleCaptureVideoButton(){
+        mViewModel.recording = !mViewModel.recording
+        if(mViewModel.recording){
+            startRecording()
+            mBinding.activityCameraCaptureVideoBtn.setImageResource(R.drawable.ic_shutter_video_recording)
+        } else{
+            stopRecording()
+            mBinding.activityCameraCaptureVideoBtn.setImageResource(R.drawable.ic_shutter_video_normal)
+        }
+    }
+
+    private fun displayActualMode(){
+        mBinding.apply {
+            when (mViewModel.cameraMode) {
+                CameraMode.PHOTO -> {
+                    activityCameraVideoBtn.visibility = View.VISIBLE
+                    activityCameraPhotoBtn.visibility = View.GONE
+                    activityCameraCaptureVideoBtn.visibility = View.GONE
+                    activityCameraCapturePhotoBtn.visibility = View.VISIBLE
+                }
+                CameraMode.VIDEO -> {
+                    activityCameraVideoBtn.visibility = View.GONE
+                    activityCameraPhotoBtn.visibility = View.VISIBLE
+                    activityCameraCaptureVideoBtn.visibility = View.VISIBLE
+                    activityCameraCapturePhotoBtn.visibility = View.GONE
+                }
+            }
+        }
     }
 
     private fun configureViewModel() {
@@ -60,8 +117,12 @@ class CameraActivity : AppCompatActivity() {
 
     private val rotationObserver = Observer<Float?> { rotation ->
         if(rotation != null) {
-            mBinding.activityCameraGalleryBtn.animate().rotation(rotation).setDuration(500).start()
-            mBinding.activityCameraCheckBtn.animate().rotation(rotation).setDuration(500).start()
+            mBinding.apply {
+                activityCameraGalleryBtn.animate().rotation(rotation).setDuration(500).start()
+                activityCameraCheckBtn.animate().rotation(rotation).setDuration(500).start()
+                activityCameraVideoBtn.animate().rotation(rotation).setDuration(500).start()
+                activityCameraPhotoBtn.animate().rotation(rotation).setDuration(500).start()
+            }
         }
     }
 
@@ -77,17 +138,25 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun showCheckButton() {
-        mBinding.activityCameraCheckBtn.visibility = View.VISIBLE
-        mBinding.activityCameraCancelBtn.visibility = View.VISIBLE
-        mBinding.activityCameraCaptureBtn.visibility = View.GONE
-        mBinding.activityCameraGalleryBtn.visibility = View.GONE
+        mBinding.apply {
+            activityCameraCheckBtn.visibility = View.VISIBLE
+            activityCameraCancelBtn.visibility = View.VISIBLE
+            activityCameraCapturePhotoBtn.visibility = View.GONE
+            activityCameraCaptureVideoBtn.visibility = View.GONE
+            activityCameraGalleryBtn.visibility = View.GONE
+            activityCameraVideoBtn.visibility = View.GONE
+            activityCameraPhotoBtn.visibility = View.GONE
+        }
     }
 
     private fun hideCheckButton() {
-        mBinding.activityCameraCheckBtn.visibility = View.GONE
-        mBinding.activityCameraCancelBtn.visibility = View.GONE
-        mBinding.activityCameraCaptureBtn.visibility = View.VISIBLE
-        mBinding.activityCameraGalleryBtn.visibility = View.VISIBLE
+        mBinding.apply {
+            activityCameraCheckBtn.visibility = View.GONE
+            activityCameraCancelBtn.visibility = View.GONE
+            activityCameraCapturePhotoBtn.visibility = View.VISIBLE
+            activityCameraGalleryBtn.visibility = View.VISIBLE
+        }
+        displayActualMode()
     }
 
     private fun configureCamera(){
@@ -100,6 +169,50 @@ class CameraActivity : AppCompatActivity() {
             val preview: FrameLayout = mBinding.activityCameraFl
             preview.addView(it)
         }
+    }
+
+    private fun takePicture() {
+        mCamera?.autoFocus(null)
+        mCamera?.takePicture(null, null, mViewModel.imageSaver)
+    }
+
+    private fun savePicture() {
+        mViewModel.imageSaver.savePicture()
+    }
+
+    private fun startRecording() {
+        mCamera?.unlock()
+        mRecorder = MediaRecorder().apply {
+            setCamera(mCamera)
+            setAudioSource(MediaRecorder.AudioSource.CAMCORDER)
+            setVideoSource(MediaRecorder.VideoSource.CAMERA)
+
+            setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P))
+
+            mVideoFile = mViewModel.imageSaver.getOutputMediaFile(MEDIA_TYPE_VIDEO)
+            if(Build.VERSION.SDK_INT < 26) {
+                setOutputFile(mVideoFile?.absolutePath)
+            }else{
+                setOutputFile(mVideoFile)
+            }
+
+            try {
+                prepare()
+            } catch (e: IOException) {
+                Timber.e("Debug startRecording : ${e.message}")
+            }
+            start()
+        }
+    }
+
+    private fun stopRecording() {
+        mRecorder?.apply {
+            stop()
+            reset()
+            release()
+        }
+        mRecorder = null
+        configureCamera()
     }
 
     private fun openGallery(){

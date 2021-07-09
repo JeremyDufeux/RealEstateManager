@@ -328,6 +328,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
                 requestPermissionLauncher.launch(
                     arrayOf(
                         Manifest.permission.CAMERA,
+                        Manifest.permission.RECORD_AUDIO,
                         Manifest.permission.READ_EXTERNAL_STORAGE
                     )
                 )
@@ -335,6 +336,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
                 requestPermissionLauncher.launch(
                     arrayOf(
                         Manifest.permission.CAMERA,
+                        Manifest.permission.RECORD_AUDIO,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                     )
@@ -348,12 +350,16 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
             Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this,
             Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this,
+            Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
 
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             perms = perms && ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
         }
         return perms
     }
