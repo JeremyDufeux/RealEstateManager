@@ -11,8 +11,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import androidx.core.net.toUri
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.models.FileState
+import com.openclassrooms.realestatemanager.models.FileType
 import com.openclassrooms.realestatemanager.models.OrientationMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,7 +41,7 @@ class VideoRecorder @Inject constructor(private val mContext: Context) {
             setAudioSource(MediaRecorder.AudioSource.CAMCORDER)
             setVideoSource(MediaRecorder.VideoSource.CAMERA)
 
-            setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH))
+            setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P))
 
             setOrientationHint(mOrientationMode.rotation)
 
@@ -52,11 +54,14 @@ class VideoRecorder @Inject constructor(private val mContext: Context) {
 
             try {
                 prepare()
+                start()
             } catch (e: IOException) {
-                Timber.e("Debug startRecording : ${e.message}")
+                Timber.e("Debug startRecording IOException: ${e.message}")
+                _fileStateFlow.value = FileState.Error(R.string.an_error_append)
+            } catch (e: IllegalStateException) {
+                Timber.e("Debug startRecording IllegalStateException: ${e.message}")
                 _fileStateFlow.value = FileState.Error(R.string.an_error_append)
             }
-            start()
         }
     }
 
@@ -68,6 +73,8 @@ class VideoRecorder @Inject constructor(private val mContext: Context) {
         }
         mRecorder = null
         addVideoToGallery()
+
+        _fileStateFlow.value = FileState.Success(mVideoFile.toUri(), FileType.VIDEO)
     }
 
     @SuppressLint("SimpleDateFormat")

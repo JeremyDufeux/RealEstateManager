@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.ui.camera
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.hardware.Camera
 import android.net.Uri
 import android.os.Bundle
@@ -10,14 +12,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityCameraBinding
 import com.openclassrooms.realestatemanager.models.FileState
+import com.openclassrooms.realestatemanager.models.FileType
+import com.openclassrooms.realestatemanager.modules.GlideApp
+import com.openclassrooms.realestatemanager.ui.camera.CameraActivityViewModel.CameraMode.*
 import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 const val URI_RESULT_KEY = "URI_RESULT_KEY"
+const val FILE_TYPE_KEY = "FILE_TYPE_KEY"
 
 @AndroidEntryPoint
 class CameraActivity : AppCompatActivity() {
@@ -29,23 +37,54 @@ class CameraActivity : AppCompatActivity() {
     private var mCamera: Camera? = null
     private var mPreview: CameraPreview? = null
 
-    enum class CameraMode{
-        PHOTO, VIDEO
-    }
+    private lateinit var mPlayer: SimpleExoPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        configureUi()
+
         configureViewModel()
+        configureUi()
+    }
+
+    private fun configureViewModel() {
+        mViewModel.rotationLiveData.observe(this, rotationObserver)
+        mViewModel.fileLiveData.observe(this, fileStateObserver)
+    }
+
+    private val rotationObserver = Observer<Float?> { rotation ->
+        if(rotation != null) {
+            mBinding.apply {
+                activityCameraGalleryBtn.animate().rotation(rotation).setDuration(500).start()
+                activityCameraVideoBtn.animate().rotation(rotation).setDuration(500).start()
+                activityCameraPhotoBtn.animate().rotation(rotation).setDuration(500).start()
+            }
+        }
+    }
+
+    private val fileStateObserver = Observer<FileState> { state ->
+        when(state){
+            is FileState.Success -> {
+                when(state.type){
+                    FileType.PICTURE -> showPicture()
+                    FileType.VIDEO -> showVideo()
+                }
+                showCheckButton()
+                releaseCamera()
+            }
+            is FileState.Error -> {
+                showToast(this@CameraActivity, R.string.error_saving_file)
+                finishActivityWithoutFile()
+            }
+            is FileState.Empty -> {}
+        }
     }
 
     private fun configureUi(){
         mBinding.apply {
             activityCameraCapturePhotoBtn.setOnClickListener {
                 takePicture()
-                showCheckButton()
             }
             activityCameraCaptureVideoBtn.setOnClickListener {
                 toggleCaptureVideoButton()
@@ -54,18 +93,17 @@ class CameraActivity : AppCompatActivity() {
                 openGallery()
             }
             activityCameraCheckBtn.setOnClickListener {
-                savePicture()
+                finishActivityWithFile()
             }
             activityCameraCancelBtn.setOnClickListener {
-                mCamera?.startPreview()
-                hideCheckButton()
+                finishActivityWithoutFile()
             }
             activityCameraVideoBtn.setOnClickListener {
-                mViewModel.cameraMode = CameraMode.VIDEO
+                mViewModel.cameraMode = VIDEO
                 displayActualMode()
             }
             activityCameraPhotoBtn.setOnClickListener {
-                mViewModel.cameraMode = CameraMode.PHOTO
+                mViewModel.cameraMode = PHOTO
                 displayActualMode()
             }
             activityCameraFl.setOnClickListener {
@@ -88,13 +126,13 @@ class CameraActivity : AppCompatActivity() {
     private fun displayActualMode(){
         mBinding.apply {
             when (mViewModel.cameraMode) {
-                CameraMode.PHOTO -> {
+                PHOTO -> {
                     activityCameraVideoBtn.visibility = View.VISIBLE
                     activityCameraPhotoBtn.visibility = View.GONE
                     activityCameraCaptureVideoBtn.visibility = View.GONE
                     activityCameraCapturePhotoBtn.visibility = View.VISIBLE
                 }
-                CameraMode.VIDEO -> {
+                VIDEO -> {
                     activityCameraVideoBtn.visibility = View.GONE
                     activityCameraPhotoBtn.visibility = View.VISIBLE
                     activityCameraCaptureVideoBtn.visibility = View.VISIBLE
@@ -104,38 +142,39 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun configureViewModel() {
-        mViewModel.startOrientationService()
-        mViewModel.pictureFileStateFlow.observe(this, fileStateObserver)
-        mViewModel.rotationLiveData.observe(this, rotationObserver)
+    private fun showPicture() {
+        val fileState = mViewModel.fileLiveData.value as FileState.Success
+        GlideApp.with(this)
+            .load(fileState.uri)
+            .into(mBinding.activityCameraPictureIv)
+
+        mBinding.activityCameraPictureIv.visibility = View.VISIBLE
     }
 
-    private val rotationObserver = Observer<Float?> { rotation ->
-        if(rotation != null) {
-            mBinding.apply {
-                activityCameraGalleryBtn.animate().rotation(rotation).setDuration(500).start()
-                activityCameraCheckBtn.animate().rotation(rotation).setDuration(500).start()
-                activityCameraVideoBtn.animate().rotation(rotation).setDuration(500).start()
-                activityCameraPhotoBtn.animate().rotation(rotation).setDuration(500).start()
-            }
+    private fun showVideo() {
+        mPlayer = SimpleExoPlayer.Builder(this).build()
+        mBinding.apply {
+            activityCameraFl.visibility = View.GONE
+            activityCameraExoplayer.visibility = View.VISIBLE
+            activityCameraExoplayer.player = mPlayer
+            activityCameraCheckBtn.visibility = View.VISIBLE
+            activityCameraCancelBtn.visibility = View.VISIBLE
         }
-    }
-
-    private val fileStateObserver = Observer<FileState> { state ->
-        when(state){
-            is FileState.Success -> finishActivityOk(state.file.absolutePath)
-            is FileState.Error -> {
-                showToast(this@CameraActivity, R.string.error_saving_file)
-                finishActivityError()
-            }
-            is FileState.Empty -> {}
-        }
+        val fileState = mViewModel.fileLiveData.value as FileState.Success
+        val mediaItem: MediaItem = MediaItem.fromUri(fileState.uri)
+        mPlayer.setMediaItem(mediaItem)
+        mPlayer.prepare()
+        mPlayer.play()
     }
 
     private fun showCheckButton() {
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
+
         mBinding.apply {
             activityCameraCheckBtn.visibility = View.VISIBLE
             activityCameraCancelBtn.visibility = View.VISIBLE
+
+            activityCameraFl.visibility = View.GONE
             activityCameraCapturePhotoBtn.visibility = View.GONE
             activityCameraCaptureVideoBtn.visibility = View.GONE
             activityCameraGalleryBtn.visibility = View.GONE
@@ -144,14 +183,21 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     private fun hideCheckButton() {
         mBinding.apply {
             activityCameraCheckBtn.visibility = View.GONE
             activityCameraCancelBtn.visibility = View.GONE
+            activityCameraPictureIv.visibility = View.GONE
+            activityCameraExoplayer.visibility = View.GONE
+
             activityCameraCapturePhotoBtn.visibility = View.VISIBLE
             activityCameraGalleryBtn.visibility = View.VISIBLE
+            activityCameraFl.visibility = View.VISIBLE
         }
         displayActualMode()
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     private fun configureCamera(){
@@ -168,21 +214,17 @@ class CameraActivity : AppCompatActivity() {
 
     private fun takePicture() {
         mCamera?.autoFocus(null)
-        mCamera?.takePicture(null, null, mViewModel.mPictureSaver)
-    }
-
-    private fun savePicture() {
-        mViewModel.mPictureSaver.savePicture()
+        mCamera?.takePicture(null, null, mViewModel.getPictureSaver())
     }
 
     private fun startRecording() {
         mCamera?.autoFocus(null)
         mCamera?.unlock()
-        mCamera?.let { mViewModel.mVideoRecorder.startRecording(it) }
+        mCamera?.let { mViewModel.startRecording(it) }
     }
 
     private fun stopRecording() {
-        mViewModel.mVideoRecorder.stopRecording()
+        mViewModel.stopRecording()
         configureCamera()
     }
 
@@ -192,18 +234,21 @@ class CameraActivity : AppCompatActivity() {
 
     private var resultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if (uri != null) {
-            finishActivityOk(uri.toString())
+            mViewModel.setFileState(FileState.Success(uri, FileType.PICTURE))
         }
     }
 
-    private fun finishActivityOk(file: String ){
+    private fun finishActivityWithFile( ){
+        val fileState = mViewModel.fileLiveData.value as FileState.Success
+
         val data = Intent()
-        data.putExtra(URI_RESULT_KEY, file)
+        data.putExtra(URI_RESULT_KEY, fileState.uri.toString())
+        data.putExtra(FILE_TYPE_KEY, fileState.type)
         setResult(RESULT_OK, data)
         finish()
     }
 
-    private fun finishActivityError(){
+    private fun finishActivityWithoutFile(){
         val data = Intent()
         setResult(RESULT_CANCELED, data)
         finish()
@@ -217,7 +262,7 @@ class CameraActivity : AppCompatActivity() {
         } catch (e: RuntimeException) {
             Timber.e("Error configureCamera : ${e.message.toString()}")
             showToast(this, R.string.error_opening_camera)
-            finishActivityError()
+            finishActivityWithoutFile()
         }
     }
 

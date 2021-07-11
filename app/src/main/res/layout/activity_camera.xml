@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".ui.camera.CameraActivity">
 
     <FrameLayout
@@ -67,12 +68,27 @@
         android:contentDescription="@string/video"
         />
 
+    <ImageView
+        android:id="@+id/activity_camera_picture_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/capture_picture"
+        android:visibility="gone"/>
+
+    <com.google.android.exoplayer2.ui.StyledPlayerView
+        android:id="@+id/activity_camera_exoplayer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:visibility="gone"
+        />
+
     <ImageButton
         android:id="@+id/activity_camera_cancel_btn"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_margin="20dp"
-        android:layout_gravity="top|end"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="25dp"
+        android:layout_gravity="top|start"
         android:scaleType="fitCenter"
         android:background="@drawable/ic_cancel"
         android:contentDescription="@string/cancel"
@@ -84,12 +100,11 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="20dp"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_gravity="top|end"
         android:scaleType="fitCenter"
         android:background="@drawable/ic_check"
         android:contentDescription="@string/check"
         android:visibility="gone"
         />
-
 
 </FrameLayout>

@@ -72,6 +72,8 @@ class OrientationService @Inject constructor(context: Context)
                     rotation += 90
                 } else if (orientation == OrientationMode.ORIENTATION_LANDSCAPE_INVERTED) {
                     rotation -= 90
+                } else if (orientation == OrientationMode.ORIENTATION_PORTRAIT_INVERTED) {
+                    rotation -= 180
                 }
             }
             OrientationMode.ORIENTATION_PORTRAIT_INVERTED -> {
@@ -79,6 +81,8 @@ class OrientationService @Inject constructor(context: Context)
                     rotation -= 90
                 } else if (orientation == OrientationMode.ORIENTATION_LANDSCAPE_INVERTED) {
                     rotation += 90
+                }else if (orientation == OrientationMode.ORIENTATION_PORTRAIT_NORMAL) {
+                    rotation += 180
                 }
             }
             OrientationMode.ORIENTATION_LANDSCAPE_NORMAL -> {
@@ -86,6 +90,8 @@ class OrientationService @Inject constructor(context: Context)
                     rotation -= 90
                 } else if (orientation == OrientationMode.ORIENTATION_PORTRAIT_INVERTED) {
                     rotation += 90
+                } else if (orientation == OrientationMode.ORIENTATION_LANDSCAPE_INVERTED) {
+                    rotation += 180
                 }
             }
             OrientationMode.ORIENTATION_LANDSCAPE_INVERTED -> {
@@ -93,6 +99,8 @@ class OrientationService @Inject constructor(context: Context)
                     rotation += 90
                 } else if (orientation == OrientationMode.ORIENTATION_PORTRAIT_INVERTED) {
                     rotation -= 90
+                } else if (orientation == OrientationMode.ORIENTATION_LANDSCAPE_NORMAL) {
+                    rotation -= 180
                 }
             }
         }
@@ -107,5 +115,6 @@ class OrientationService @Inject constructor(context: Context)
 
     fun disableOrientationService(){
         disable()
+        _rotationFlow.value = null
     }
 }

@@ -1,8 +1,8 @@
 package com.openclassrooms.realestatemanager.modules
 
 import android.content.Context
-import com.openclassrooms.realestatemanager.services.ImageSaver
 import com.openclassrooms.realestatemanager.services.OrientationService
+import com.openclassrooms.realestatemanager.services.PictureSaver
 import com.openclassrooms.realestatemanager.services.VideoRecorder
 import dagger.Module
 import dagger.Provides
@@ -19,8 +19,8 @@ class HiltViewModelModules {
     }
 
     @Provides
-    fun provideImageSaver(@ApplicationContext context: Context) : ImageSaver {
-        return ImageSaver(context)
+    fun provideImageSaver(@ApplicationContext context: Context) : PictureSaver {
+        return PictureSaver(context)
     }
 
     @Provides

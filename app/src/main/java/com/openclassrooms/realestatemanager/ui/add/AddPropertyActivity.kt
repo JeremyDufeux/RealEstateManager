@@ -374,11 +374,13 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         if (result.resultCode == RESULT_OK) {
             val data: Intent? = result.data
 
-            data?.getStringExtra(URI_RESULT_KEY)?.let { mViewModel.addMediaUri(it, null) }
+            data?.getStringExtra(URI_RESULT_KEY)?.let {
+                mViewModel.addMediaUri(it, null)
+            }
         }
     }
 
     override fun onMediaClick(position: Int) {
-        TODO("Not yet implemented")
+        //TODO Not yet implemented
     }
 }

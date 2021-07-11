@@ -96,6 +96,9 @@ dependencies {
 
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
+
+    // ExoPlayer
+    implementation 'com.google.android.exoplayer:exoplayer:2.14.1'
 }
 
 kapt {

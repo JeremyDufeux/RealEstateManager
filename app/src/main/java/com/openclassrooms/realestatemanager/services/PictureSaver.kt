@@ -13,9 +13,12 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+import androidx.core.net.toUri
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.models.FileState
+import com.openclassrooms.realestatemanager.models.FileType
 import com.openclassrooms.realestatemanager.models.OrientationMode
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
@@ -24,10 +27,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class ImageSaver @Inject constructor(private val mContext: Context) : Camera.PictureCallback{
+class PictureSaver @Inject constructor(private val mContext: Context) : Camera.PictureCallback{
 
     private var mOrientationMode = OrientationMode.ORIENTATION_PORTRAIT_NORMAL
-    private var mLastOrientationMode = OrientationMode.ORIENTATION_PORTRAIT_NORMAL
 
     private val _fileStateFlow = MutableStateFlow<FileState>(FileState.Empty)
     val fileStateFlow = _fileStateFlow.asStateFlow()
@@ -37,18 +39,13 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
 
     override fun onPictureTaken(data: ByteArray, camera: Camera?) {
         mPictureBytes = data
-        mLastOrientationMode = mOrientationMode
-    }
-
-    fun savePicture(){
         mPictureFile = getOutputMediaFile()
 
         try {
             writeFile()
 
             addPictureToGallery()
-
-            _fileStateFlow.value = FileState.Success(mPictureFile)
+            _fileStateFlow.value = FileState.Success(mPictureFile.toUri(), FileType.PICTURE)
 
         }
         catch (e: FileNotFoundException){
@@ -85,11 +82,10 @@ class ImageSaver @Inject constructor(private val mContext: Context) : Camera.Pic
     }
 
     private fun writeFile(){
-
         if(mContext.resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
             var thePicture = BitmapFactory.decodeByteArray(mPictureBytes, 0, mPictureBytes.size)
             val m = Matrix()
-            m.postRotate(mLastOrientationMode.rotation.toFloat())
+            m.postRotate(mOrientationMode.rotation.toFloat())
             thePicture =
                 Bitmap.createBitmap(thePicture, 0, 0, thePicture.width, thePicture.height, m, true)
 
