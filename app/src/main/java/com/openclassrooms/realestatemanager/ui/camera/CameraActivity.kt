@@ -1,12 +1,15 @@
 package com.openclassrooms.realestatemanager.ui.camera
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.hardware.Camera
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -23,6 +26,8 @@ import com.openclassrooms.realestatemanager.ui.camera.CameraActivityViewModel.Ca
 import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.util.*
+
 
 const val URI_RESULT_KEY = "URI_RESULT_KEY"
 const val FILE_TYPE_KEY = "FILE_TYPE_KEY"
@@ -69,6 +74,7 @@ class CameraActivity : AppCompatActivity() {
                 when(state.type){
                     FileType.PICTURE -> showPicture()
                     FileType.VIDEO -> showVideo()
+                    else -> {return@Observer}
                 }
                 showCheckButton()
                 releaseCamera()
@@ -229,13 +235,41 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun openGallery(){
-        resultLauncher.launch("image/*")
+        resultLauncher.launch(arrayOf("image/*", "video/*"))
     }
 
-    private var resultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+    private var resultLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         if (uri != null) {
-            mViewModel.setFileState(FileState.Success(uri, FileType.PICTURE))
+            if (Build.VERSION.SDK_INT >= 19) {
+                val perms = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                contentResolver.takePersistableUriPermission(uri, perms)
+            }
+
+            mViewModel.setFileState(FileState.Success(uri, getFileType(getMimeType(uri))))
         }
+    }
+
+    fun getMimeType(uri: Uri): String? {
+        return if (ContentResolver.SCHEME_CONTENT == uri.scheme) {
+            contentResolver.getType(uri)
+        } else {
+            val fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+            MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                fileExtension.lowercase(Locale.getDefault())
+            )
+        }
+    }
+
+    private fun getFileType(mimeType: String?): FileType{
+        var type = FileType.OTHER
+        if(mimeType != null){
+            if(mimeType.contains("image")){
+                type =  FileType.PICTURE
+            } else if(mimeType.contains("video")) {
+                type =  FileType.VIDEO
+            }
+        }
+        return type
     }
 
     private fun finishActivityWithFile( ){

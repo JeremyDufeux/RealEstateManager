@@ -10,5 +10,6 @@ sealed class FileState{
 
 enum class FileType{
     PICTURE,
-    VIDEO
+    VIDEO,
+    OTHER
 }
