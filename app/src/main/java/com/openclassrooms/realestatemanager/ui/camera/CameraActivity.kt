@@ -257,22 +257,24 @@ class CameraActivity : AppCompatActivity() {
         return type
     }
 
-    private fun finishActivityWithFile( ){
-        try {
-            val fileState = mViewModel.fileLiveData.value as FileState.Success
+    private fun finishActivityWithFile( ) {
+        when (mViewModel.fileLiveData.value) {
+            is FileState.Success -> {
+                val fileState = mViewModel.fileLiveData.value as FileState.Success
 
-            val data = Intent()
-            data.putExtra(RESULT_URI_KEY, fileState.uri.toString())
-            data.putExtra(RESULT_FILE_TYPE_KEY, fileState.type)
-            data.putExtra(
-                RESULT_DESCRIPTION_KEY,
-                mBinding.activityCameraDescriptionEt.text.toString()
-            )
-            setResult(RESULT_OK, data)
-            finish()
-        }catch (e: ClassCastException){
-            Timber.e("Error finishActivityWithFile : ${e.message.toString()}")
-            showToast(this, R.string.an_error_append)
+                val data = Intent()
+                data.putExtra(RESULT_URI_KEY, fileState.uri.toString())
+                data.putExtra(RESULT_FILE_TYPE_KEY, fileState.type)
+                data.putExtra(
+                    RESULT_DESCRIPTION_KEY,
+                    mBinding.activityCameraDescriptionEt.text.toString()
+                )
+                setResult(RESULT_OK, data)
+                finish()
+            }
+            else -> {
+                showToast(this, R.string.an_error_append)
+            }
         }
     }
 
