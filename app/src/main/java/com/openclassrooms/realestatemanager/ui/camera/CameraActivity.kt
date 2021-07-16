@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.ui.camera
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -9,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.webkit.MimeTypeMap
 import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,9 +28,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.*
 
-
-const val URI_RESULT_KEY = "URI_RESULT_KEY"
-const val FILE_TYPE_KEY = "FILE_TYPE_KEY"
+const val RESULT_URI_KEY = "RESULT_URI_KEY"
+const val RESULT_DESCRIPTION_KEY = "RESULT_DESCRIPTION_KEY"
+const val RESULT_FILE_TYPE_KEY = "RESULT_FILE_TYPE_KEY"
 
 @AndroidEntryPoint
 class CameraActivity : AppCompatActivity() {
@@ -101,9 +101,6 @@ class CameraActivity : AppCompatActivity() {
             activityCameraCheckBtn.setOnClickListener {
                 finishActivityWithFile()
             }
-            activityCameraCancelBtn.setOnClickListener {
-                finishActivityWithoutFile()
-            }
             activityCameraVideoBtn.setOnClickListener {
                 mViewModel.cameraMode = VIDEO
                 displayActualMode()
@@ -114,6 +111,12 @@ class CameraActivity : AppCompatActivity() {
             }
             activityCameraFl.setOnClickListener {
                 mCamera?.autoFocus(null)
+            }
+            activityCameraDescriptionEt.setOnEditorActionListener { _, actionId, _ ->
+                if(actionId == EditorInfo.IME_ACTION_SEND){
+                    finishActivityWithFile()
+                }
+                return@setOnEditorActionListener true
             }
         }
     }
@@ -164,7 +167,6 @@ class CameraActivity : AppCompatActivity() {
             activityCameraExoplayer.visibility = View.VISIBLE
             activityCameraExoplayer.player = mPlayer
             activityCameraCheckBtn.visibility = View.VISIBLE
-            activityCameraCancelBtn.visibility = View.VISIBLE
         }
         val fileState = mViewModel.fileLiveData.value as FileState.Success
         val mediaItem: MediaItem = MediaItem.fromUri(fileState.uri)
@@ -178,7 +180,7 @@ class CameraActivity : AppCompatActivity() {
 
         mBinding.apply {
             activityCameraCheckBtn.visibility = View.VISIBLE
-            activityCameraCancelBtn.visibility = View.VISIBLE
+            activityCameraDescriptionEt.visibility = View.VISIBLE
 
             activityCameraFl.visibility = View.GONE
             activityCameraCapturePhotoBtn.visibility = View.GONE
@@ -187,23 +189,6 @@ class CameraActivity : AppCompatActivity() {
             activityCameraVideoBtn.visibility = View.GONE
             activityCameraPhotoBtn.visibility = View.GONE
         }
-    }
-
-    @SuppressLint("SourceLockedOrientationActivity")
-    private fun hideCheckButton() {
-        mBinding.apply {
-            activityCameraCheckBtn.visibility = View.GONE
-            activityCameraCancelBtn.visibility = View.GONE
-            activityCameraPictureIv.visibility = View.GONE
-            activityCameraExoplayer.visibility = View.GONE
-
-            activityCameraCapturePhotoBtn.visibility = View.VISIBLE
-            activityCameraGalleryBtn.visibility = View.VISIBLE
-            activityCameraFl.visibility = View.VISIBLE
-        }
-        displayActualMode()
-
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     private fun configureCamera(){
@@ -273,13 +258,22 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun finishActivityWithFile( ){
-        val fileState = mViewModel.fileLiveData.value as FileState.Success
+        try {
+            val fileState = mViewModel.fileLiveData.value as FileState.Success
 
-        val data = Intent()
-        data.putExtra(URI_RESULT_KEY, fileState.uri.toString())
-        data.putExtra(FILE_TYPE_KEY, fileState.type)
-        setResult(RESULT_OK, data)
-        finish()
+            val data = Intent()
+            data.putExtra(RESULT_URI_KEY, fileState.uri.toString())
+            data.putExtra(RESULT_FILE_TYPE_KEY, fileState.type)
+            data.putExtra(
+                RESULT_DESCRIPTION_KEY,
+                mBinding.activityCameraDescriptionEt.text.toString()
+            )
+            setResult(RESULT_OK, data)
+            finish()
+        }catch (e: ClassCastException){
+            Timber.e("Error finishActivityWithFile : ${e.message.toString()}")
+            showToast(this, R.string.an_error_append)
+        }
     }
 
     private fun finishActivityWithoutFile(){

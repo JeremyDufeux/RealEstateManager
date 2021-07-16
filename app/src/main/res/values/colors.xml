@@ -6,6 +6,8 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="blackTransparent">#65000000</color>
+    <color name="dark_grey">#202020</color>
     <color name="grey">#737373</color>
-    <color name="lightGrey">#ECECEC</color>
+    <color name="light_grey">#BBBBBB</color>
+    <color name="very_light_Grey">#ECECEC</color>
 </resources>

@@ -25,7 +25,8 @@ import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBindi
 import com.openclassrooms.realestatemanager.models.PointsOfInterest
 import com.openclassrooms.realestatemanager.models.PropertyType
 import com.openclassrooms.realestatemanager.ui.camera.CameraActivity
-import com.openclassrooms.realestatemanager.ui.camera.URI_RESULT_KEY
+import com.openclassrooms.realestatemanager.ui.camera.RESULT_DESCRIPTION_KEY
+import com.openclassrooms.realestatemanager.ui.camera.RESULT_URI_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -374,8 +375,13 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         if (result.resultCode == RESULT_OK) {
             val data: Intent? = result.data
 
-            data?.getStringExtra(URI_RESULT_KEY)?.let {
-                mViewModel.addMediaUri(it, null)
+            if(data != null) {
+                val uri = data.getStringExtra(RESULT_URI_KEY)
+                val description = data.getStringExtra(RESULT_DESCRIPTION_KEY)
+
+                if (uri != null) {
+                    mViewModel.addMediaUri(uri, description)
+                }
             }
         }
     }

@@ -18,8 +18,10 @@
         android:id="@+id/activity_add_property_media_item_tv"
         style="@style/detailMediaText"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:visibility="gone"
         android:layout_gravity="center_horizontal|bottom"
+        android:ellipsize="end"
+        android:maxLines="2"
         tools:text="@sample/properties.json/names/media_name/value" />
 </androidx.cardview.widget.CardView>

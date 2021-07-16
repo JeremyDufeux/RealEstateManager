@@ -14,7 +14,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -87,7 +86,6 @@ class AddActivityViewModel @Inject constructor(
     fun addMediaUri(uri: String, description: String?) {
         viewModelScope.launch(Dispatchers.IO) {
             mediaList[uri] = description
-            Timber.d( "addMediaUri: $uri $description")
 
             val pairList: MutableList<Pair<String, String?>> = mutableListOf()
             for (entry in mediaList) {
