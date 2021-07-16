@@ -50,11 +50,9 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
         fun updateViewHolder(property: Property) {
             val context = mBinding.root.context
 
-            val mediaKeys = property.mediaUriList.keys
-
-            if (property.mediaUriList.isNotEmpty()) {
+            if (property.mediaList.isNotEmpty()) {
                 GlideApp.with(context)
-                    .load(mediaKeys.first())
+                    .load(property.mediaList[0].url)
                     .centerCrop()
                     .timeout(2000)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)

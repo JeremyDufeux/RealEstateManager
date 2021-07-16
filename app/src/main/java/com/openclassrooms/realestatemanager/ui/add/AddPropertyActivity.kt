@@ -22,10 +22,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBinding
+import com.openclassrooms.realestatemanager.models.FileType
+import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.PointsOfInterest
 import com.openclassrooms.realestatemanager.models.PropertyType
 import com.openclassrooms.realestatemanager.ui.camera.CameraActivity
 import com.openclassrooms.realestatemanager.ui.camera.RESULT_DESCRIPTION_KEY
+import com.openclassrooms.realestatemanager.ui.camera.RESULT_FILE_TYPE_KEY
 import com.openclassrooms.realestatemanager.ui.camera.RESULT_URI_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -117,7 +120,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         mViewModel.mediaListLiveData.observe(this, propertyMediaListObserver)
     }
 
-    private val propertyMediaListObserver = Observer<List<Pair<String, String?>>> { list ->
+    private val propertyMediaListObserver = Observer<List<MediaItem>> { list ->
         mAdapter.submitList(list)
     }
 
@@ -378,9 +381,10 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
             if(data != null) {
                 val uri = data.getStringExtra(RESULT_URI_KEY)
                 val description = data.getStringExtra(RESULT_DESCRIPTION_KEY)
+                val fileType = data.getSerializableExtra(RESULT_FILE_TYPE_KEY) as FileType
 
                 if (uri != null) {
-                    mViewModel.addMediaUri(uri, description)
+                    mViewModel.addMediaUri(uri, description, fileType)
                 }
             }
         }

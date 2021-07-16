@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyMediasItemBinding
+import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.modules.GlideApp
 
-class AddPropertyMediaListAdapter(var mMediaListener: MediaListener) : ListAdapter<Pair<String, String?>, AddPropertyMediaListAdapter.PropertyViewHolder>(DiffCallback) {
+class AddPropertyMediaListAdapter(var mMediaListener: MediaListener) : ListAdapter<MediaItem, AddPropertyMediaListAdapter.PropertyViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
         val binding : ActivityAddPropertyMediasItemBinding = ActivityAddPropertyMediasItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,19 +26,19 @@ class AddPropertyMediaListAdapter(var mMediaListener: MediaListener) : ListAdapt
                              private val mMediaListener: MediaListener)
         : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun updateViewHolder(media: Pair<String, String?>) {
+        fun updateViewHolder(media: MediaItem) {
             val context = mBinding.root.context
 
             GlideApp.with(context)
-                .load(media.first)
+                .load(media.url)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mBinding.activityAddPropertyMediaItemIv)
 
-            if(media.second != null) {
+            if(media.description != null) {
                 mBinding.activityAddPropertyMediaItemTv.apply {
                     visibility = View.VISIBLE
-                    text = media.second
+                    text = media.description
                 }
             }
 
@@ -50,12 +51,12 @@ class AddPropertyMediaListAdapter(var mMediaListener: MediaListener) : ListAdapt
     }
 
     companion object{
-        private val DiffCallback = object : DiffUtil.ItemCallback<Pair<String, String?>>(){
-            override fun areItemsTheSame(oldItem: Pair<String, String?>, newItem: Pair<String, String?>): Boolean {
-                return oldItem.first == newItem.first
+        private val DiffCallback = object : DiffUtil.ItemCallback<MediaItem>(){
+            override fun areItemsTheSame(oldItem: MediaItem, newItem: MediaItem): Boolean {
+                return oldItem.url == newItem.url
             }
 
-            override fun areContentsTheSame(oldItem: Pair<String, String?>, newItem: Pair<String, String?>): Boolean {
+            override fun areContentsTheSame(oldItem: MediaItem, newItem: MediaItem): Boolean {
                 return oldItem == newItem
             }
         }

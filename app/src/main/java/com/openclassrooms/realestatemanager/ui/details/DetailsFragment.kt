@@ -58,19 +58,7 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
 
     private val propertyObserver = Observer<Property> { property ->
 
-        if(property.mediaUriList.isEmpty()){
-            mBinding.apply {
-                fragmentDetailMediaRv.visibility = View.GONE
-                fragmentDetailMediaTitleTv.visibility = View.GONE
-            }
-        } else {
-            val listOfPairs : MutableList<Pair<String, String?>> = mutableListOf()
-
-            for(entry in property.mediaUriList){
-                listOfPairs.add(Pair(entry.key, entry.value))
-            }
-            mMediaAdapter.updateList(listOfPairs)
-        }
+        mMediaAdapter.updateList(property.mediaList)
 
         if(property.pointOfInterest.isEmpty()){
             mBinding.apply {

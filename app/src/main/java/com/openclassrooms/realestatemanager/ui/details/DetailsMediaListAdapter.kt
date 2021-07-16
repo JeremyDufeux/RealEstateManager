@@ -5,11 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsMediaItemBinding
+import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.modules.GlideApp
 
-class DetailsMediaListAdapter(var mMediaListener: MediaListener) : RecyclerView.Adapter<DetailsMediaListAdapter.PropertyViewHolder>() {
+class DetailsMediaListAdapter(private var mMediaListener: MediaListener) : RecyclerView.Adapter<DetailsMediaListAdapter.PropertyViewHolder>() {
 
-    private var mMediaList : List<Pair<String, String?>> = listOf()
+    private var mMediaList : List<MediaItem> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
         val binding : FragmentDetailsMediaItemBinding = FragmentDetailsMediaItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -24,22 +25,22 @@ class DetailsMediaListAdapter(var mMediaListener: MediaListener) : RecyclerView.
         return mMediaList.size
     }
 
-    fun updateList(list : List<Pair<String, String?>>){
+    fun updateList(list : List<MediaItem>){
         mMediaList = list
     }
 
     inner class PropertyViewHolder(private val mBinding : FragmentDetailsMediaItemBinding, val mMediaListener: MediaListener) : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun updateViewHolder(media: Pair<String, String?>) {
+        fun updateViewHolder(media: MediaItem) {
             val context = mBinding.root.context
 
             GlideApp.with(context)
-                .load(media.first)
+                .load(media.url)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mBinding.fragmentDetailMediaItemIv)
 
-            mBinding.fragmentDetailMediaItemTv.text = media.second
+            mBinding.fragmentDetailMediaItemTv.text = media.description
 
             mBinding.root.setOnClickListener { mMediaListener.onMediaClick(adapterPosition) }
         }

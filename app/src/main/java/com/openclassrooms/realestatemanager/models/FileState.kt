@@ -7,9 +7,3 @@ sealed class FileState{
     data class Error(val stringId: Int) : FileState()
     object Empty : FileState()
 }
-
-enum class FileType{
-    PICTURE,
-    VIDEO,
-    OTHER
-}

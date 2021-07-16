@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.models
 
 import java.util.*
-import kotlin.collections.HashMap
 
 data class Property(
     val id: String = UUID.randomUUID().toString(),
@@ -12,7 +11,7 @@ data class Property(
     var bathroomsAmount: Int = 0,
     var bedroomsAmount: Int = 0,
     var description: String = "",
-    var mediaUriList: HashMap<String, String?> = HashMap(),
+    var mediaList: List<MediaItem> = listOf(),
     var address: String = "",
     var city: String = "",
     var postalCode: String = "",

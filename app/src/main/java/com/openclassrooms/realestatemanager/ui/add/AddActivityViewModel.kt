@@ -4,9 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.openclassrooms.realestatemanager.models.PointsOfInterest
-import com.openclassrooms.realestatemanager.models.Property
-import com.openclassrooms.realestatemanager.models.PropertyType
+import com.openclassrooms.realestatemanager.models.*
 import com.openclassrooms.realestatemanager.repositories.PropertyRepository
 import com.openclassrooms.realestatemanager.utils.GeocoderClient
 import com.openclassrooms.realestatemanager.utils.getGeoApifyUrl
@@ -17,7 +15,6 @@ import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
-import kotlin.collections.set
 import kotlin.properties.Delegates
 
 @HiltViewModel
@@ -27,7 +24,7 @@ class AddActivityViewModel @Inject constructor(
 ) : ViewModel(){
 
     var propertyType : PropertyType = PropertyType.FLAT
-    var mediaList : HashMap<String, String?> = hashMapOf()
+    var mediaList : MutableList<MediaItem> = mutableListOf()
     var price by Delegates.notNull<Long>()
     var surface by Delegates.notNull<Int>()
     var rooms by Delegates.notNull<Int>()
@@ -44,8 +41,8 @@ class AddActivityViewModel @Inject constructor(
     var agent = String()
     var pointOfInterestList : MutableList<PointsOfInterest> = ArrayList()
 
-    private val _mediaListLiveData = MutableLiveData<MutableList<Pair<String, String?>>>()
-    val mediaListLiveData : LiveData<MutableList<Pair<String, String?>>> = _mediaListLiveData
+    private val _mediaListLiveData = MutableLiveData<MutableList<MediaItem>>()
+    val mediaListLiveData : LiveData<MutableList<MediaItem>> = _mediaListLiveData
     
     suspend fun saveProperty() = withContext(Dispatchers.IO) {
         val latLng =
@@ -66,7 +63,7 @@ class AddActivityViewModel @Inject constructor(
             bathroomsAmount = bathrooms,
             bedroomsAmount = bedrooms,
             description = description,
-            mediaUriList = mediaList, // Todo
+            mediaList = mediaList,
             address = address1,
             city = city,
             postalCode = postalCode,
@@ -83,16 +80,12 @@ class AddActivityViewModel @Inject constructor(
         mPropertyRepository.addPropertyAndFetch(property)
     }
 
-    fun addMediaUri(uri: String, description: String?) {
+    fun addMediaUri(uri: String, description: String?, fileType: FileType) {
         viewModelScope.launch(Dispatchers.IO) {
-            mediaList[uri] = description
 
-            val pairList: MutableList<Pair<String, String?>> = mutableListOf()
-            for (entry in mediaList) {
-                pairList.add(Pair(entry.key, entry.value))
-            }
+            mediaList.add(MediaItem(uri, description, fileType))
 
-            _mediaListLiveData.postValue(pairList)
+            _mediaListLiveData.postValue(mediaList)
         }
     }
 }
