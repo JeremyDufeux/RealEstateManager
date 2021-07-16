@@ -11,7 +11,7 @@ import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyMedia
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.modules.GlideApp
 
-class AddPropertyMediaListAdapter(var mMediaListener: MediaListener) : ListAdapter<MediaItem, AddPropertyMediaListAdapter.PropertyViewHolder>(DiffCallback) {
+class AddPropertyMediaListAdapter(private var mMediaListener: MediaListener) : ListAdapter<MediaItem, AddPropertyMediaListAdapter.PropertyViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
         val binding : ActivityAddPropertyMediasItemBinding = ActivityAddPropertyMediasItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -35,7 +35,7 @@ class AddPropertyMediaListAdapter(var mMediaListener: MediaListener) : ListAdapt
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mBinding.activityAddPropertyMediaItemIv)
 
-            if(media.description != null) {
+            if(!media.description.isNullOrEmpty()) {
                 mBinding.activityAddPropertyMediaItemTv.apply {
                     visibility = View.VISIBLE
                     text = media.description
