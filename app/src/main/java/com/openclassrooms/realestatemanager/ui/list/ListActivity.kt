@@ -4,15 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayoutMediator
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityListBinding
+import com.openclassrooms.realestatemanager.models.State
 import com.openclassrooms.realestatemanager.ui.add.AddPropertyActivity
+import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ListActivity : AppCompatActivity() {
+    private val mViewModel: ListViewModel by viewModels()
+
     private lateinit var mBinding : ActivityListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +31,8 @@ class ListActivity : AppCompatActivity() {
 
         configureToolBar()
         configureViewPager()
+
+        mViewModel.propertyListLiveData.observe(this, propertyRepositoryObserver)
     }
 
     private fun configureToolBar() {
@@ -63,5 +73,21 @@ class ListActivity : AppCompatActivity() {
     private fun openAddPropertyActivity() {
         val addPropertyActivityIntent = Intent(this, AddPropertyActivity::class.java)
         startActivity(addPropertyActivityIntent)
+    }
+
+    private val propertyRepositoryObserver = Observer<State> { state ->
+        when(state){
+            is State.Upload.Uploading -> {
+                mBinding.activityListProgressLine.visibility = View.VISIBLE
+            }
+            is State.Upload.Error -> {
+                mBinding.activityListProgressLine.visibility = View.GONE
+                showToast(this, R.string.an_error_append)
+                Timber.e("Error ListFragment.propertyListObserver: ${state.throwable.toString()}")
+            }
+            else -> {
+                mBinding.activityListProgressLine.visibility = View.GONE
+            }
+        }
     }
 }

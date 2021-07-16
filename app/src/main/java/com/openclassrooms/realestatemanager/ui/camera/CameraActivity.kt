@@ -44,6 +44,8 @@ class CameraActivity : AppCompatActivity() {
 
     private lateinit var mPlayer: SimpleExoPlayer
 
+    private lateinit var mFileState: FileState.Success
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityCameraBinding.inflate(layoutInflater)
@@ -71,7 +73,8 @@ class CameraActivity : AppCompatActivity() {
     private val fileStateObserver = Observer<FileState> { state ->
         when(state){
             is FileState.Success -> {
-                when(state.type){
+                mFileState = state
+                when(mFileState.type){
                     FileType.PICTURE -> showPicture()
                     FileType.VIDEO -> showVideo()
                     else -> {return@Observer}
@@ -152,9 +155,8 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun showPicture() {
-        val fileState = mViewModel.fileLiveData.value as FileState.Success
         GlideApp.with(this)
-            .load(fileState.uri)
+            .load(mFileState.uri)
             .into(mBinding.activityCameraPictureIv)
 
         mBinding.activityCameraPictureIv.visibility = View.VISIBLE
@@ -168,8 +170,7 @@ class CameraActivity : AppCompatActivity() {
             activityCameraExoplayer.player = mPlayer
             activityCameraCheckBtn.visibility = View.VISIBLE
         }
-        val fileState = mViewModel.fileLiveData.value as FileState.Success
-        val mediaItem: MediaItem = MediaItem.fromUri(fileState.uri)
+        val mediaItem: MediaItem = MediaItem.fromUri(mFileState.uri)
         mPlayer.setMediaItem(mediaItem)
         mPlayer.prepare()
         mPlayer.play()
@@ -229,7 +230,7 @@ class CameraActivity : AppCompatActivity() {
                 val perms = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 contentResolver.takePersistableUriPermission(uri, perms)
             }
-
+            Timber.d("Debug  registerForActivityResult: $uri")
             mViewModel.setFileState(FileState.Success(uri, getFileType(getMimeType(uri))))
         }
     }
@@ -258,24 +259,17 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun finishActivityWithFile( ) {
-        when (mViewModel.fileLiveData.value) {
-            is FileState.Success -> {
-                val fileState = mViewModel.fileLiveData.value as FileState.Success
+        Timber.d("Debug finishActivityWithFile : ${mFileState.uri.toString()}")
 
-                val data = Intent()
-                data.putExtra(RESULT_URI_KEY, fileState.uri.toString())
-                data.putExtra(RESULT_FILE_TYPE_KEY, fileState.type)
-                data.putExtra(
-                    RESULT_DESCRIPTION_KEY,
-                    mBinding.activityCameraDescriptionEt.text.toString()
-                )
-                setResult(RESULT_OK, data)
-                finish()
-            }
-            else -> {
-                showToast(this, R.string.an_error_append)
-            }
-        }
+        val data = Intent()
+        data.putExtra(RESULT_URI_KEY, mFileState.uri.toString())
+        data.putExtra(RESULT_FILE_TYPE_KEY, mFileState.type)
+        data.putExtra(
+            RESULT_DESCRIPTION_KEY,
+            mBinding.activityCameraDescriptionEt.text.toString()
+        )
+        setResult(RESULT_OK, data)
+        finish()
     }
 
     private fun finishActivityWithoutFile(){
@@ -298,8 +292,15 @@ class CameraActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+        pausePlayer()
         mViewModel.disableOrientationService()
         releaseCamera()
+    }
+
+    private fun pausePlayer() {
+        if(this::mPlayer.isInitialized){
+            mPlayer.pause()
+        }
     }
 
     private fun releaseCamera() {

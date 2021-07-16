@@ -1,18 +1,21 @@
 package com.openclassrooms.realestatemanager.services
 
+import android.net.Uri
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Source
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.openclassrooms.realestatemanager.models.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
+import java.util.*
 import javax.inject.Inject
 
 private const val COLLECTION_PROPERTIES_NAME = "Properties"
-private const val COLLECTION_MEDIAS_NAME = "mediasList"
 
 class PropertyApiService @Inject constructor() {
 
@@ -20,7 +23,7 @@ class PropertyApiService @Inject constructor() {
         return FirebaseFirestore.getInstance().collection(COLLECTION_PROPERTIES_NAME)
     }
 
-    fun fetchProperties() : Flow<State<List<Property>>> = flow {
+    fun fetchProperties() : Flow<State> = flow {
         try {
             val snapshot = getPropertiesCollection().get(Source.SERVER).await()
             val properties = mutableListOf<Property>()
@@ -73,13 +76,26 @@ class PropertyApiService @Inject constructor() {
                 properties.add(property)
             }
 
-            emit(State.Success(properties))
+            emit(State.Download.DownloadSuccess(properties))
         }catch (e: Exception){
-            emit(State.Failure(e))
+            emit(State.Download.Error(e))
         }
     }.flowOn(Dispatchers.IO)
 
     fun addProperty(property: Property) {
         getPropertiesCollection().document(property.id).set(property)
+    }
+
+    suspend fun uploadMedia(url: String): State{
+        return try {
+            val uuid = UUID.randomUUID().toString()
+
+            val mediaRef: StorageReference = FirebaseStorage.getInstance().getReference(uuid)
+            mediaRef.putFile(Uri.parse(url)).await()
+
+            State.Upload.UploadSuccess(mediaRef.downloadUrl.await().toString())
+        } catch (e: java.lang.Exception){
+            State.Upload.Error(e)
+        }
     }
 }

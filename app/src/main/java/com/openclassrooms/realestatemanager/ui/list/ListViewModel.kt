@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.State
 import com.openclassrooms.realestatemanager.repositories.PropertyRepository
 import com.openclassrooms.realestatemanager.services.LocationService
@@ -20,8 +19,8 @@ class ListViewModel @Inject constructor(
     private val mLocationService: LocationService,
     ) : ViewModel(){
 
-    private var mPropertyListMutableLiveData : MutableLiveData<State<List<Property>>> = MutableLiveData()
-    val propertyListLiveData: LiveData<State<List<Property>>> = mPropertyListMutableLiveData
+    private var mPropertyListMutableLiveData : MutableLiveData<State> = MutableLiveData()
+    val propertyListLiveData: LiveData<State> = mPropertyListMutableLiveData
 
     private val _location: MutableLiveData<Location> = MutableLiveData()
     val location: LiveData<Location> = _location

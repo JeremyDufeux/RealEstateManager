@@ -59,22 +59,25 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
         mBinding.fragmentListRv.addItemDecoration(itemDecoration)
     }
 
-    private val propertyListObserver = Observer<State<List<Property>>> { state ->
+    private val propertyListObserver = Observer<State> { state ->
         when(state) {
-            is State.Loading -> {
+            is State.Download.Downloading -> {
                 mBinding.fragmentListPb.visibility = View.VISIBLE
                 mBinding.fragmentListRv.visibility = View.GONE
             }
-            is State.Success -> {
-                mPropertyList = state.value
+            is State.Download.DownloadSuccess -> {
+                mPropertyList = state.propertiesList
                 mAdapter.updateList(mPropertyList)
                 mBinding.fragmentListPb.visibility = View.GONE
                 mBinding.fragmentListRv.visibility = View.VISIBLE
             }
-            is State.Failure -> {
+            is State.Download.Error -> {
                 mBinding.fragmentListPb.visibility = View.GONE
                 showToast(requireContext(), R.string.an_error_append)
                 Timber.e("Error ListFragment.propertyListObserver: ${state.throwable.toString()}")
+            }
+            else -> {
+                mBinding.fragmentListPb.visibility = View.GONE
             }
         }
     }

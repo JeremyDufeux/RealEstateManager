@@ -27,6 +27,17 @@
         app:layout_constraintTop_toBottomOf="@+id/activity_list_toolbar"
         app:tabSelectedTextColor="@color/colorAccent" />
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/activity_list_progressLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:indicatorColor="@color/colorAccent"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_list_tabLayout" />
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/activity_list_viewPager"
         android:name="com.openclassrooms.realestatemanager.ui.ListFragment"
@@ -35,5 +46,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_list_tabLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/activity_list_progressLine" />
 </androidx.constraintlayout.widget.ConstraintLayout>

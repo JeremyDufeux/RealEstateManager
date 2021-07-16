@@ -76,20 +76,21 @@ class MapFragment : Fragment(),
         mViewModel.propertyListLiveData.observe(this, propertyListObserver)
     }
 
-    private val propertyListObserver = Observer<State<List<Property>>> { state ->
+    private val propertyListObserver = Observer<State> { state ->
         when(state){
-            is State.Loading -> {
+            is State.Download.Downloading -> {
                 mBinding.mapViewFragmentPb.visibility = View.VISIBLE
             }
-            is State.Success -> {
+            is State.Download.DownloadSuccess -> {
                 mBinding.mapViewFragmentPb.visibility = View.GONE
-                updateMap(state.value)
+                updateMap(state.propertiesList)
             }
-            is State.Failure -> {
+            is State.Download.Error -> {
                 mBinding.mapViewFragmentPb.visibility = View.GONE
                 showToast(requireContext(), R.string.an_error_append)
                 Timber.e("Error MapFragment.propertyListObserver: ${state.throwable.toString()}")
             }
+            else -> {}
         }
     }
 
