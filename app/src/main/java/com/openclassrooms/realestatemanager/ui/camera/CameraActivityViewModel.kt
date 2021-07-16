@@ -1,19 +1,26 @@
 package com.openclassrooms.realestatemanager.ui.camera
 
 import android.hardware.Camera
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import com.openclassrooms.realestatemanager.models.FileState
+import com.openclassrooms.realestatemanager.modules.DefaultCoroutineScope
+import com.openclassrooms.realestatemanager.modules.MainCoroutineScope
 import com.openclassrooms.realestatemanager.services.OrientationService
 import com.openclassrooms.realestatemanager.services.PictureSaver
 import com.openclassrooms.realestatemanager.services.VideoRecorder
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CameraActivityViewModel @Inject constructor(
+    @DefaultCoroutineScope private val mDefaultScope: CoroutineScope,
+    @MainCoroutineScope private val mMainScope: CoroutineScope,
     private val mOrientationService: OrientationService,
     private val mPictureSaver: PictureSaver,
     private val mVideoRecorder: VideoRecorder
@@ -32,19 +39,19 @@ class CameraActivityViewModel @Inject constructor(
     }
 
     init{
-        viewModelScope.launch(Dispatchers.Default) { // TODO to inject
+        mDefaultScope.launch() {
             mOrientationService.orientationModeFlow.collect { orientation ->
                 mPictureSaver.setOrientationMode(orientation)
                 mVideoRecorder.setOrientationMode(orientation)
             }
         }
 
-        viewModelScope.launch(Dispatchers.Main) {
+        mMainScope.launch() {
             mPictureSaver.fileStateFlow.collect { pictureFile ->
                 _fileLiveData.value = pictureFile
             }
         }
-        viewModelScope.launch(Dispatchers.Main) {
+        mMainScope.launch() {
             mVideoRecorder.fileStateFlow.collect { videoFile ->
                 _fileLiveData.value = videoFile
             }

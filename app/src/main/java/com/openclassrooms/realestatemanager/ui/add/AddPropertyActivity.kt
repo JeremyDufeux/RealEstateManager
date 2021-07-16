@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
@@ -31,8 +30,6 @@ import com.openclassrooms.realestatemanager.ui.camera.RESULT_DESCRIPTION_KEY
 import com.openclassrooms.realestatemanager.ui.camera.RESULT_FILE_TYPE_KEY
 import com.openclassrooms.realestatemanager.ui.camera.RESULT_URI_KEY
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.MediaListener {
@@ -285,10 +282,8 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
     }
 
     private fun saveProperty(){
-        lifecycleScope.launch(Dispatchers.Main) {
             mViewModel.saveProperty()
             finish()
-        }
     }
 
     private fun checkFields(){
