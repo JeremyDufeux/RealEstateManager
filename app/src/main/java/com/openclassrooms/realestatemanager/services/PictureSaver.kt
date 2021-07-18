@@ -18,16 +18,20 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.models.FileState
 import com.openclassrooms.realestatemanager.models.FileType
 import com.openclassrooms.realestatemanager.models.OrientationMode
-import dagger.hilt.android.scopes.ActivityRetainedScoped
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class PictureSaver @Inject constructor(private val mContext: Context) : Camera.PictureCallback{
+class PictureSaver @Inject constructor(
+    private val mDefaultScope: CoroutineScope,
+    private val mContext: Context)
+    : Camera.PictureCallback{
 
     private var mOrientationMode = OrientationMode.ORIENTATION_PORTRAIT_NORMAL
 
@@ -42,11 +46,12 @@ class PictureSaver @Inject constructor(private val mContext: Context) : Camera.P
         mPictureFile = getOutputMediaFile()
 
         try {
-            writeFile()
+            mDefaultScope.launch {
+                writeFile()
 
-            addPictureToGallery()
-            _fileStateFlow.value = FileState.Success(mPictureFile.toUri(), FileType.PICTURE)
-
+                addPictureToGallery()
+                _fileStateFlow.value = FileState.Success(mPictureFile.toUri(), FileType.PICTURE)
+            }
         }
         catch (e: FileNotFoundException){
             Timber.e("Error: File not found: ${e.message}")

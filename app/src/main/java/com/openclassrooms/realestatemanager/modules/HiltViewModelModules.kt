@@ -9,6 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -19,8 +20,10 @@ class HiltViewModelModules {
     }
 
     @Provides
-    fun provideImageSaver(@ApplicationContext context: Context) : PictureSaver {
-        return PictureSaver(context)
+    fun provideImageSaver(
+        @DefaultCoroutineScope defaultScope: CoroutineScope,
+        @ApplicationContext context: Context) : PictureSaver {
+        return PictureSaver(defaultScope, context)
     }
 
     @Provides

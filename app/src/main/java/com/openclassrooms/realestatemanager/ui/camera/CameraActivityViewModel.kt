@@ -1,12 +1,8 @@
 package com.openclassrooms.realestatemanager.ui.camera
 
 import android.hardware.Camera
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
 import com.openclassrooms.realestatemanager.models.FileState
-import com.openclassrooms.realestatemanager.modules.DefaultCoroutineScope
 import com.openclassrooms.realestatemanager.modules.MainCoroutineScope
 import com.openclassrooms.realestatemanager.services.OrientationService
 import com.openclassrooms.realestatemanager.services.PictureSaver
@@ -19,7 +15,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CameraActivityViewModel @Inject constructor(
-    @DefaultCoroutineScope private val mDefaultScope: CoroutineScope,
     @MainCoroutineScope private val mMainScope: CoroutineScope,
     private val mOrientationService: OrientationService,
     private val mPictureSaver: PictureSaver,
@@ -39,7 +34,7 @@ class CameraActivityViewModel @Inject constructor(
     }
 
     init{
-        mDefaultScope.launch() {
+        viewModelScope.launch() {
             mOrientationService.orientationModeFlow.collect { orientation ->
                 mPictureSaver.setOrientationMode(orientation)
                 mVideoRecorder.setOrientationMode(orientation)
@@ -51,6 +46,7 @@ class CameraActivityViewModel @Inject constructor(
                 _fileLiveData.value = pictureFile
             }
         }
+
         mMainScope.launch() {
             mVideoRecorder.fileStateFlow.collect { videoFile ->
                 _fileLiveData.value = videoFile
