@@ -46,12 +46,15 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
                               savedInstanceState: Bundle?): View {
         mBinding = FragmentListBinding.inflate(layoutInflater)
 
-        configureRecyclerView()
+        configureUi()
 
         return mBinding.root
     }
 
-    private fun configureRecyclerView() {
+    private fun configureUi() {
+        mBinding.fragmentListSrl.setOnRefreshListener { mViewModel.fetchProperties() }
+        mBinding.fragmentListSrl.isRefreshing = true
+
         mBinding.fragmentListRv.adapter = mAdapter
         mBinding.fragmentListRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
@@ -61,25 +64,25 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
 
     private val propertyListObserver = Observer<State> { state ->
         when(state) {
-            is State.Download.Downloading -> {
-                mBinding.fragmentListPb.visibility = View.VISIBLE
-                mBinding.fragmentListRv.visibility = View.GONE
-            }
             is State.Download.DownloadSuccess -> {
                 mPropertyList = state.propertiesList
                 mAdapter.updateList(mPropertyList)
-                mBinding.fragmentListPb.visibility = View.GONE
-                mBinding.fragmentListRv.visibility = View.VISIBLE
+                hideProgress()
             }
             is State.Download.Error -> {
-                mBinding.fragmentListPb.visibility = View.GONE
+                hideProgress()
                 showToast(requireContext(), R.string.an_error_append)
                 Timber.e("Error ListFragment.propertyListObserver: ${state.throwable.toString()}")
             }
             else -> {
-                mBinding.fragmentListPb.visibility = View.GONE
+                hideProgress()
             }
         }
+    }
+
+    private fun hideProgress(){
+        mBinding.fragmentListSrl.isRefreshing = false
+        mBinding.fragmentListPb.visibility = View.GONE
     }
 
     override fun onPropertyClick(position: Int) {

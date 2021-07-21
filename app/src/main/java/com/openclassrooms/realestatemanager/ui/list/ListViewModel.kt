@@ -30,9 +30,15 @@ class ListViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             mPropertyRepository.fetchProperties()
-            mPropertyRepository.propertiesFlow.collect { list ->
-                mPropertyListMutableLiveData.postValue(list)
+            mPropertyRepository.propertiesFlow.collect { state ->
+                mPropertyListMutableLiveData.postValue(state)
             }
+        }
+    }
+
+    fun fetchProperties(){
+        viewModelScope.launch {
+            mPropertyRepository.fetchProperties()
         }
     }
 

@@ -19,6 +19,7 @@ class PropertyRepository @Inject constructor(
     val propertiesFlow = _propertiesFlow.asStateFlow()
 
     suspend fun fetchProperties() {
+        _propertiesFlow.value = State.Download.Downloading
         mPropertyApiService.fetchProperties()
             .collect { result ->
                 if(result is State.Download.DownloadSuccess){
