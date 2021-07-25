@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.details
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +16,11 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.modules.GlideApp
+import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_MEDIA_LIST
+import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_SELECTED_MEDIA_INDEX
+import com.openclassrooms.realestatemanager.ui.mediaViewer.MediaViewerActivity
 import com.openclassrooms.realestatemanager.utils.formatCalendarToString
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
@@ -103,7 +106,10 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
     }
 
     override fun onMediaClick(position: Int) {
-        Timber.d("Debug onMediaClick: $position")
+        val intent = Intent(requireContext(), MediaViewerActivity::class.java)
+        intent.putParcelableArrayListExtra(BUNDLE_KEY_MEDIA_LIST, mViewModel.propertyLiveData.value?.mediaList as ArrayList)
+        intent.putExtra(BUNDLE_KEY_SELECTED_MEDIA_INDEX, position)
+        startActivity(intent)
     }
 
 }
