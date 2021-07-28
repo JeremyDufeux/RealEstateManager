@@ -61,7 +61,7 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
 
     private val propertyObserver = Observer<Property> { property ->
 
-        mMediaAdapter.updateList(property.mediaList)
+        mMediaAdapter.submitList(property.mediaList)
 
         if(property.pointOfInterest.isEmpty()){
             mBinding.apply {
