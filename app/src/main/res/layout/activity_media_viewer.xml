@@ -11,4 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <ImageButton
+        android:id="@+id/activity_media_viewer_close_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="20dp"
+        android:layout_gravity="top|end"
+        android:scaleType="fitCenter"
+        android:background="@drawable/ic_cancel"
+        android:contentDescription="@string/check"/>
+
 </FrameLayout>

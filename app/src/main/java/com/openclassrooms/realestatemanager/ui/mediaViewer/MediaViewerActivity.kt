@@ -18,6 +18,8 @@ class MediaViewerActivity : AppCompatActivity() {
         mBinding = ActivityMediaViewerBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
+        mBinding.activityMediaViewerCloseBtn.setOnClickListener { finish() }
+
         configureAdapter()
     }
 
