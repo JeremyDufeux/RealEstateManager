@@ -88,14 +88,14 @@ class AddActivityViewModel @Inject constructor(
     }
 
     fun addMediaUri(mediaItem: MediaItem) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
             mediaList.add(mediaItem)
             _mediaListLiveData.postValue(mediaList)
         }
     }
 
     fun removeMediaAtPosition(position: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
             mediaList.removeAt(position)
             _mediaListLiveData.postValue(mediaList)
         }

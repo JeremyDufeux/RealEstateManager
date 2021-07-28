@@ -6,15 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.models.State
+import com.openclassrooms.realestatemanager.modules.IoCoroutineScope
 import com.openclassrooms.realestatemanager.repositories.PropertyRepository
 import com.openclassrooms.realestatemanager.services.LocationService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ListViewModel @Inject constructor(
+    @IoCoroutineScope private val mIoScope: CoroutineScope,
     private val mPropertyRepository: PropertyRepository,
     private val mLocationService: LocationService,
     ) : ViewModel(){
@@ -28,7 +31,7 @@ class ListViewModel @Inject constructor(
     val locationStarted = mLocationService.locationStarted
 
     init {
-        viewModelScope.launch {
+        mIoScope.launch {
             mPropertyRepository.fetchProperties()
             mPropertyRepository.propertiesFlow.collect { state ->
                 mPropertyListMutableLiveData.postValue(state)
@@ -37,7 +40,7 @@ class ListViewModel @Inject constructor(
     }
 
     fun fetchProperties(){
-        viewModelScope.launch {
+        mIoScope.launch {
             mPropertyRepository.fetchProperties()
         }
     }
