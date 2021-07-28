@@ -111,5 +111,4 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
         intent.putExtra(BUNDLE_KEY_SELECTED_MEDIA_INDEX, position)
         startActivity(intent)
     }
-
 }

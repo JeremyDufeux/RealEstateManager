@@ -55,6 +55,7 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
                     .load(property.mediaList[0].url)
                     .centerCrop()
                     .timeout(2000)
+                    .error(ResourcesCompat.getDrawable(context.resources, R.drawable.ic_building, null))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mBinding.fragmentListItemIv)
             } else{

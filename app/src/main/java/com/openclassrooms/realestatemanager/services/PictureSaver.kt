@@ -51,7 +51,7 @@ class PictureSaver @Inject constructor(
                 writeFile()
 
                 addPictureToGallery()
-                val mediaItem = MediaItem(mPictureFile.toUri().toString(), "", FileType.PICTURE)
+                val mediaItem = MediaItem(UUID.randomUUID().toString(), mPictureFile.toUri().toString(), "", FileType.PICTURE)
                 _fileStateFlow.value = FileState.Success(mediaItem)
             }
         }

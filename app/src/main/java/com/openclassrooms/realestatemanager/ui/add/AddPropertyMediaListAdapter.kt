@@ -3,10 +3,12 @@ package com.openclassrooms.realestatemanager.ui.add
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyMediasItemBinding
 import com.openclassrooms.realestatemanager.models.FileType
 import com.openclassrooms.realestatemanager.models.MediaItem
@@ -33,8 +35,9 @@ class AddPropertyMediaListAdapter(private var mMediaListener: MediaListener) : L
             GlideApp.with(context)
                 .load(media.url)
                 .centerCrop()
+                .timeout(2000)
+                .error(ResourcesCompat.getDrawable(context.resources, R.drawable.ic_building, null))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                //.errorPlaceholder() // TODO
                 .into(mBinding.activityAddPropertyMediaItemIv)
 
             if(!media.description.isNullOrEmpty()) {
@@ -61,7 +64,7 @@ class AddPropertyMediaListAdapter(private var mMediaListener: MediaListener) : L
     companion object{
         private val DiffCallback = object : DiffUtil.ItemCallback<MediaItem>(){
             override fun areItemsTheSame(oldItem: MediaItem, newItem: MediaItem): Boolean {
-                return oldItem.url == newItem.url
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: MediaItem, newItem: MediaItem): Boolean {

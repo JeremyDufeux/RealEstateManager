@@ -180,7 +180,7 @@ class CameraActivity : AppCompatActivity() {
                 val perms = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 contentResolver.takePersistableUriPermission(uri, perms)
             }
-            val mediaItem = MediaItem(uri.toString(), "", getFileType(getMimeType(uri)))
+            val mediaItem = MediaItem(UUID.randomUUID().toString(), uri.toString(), "", getFileType(getMimeType(uri)))
             mViewModel.setFileState(FileState.Success(mediaItem))
         }
     }

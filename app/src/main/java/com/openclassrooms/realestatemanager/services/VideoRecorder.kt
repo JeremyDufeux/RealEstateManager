@@ -75,7 +75,7 @@ class VideoRecorder @Inject constructor(private val mContext: Context) {
         mRecorder = null
         addVideoToGallery()
 
-        val mediaItem = MediaItem(mVideoFile.toUri().toString(), "", FileType.VIDEO)
+        val mediaItem = MediaItem(UUID.randomUUID().toString(), mVideoFile.toUri().toString(), "", FileType.VIDEO)
 
         _fileStateFlow.value = FileState.Success(mediaItem)
     }
