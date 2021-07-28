@@ -14,6 +14,15 @@
         android:contentDescription="@string/media"
         tools:srcCompat="@sample/properties" />
 
+    <ImageView
+        android:id="@+id/activity_add_property_video_iv"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="5dp"
+        android:src="@drawable/ic_video"
+        android:visibility="gone"
+        android:contentDescription="@string/media" />
+
     <TextView
         android:id="@+id/activity_add_property_media_item_tv"
         style="@style/detailMediaText"

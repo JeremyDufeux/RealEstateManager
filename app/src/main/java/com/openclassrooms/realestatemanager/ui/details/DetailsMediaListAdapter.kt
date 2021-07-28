@@ -1,10 +1,12 @@
 package com.openclassrooms.realestatemanager.ui.details
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsMediaItemBinding
+import com.openclassrooms.realestatemanager.models.FileType
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.modules.GlideApp
 
@@ -40,7 +42,16 @@ class DetailsMediaListAdapter(private var mMediaListener: MediaListener) : Recyc
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mBinding.fragmentDetailMediaItemIv)
 
-            mBinding.fragmentDetailMediaItemTv.text = media.description
+            if(!media.description.isNullOrEmpty()) {
+                mBinding.fragmentDetailMediaItemTv.apply {
+                    visibility = View.VISIBLE
+                    text = media.description
+                }
+            }
+
+            if(media.fileType == FileType.VIDEO){
+                mBinding.fragmentDetailVideoIv.visibility = View.VISIBLE
+            }
 
             mBinding.root.setOnClickListener { mMediaListener.onMediaClick(adapterPosition) }
         }
