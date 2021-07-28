@@ -17,6 +17,7 @@ import androidx.core.net.toUri
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.models.FileState
 import com.openclassrooms.realestatemanager.models.FileType
+import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.OrientationMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,7 +51,8 @@ class PictureSaver @Inject constructor(
                 writeFile()
 
                 addPictureToGallery()
-                _fileStateFlow.value = FileState.Success(mPictureFile.toUri(), FileType.PICTURE)
+                val mediaItem = MediaItem(mPictureFile.toUri().toString(), "", FileType.PICTURE)
+                _fileStateFlow.value = FileState.Success(mediaItem)
             }
         }
         catch (e: FileNotFoundException){

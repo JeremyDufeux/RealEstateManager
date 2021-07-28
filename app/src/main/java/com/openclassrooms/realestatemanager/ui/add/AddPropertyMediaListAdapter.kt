@@ -26,13 +26,14 @@ class AddPropertyMediaListAdapter(private var mMediaListener: MediaListener) : L
                              private val mMediaListener: MediaListener)
         : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun updateViewHolder(media: MediaItem) {
+        fun updateViewHolder(media: MediaItem) {  // TODO Add video icon + delete icon
             val context = mBinding.root.context
 
             GlideApp.with(context)
                 .load(media.url)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.errorPlaceholder() // TODO
                 .into(mBinding.activityAddPropertyMediaItemIv)
 
             if(!media.description.isNullOrEmpty()) {

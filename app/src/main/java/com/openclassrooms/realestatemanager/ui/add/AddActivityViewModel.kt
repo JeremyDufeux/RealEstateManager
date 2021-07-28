@@ -4,7 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.openclassrooms.realestatemanager.models.*
+import com.openclassrooms.realestatemanager.models.MediaItem
+import com.openclassrooms.realestatemanager.models.PointsOfInterest
+import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.models.PropertyType
 import com.openclassrooms.realestatemanager.modules.IoCoroutineScope
 import com.openclassrooms.realestatemanager.repositories.PropertyRepository
 import com.openclassrooms.realestatemanager.services.GeocoderClient
@@ -38,8 +41,8 @@ class AddActivityViewModel @Inject constructor(
     var city = String()
     var postalCode = String()
     var country = String()
-    var latitude : Double = 0.0
-    var longitude : Double = 0.0
+    private var latitude : Double = 0.0
+    private var longitude : Double = 0.0
     var agent = String()
     var pointOfInterestList : MutableList<PointsOfInterest> = ArrayList()
 
@@ -84,10 +87,9 @@ class AddActivityViewModel @Inject constructor(
         }
     }
 
-    fun addMediaUri(uri: String, description: String?, fileType: FileType) {
+    fun addMediaUri(mediaItem: MediaItem) {
         viewModelScope.launch(Dispatchers.IO) {
-
-            mediaList.add(MediaItem(uri, description, fileType))
+            mediaList.add(mediaItem)
 
             _mediaListLiveData.postValue(mediaList)
         }

@@ -6,9 +6,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VideoViewerViewModel @Inject constructor() : ViewModel() {
-    var mPlayWhenReady = true
-    var mIsPlaying = true
-    var mCurrentWindow = 0
-    var mPlaybackPosition = 0L
-    var mUrl : String = ""
+    var playWhenReady = true
+    var isPlaying = true
+    var currentWindow = 0
+    var playbackPosition = 0L
+    var url : String = ""
 }

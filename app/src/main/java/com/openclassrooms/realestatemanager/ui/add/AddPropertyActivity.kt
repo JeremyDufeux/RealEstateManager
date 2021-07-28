@@ -21,14 +21,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBinding
-import com.openclassrooms.realestatemanager.models.FileType
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.PointsOfInterest
 import com.openclassrooms.realestatemanager.models.PropertyType
+import com.openclassrooms.realestatemanager.ui.camera.CAMERA_RESULT_MEDIA_KEY
 import com.openclassrooms.realestatemanager.ui.camera.CameraActivity
-import com.openclassrooms.realestatemanager.ui.camera.RESULT_DESCRIPTION_KEY
-import com.openclassrooms.realestatemanager.ui.camera.RESULT_FILE_TYPE_KEY
-import com.openclassrooms.realestatemanager.ui.camera.RESULT_URI_KEY
+import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_MEDIA_LIST
+import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_SELECTED_MEDIA_INDEX
+import com.openclassrooms.realestatemanager.ui.mediaViewer.MediaViewerActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -374,18 +374,19 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
             val data: Intent? = result.data
 
             if(data != null) {
-                val uri = data.getStringExtra(RESULT_URI_KEY)
-                val description = data.getStringExtra(RESULT_DESCRIPTION_KEY)
-                val fileType = data.getSerializableExtra(RESULT_FILE_TYPE_KEY) as FileType
+                val mediaItem = data.getParcelableExtra<MediaItem>(CAMERA_RESULT_MEDIA_KEY)
 
-                if (uri != null) {
-                    mViewModel.addMediaUri(uri, description, fileType)
+                if (mediaItem != null) {
+                    mViewModel.addMediaUri(mediaItem) // TODO Add media id
                 }
             }
         }
     }
 
     override fun onMediaClick(position: Int) {
-        //TODO Not yet implemented
+        val intent = Intent(this, MediaViewerActivity::class.java)
+        intent.putParcelableArrayListExtra(BUNDLE_KEY_MEDIA_LIST, mViewModel.mediaList as ArrayList)
+        intent.putExtra(BUNDLE_KEY_SELECTED_MEDIA_INDEX, position)
+        startActivity(intent)
     }
 }

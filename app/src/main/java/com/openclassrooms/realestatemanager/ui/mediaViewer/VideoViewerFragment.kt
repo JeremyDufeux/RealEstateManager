@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.ui.mediaViewer
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +9,6 @@ import androidx.fragment.app.viewModels
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.openclassrooms.realestatemanager.databinding.FragmentVideoViewerBinding
 
 
@@ -29,10 +26,13 @@ class VideoViewerFragment : Fragment() {
         mBinding = FragmentVideoViewerBinding.inflate(inflater)
 
         arguments?.getString(BUNDLE_KEY_MEDIA_URL) ?.let {
-            mViewModel.mUrl = it
+            mViewModel.url = it
         }
         arguments?.getString(BUNDLE_KEY_MEDIA_DESCRIPTION) ?.let {
-            mBinding.videoViewerFragmentTv.text = it
+            if (it.isNotBlank() && it.isNotEmpty()) {
+                mBinding.videoViewerFragmentTv.text = it
+                mBinding.videoViewerFragmentTv.visibility = View.VISIBLE
+            }
         }
 
         return mBinding.root
@@ -45,7 +45,7 @@ class VideoViewerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if(mViewModel.mIsPlaying) {
+        if(mViewModel.isPlaying) {
             mPlayer?.play()
         }
     }
@@ -53,7 +53,7 @@ class VideoViewerFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         if(mPlayer?.isPlaying == true) {
-            mViewModel.mIsPlaying = true
+            mViewModel.isPlaying = true
             mPlayer?.pause()
         }
     }
@@ -64,28 +64,25 @@ class VideoViewerFragment : Fragment() {
     }
 
     private fun initializePlayer() {
-        val dataSourceFactory = DefaultHttpDataSource.Factory()
-        val source = ProgressiveMediaSource.Factory(dataSourceFactory)
-            .createMediaSource(MediaItem.fromUri(Uri.parse(mViewModel.mUrl)))
-
+        val mediaItem: MediaItem = MediaItem.fromUri(mViewModel.url)
         mPlayer = SimpleExoPlayer.Builder(requireContext())
             .build()
             .apply {
                 mBinding.videoViewerFragmentEp.player = this
                 mBinding.videoViewerFragmentEp.controllerAutoShow = false
-                setMediaSource(source)
-                repeatMode = Player.REPEAT_MODE_ALL;
-                playWhenReady = mViewModel.mPlayWhenReady
-                seekTo(mViewModel.mCurrentWindow, mViewModel.mPlaybackPosition)
+                setMediaItem(mediaItem)
+                repeatMode = Player.REPEAT_MODE_ALL
+                playWhenReady = mViewModel.playWhenReady
+                seekTo(mViewModel.currentWindow, mViewModel.playbackPosition)
                 prepare()
             }
     }
 
     private fun releasePlayer() {
         mPlayer?.run {
-            mViewModel.mPlaybackPosition = currentPosition
-            mViewModel.mCurrentWindow = currentWindowIndex
-            mViewModel.mPlayWhenReady = playWhenReady
+            mViewModel.playbackPosition = currentPosition
+            mViewModel.currentWindow = currentWindowIndex
+            mViewModel.playWhenReady = playWhenReady
             release()
         }
         mPlayer = null

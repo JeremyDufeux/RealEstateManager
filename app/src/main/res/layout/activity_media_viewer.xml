@@ -13,12 +13,40 @@
 
     <ImageButton
         android:id="@+id/activity_media_viewer_close_btn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="30dp"
+        android:layout_gravity="top|start"
+        android:scaleType="fitCenter"
+        android:background="@drawable/ic_cancel"
+        android:contentDescription="@string/cancel"/>
+
+    <ImageButton
+        android:id="@+id/activity_media_viewer_check_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="20dp"
         android:layout_gravity="top|end"
         android:scaleType="fitCenter"
-        android:background="@drawable/ic_cancel"
-        android:contentDescription="@string/check"/>
+        android:background="@drawable/ic_check"
+        android:contentDescription="@string/check"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/activity_media_viewer_description_et"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="70dp"
+        android:autofillHints="@string/add_description"
+        android:background="@drawable/edit_text_shape"
+        android:gravity="center"
+        android:hint="@string/add_description"
+        android:imeOptions="actionSend"
+        android:inputType="textAutoComplete|textCapSentences"
+        android:textColor="@color/light_grey"
+        android:textColorHint="@color/grey"
+        android:visibility="gone" />
 
 </FrameLayout>

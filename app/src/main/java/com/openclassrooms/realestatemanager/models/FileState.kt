@@ -1,9 +1,7 @@
 package com.openclassrooms.realestatemanager.models
 
-import android.net.Uri
-
 sealed class FileState{
-    data class Success(val uri: Uri, val type: FileType) : FileState()
+    data class Success(val mediaItem: MediaItem) : FileState()
     data class Error(val stringId: Int) : FileState()
     object Empty : FileState()
 }

@@ -15,6 +15,7 @@ import androidx.core.net.toUri
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.models.FileState
 import com.openclassrooms.realestatemanager.models.FileType
+import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.OrientationMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -74,7 +75,9 @@ class VideoRecorder @Inject constructor(private val mContext: Context) {
         mRecorder = null
         addVideoToGallery()
 
-        _fileStateFlow.value = FileState.Success(mVideoFile.toUri(), FileType.VIDEO)
+        val mediaItem = MediaItem(mVideoFile.toUri().toString(), "", FileType.VIDEO)
+
+        _fileStateFlow.value = FileState.Success(mediaItem)
     }
 
     @SuppressLint("SimpleDateFormat")

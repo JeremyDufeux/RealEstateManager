@@ -2,35 +2,30 @@ package com.openclassrooms.realestatemanager.ui.camera
 
 import android.content.ContentResolver
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.hardware.Camera
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.webkit.MimeTypeMap
 import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityCameraBinding
 import com.openclassrooms.realestatemanager.models.FileState
 import com.openclassrooms.realestatemanager.models.FileType
-import com.openclassrooms.realestatemanager.modules.GlideApp
+import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.ui.camera.CameraActivityViewModel.CameraMode.*
+import com.openclassrooms.realestatemanager.ui.mediaViewer.*
 import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.*
 
-const val RESULT_URI_KEY = "RESULT_URI_KEY"
-const val RESULT_DESCRIPTION_KEY = "RESULT_DESCRIPTION_KEY"
-const val RESULT_FILE_TYPE_KEY = "RESULT_FILE_TYPE_KEY"
+const val CAMERA_RESULT_MEDIA_KEY = "CAMERA_RESULT_MEDIA_KEY"
 
 @AndroidEntryPoint
 class CameraActivity : AppCompatActivity() {
@@ -41,8 +36,6 @@ class CameraActivity : AppCompatActivity() {
 
     private var mCamera: Camera? = null
     private var mPreview: CameraPreview? = null
-
-    private lateinit var mPlayer: SimpleExoPlayer
 
     private lateinit var mFileState: FileState.Success
 
@@ -74,13 +67,9 @@ class CameraActivity : AppCompatActivity() {
         when(state){
             is FileState.Success -> {
                 mFileState = state
-                when(mFileState.type){
-                    FileType.PICTURE -> showPicture()
-                    FileType.VIDEO -> showVideo()
-                    else -> {return@Observer}
-                }
-                showCheckButton()
+
                 releaseCamera()
+                startMediaViewerActivity()
             }
             is FileState.Error -> {
                 showToast(this@CameraActivity, R.string.error_saving_file)
@@ -88,6 +77,14 @@ class CameraActivity : AppCompatActivity() {
             }
             is FileState.Empty -> {}
         }
+    }
+
+    private fun startMediaViewerActivity() {
+        val intent = Intent(this, MediaViewerActivity::class.java)
+        intent.putParcelableArrayListExtra(BUNDLE_KEY_MEDIA_LIST, arrayListOf(mFileState.mediaItem))
+        intent.putExtra(BUNDLE_KEY_SELECTED_MEDIA_INDEX, 0)
+        intent.putExtra(BUNDLE_KEY_EDIT_MODE, true)
+        openMediaViewerLauncher.launch(intent)
     }
 
     private fun configureUi(){
@@ -101,9 +98,6 @@ class CameraActivity : AppCompatActivity() {
             activityCameraGalleryBtn.setOnClickListener {
                 openGallery()
             }
-            activityCameraCheckBtn.setOnClickListener {
-                finishActivityWithFile()
-            }
             activityCameraVideoBtn.setOnClickListener {
                 mViewModel.cameraMode = VIDEO
                 displayActualMode()
@@ -114,12 +108,6 @@ class CameraActivity : AppCompatActivity() {
             }
             activityCameraFl.setOnClickListener {
                 mCamera?.autoFocus(null)
-            }
-            activityCameraDescriptionEt.setOnEditorActionListener { _, actionId, _ ->
-                if(actionId == EditorInfo.IME_ACTION_SEND){
-                    finishActivityWithFile()
-                }
-                return@setOnEditorActionListener true
             }
         }
     }
@@ -154,44 +142,6 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun showPicture() {
-        GlideApp.with(this)
-            .load(mFileState.uri)
-            .into(mBinding.activityCameraPictureIv)
-
-        mBinding.activityCameraPictureIv.visibility = View.VISIBLE
-    }
-
-    private fun showVideo() {
-        mPlayer = SimpleExoPlayer.Builder(this).build()
-        mBinding.apply {
-            activityCameraFl.visibility = View.GONE
-            activityCameraExoplayer.visibility = View.VISIBLE
-            activityCameraExoplayer.player = mPlayer
-            activityCameraCheckBtn.visibility = View.VISIBLE
-        }
-        val mediaItem: MediaItem = MediaItem.fromUri(mFileState.uri)
-        mPlayer.setMediaItem(mediaItem)
-        mPlayer.prepare()
-        mPlayer.play()
-    }
-
-    private fun showCheckButton() {
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
-
-        mBinding.apply {
-            activityCameraCheckBtn.visibility = View.VISIBLE
-            activityCameraDescriptionEt.visibility = View.VISIBLE
-
-            activityCameraFl.visibility = View.GONE
-            activityCameraCapturePhotoBtn.visibility = View.GONE
-            activityCameraCaptureVideoBtn.visibility = View.GONE
-            activityCameraGalleryBtn.visibility = View.GONE
-            activityCameraVideoBtn.visibility = View.GONE
-            activityCameraPhotoBtn.visibility = View.GONE
-        }
-    }
-
     private fun configureCamera(){
         mCamera = Camera.open()
 
@@ -221,18 +171,37 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun openGallery(){
-        resultLauncher.launch(arrayOf("image/*", "video/*"))
+        openGalleryLauncher.launch(arrayOf("image/*", "video/*"))
     }
 
-    private var resultLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+    private var openGalleryLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         if (uri != null) {
             if (Build.VERSION.SDK_INT >= 19) {
                 val perms = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 contentResolver.takePersistableUriPermission(uri, perms)
             }
-            Timber.d("Debug  registerForActivityResult: $uri")
-            mViewModel.setFileState(FileState.Success(uri, getFileType(getMimeType(uri))))
+            val mediaItem = MediaItem(uri.toString(), "", getFileType(getMimeType(uri)))
+            mViewModel.setFileState(FileState.Success(mediaItem))
         }
+    }
+
+    private var openMediaViewerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val data: Intent? = result.data
+
+            if(data != null) {
+                val mediaItem = data.getParcelableExtra<MediaItem>(MEDIA_VIEWER_RESULT_MEDIA_KEY)
+                finishActivityWithFile(mediaItem)
+            }
+        }
+    }
+
+    private fun finishActivityWithFile(mediaItem: MediaItem?) {
+        val data = Intent()
+        data.putExtra(CAMERA_RESULT_MEDIA_KEY, mediaItem)
+
+        setResult(RESULT_OK, data)
+        finish()
     }
 
     fun getMimeType(uri: Uri): String? {
@@ -258,20 +227,6 @@ class CameraActivity : AppCompatActivity() {
         return type
     }
 
-    private fun finishActivityWithFile( ) {
-        Timber.d("Debug finishActivityWithFile : ${mFileState.uri.toString()}")
-
-        val data = Intent()
-        data.putExtra(RESULT_URI_KEY, mFileState.uri.toString())
-        data.putExtra(RESULT_FILE_TYPE_KEY, mFileState.type)
-        data.putExtra(
-            RESULT_DESCRIPTION_KEY,
-            mBinding.activityCameraDescriptionEt.text.toString()
-        )
-        setResult(RESULT_OK, data)
-        finish()
-    }
-
     private fun finishActivityWithoutFile(){
         val data = Intent()
         setResult(RESULT_CANCELED, data)
@@ -292,15 +247,8 @@ class CameraActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
         mViewModel.disableOrientationService()
         releaseCamera()
-    }
-
-    private fun pausePlayer() {
-        if(this::mPlayer.isInitialized){
-            mPlayer.pause()
-        }
     }
 
     private fun releaseCamera() {
