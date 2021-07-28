@@ -27,7 +27,7 @@ class AddPropertyMediaListAdapter(private var mMediaListener: MediaListener) : L
                              private val mMediaListener: MediaListener)
         : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun updateViewHolder(media: MediaItem) {  // TODO Add video icon + delete icon
+        fun updateViewHolder(media: MediaItem) {
             val context = mBinding.root.context
 
             GlideApp.with(context)
@@ -48,12 +48,14 @@ class AddPropertyMediaListAdapter(private var mMediaListener: MediaListener) : L
                 mBinding.activityAddPropertyVideoIv.visibility = View.VISIBLE
             }
 
+            mBinding.activityAddPropertyDeleteIbtn.setOnClickListener { mMediaListener.onDeleteClick(adapterPosition) }
             mBinding.root.setOnClickListener { mMediaListener.onMediaClick(adapterPosition) }
         }
     }
 
     interface MediaListener{
         fun onMediaClick(position: Int)
+        fun onDeleteClick(position: Int)
     }
 
     companion object{

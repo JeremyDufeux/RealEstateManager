@@ -30,6 +30,7 @@ import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_MEDIA_LIST
 import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_SELECTED_MEDIA_INDEX
 import com.openclassrooms.realestatemanager.ui.mediaViewer.MediaViewerActivity
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.MediaListener {
@@ -119,6 +120,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
     private val propertyMediaListObserver = Observer<List<MediaItem>> { list ->
         mAdapter.submitList(list)
+        mAdapter.notifyDataSetChanged()
     }
 
     private fun dropdownListener() =
@@ -388,5 +390,9 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         intent.putParcelableArrayListExtra(BUNDLE_KEY_MEDIA_LIST, mViewModel.mediaList as ArrayList)
         intent.putExtra(BUNDLE_KEY_SELECTED_MEDIA_INDEX, position)
         startActivity(intent)
+    }
+
+    override fun onDeleteClick(position: Int) {
+        mViewModel.removeMediaAtPosition(position)
     }
 }

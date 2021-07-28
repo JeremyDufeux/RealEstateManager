@@ -19,9 +19,21 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="2dp"
         android:src="@drawable/ic_video"
         android:visibility="gone"
         android:contentDescription="@string/media" />
+
+    <ImageButton
+        android:id="@+id/activity_add_property_delete_ibtn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="2dp"
+        android:background="@null"
+        android:src="@drawable/ic_delete"
+        android:layout_gravity="end|top"
+        android:contentDescription="@string/remove_media" />
 
     <TextView
         android:id="@+id/activity_add_property_media_item_tv"
