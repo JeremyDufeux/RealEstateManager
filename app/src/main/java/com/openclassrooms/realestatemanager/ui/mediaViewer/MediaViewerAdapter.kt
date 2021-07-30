@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.openclassrooms.realestatemanager.models.FileType
+import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.MediaItem
 
 const val BUNDLE_KEY_MEDIA_URL = "BUNDLE_KEY_MEDIA_URL"

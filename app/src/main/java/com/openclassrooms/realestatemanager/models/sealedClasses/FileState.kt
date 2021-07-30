@@ -1,4 +1,6 @@
-package com.openclassrooms.realestatemanager.models
+package com.openclassrooms.realestatemanager.models.sealedClasses
+
+import com.openclassrooms.realestatemanager.models.MediaItem
 
 sealed class FileState{
     data class Success(val mediaItem: MediaItem) : FileState()

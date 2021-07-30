@@ -1,4 +1,6 @@
-package com.openclassrooms.realestatemanager.models
+package com.openclassrooms.realestatemanager.models.sealedClasses
+
+import com.openclassrooms.realestatemanager.models.Property
 
 sealed class State {
     object Idle : State()

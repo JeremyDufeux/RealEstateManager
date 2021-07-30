@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.models
+package com.openclassrooms.realestatemanager.models.enums
 
 enum class OrientationMode(val rotation: Int) {
     ORIENTATION_PORTRAIT_NORMAL(90),

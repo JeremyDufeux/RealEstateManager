@@ -22,15 +22,14 @@ import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBinding
 import com.openclassrooms.realestatemanager.models.MediaItem
-import com.openclassrooms.realestatemanager.models.PointsOfInterest
-import com.openclassrooms.realestatemanager.models.PropertyType
+import com.openclassrooms.realestatemanager.models.enums.PointsOfInterest
+import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.ui.camera.CAMERA_RESULT_MEDIA_KEY
 import com.openclassrooms.realestatemanager.ui.camera.CameraActivity
 import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_MEDIA_LIST
 import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_SELECTED_MEDIA_INDEX
 import com.openclassrooms.realestatemanager.ui.mediaViewer.MediaViewerActivity
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.MediaListener {

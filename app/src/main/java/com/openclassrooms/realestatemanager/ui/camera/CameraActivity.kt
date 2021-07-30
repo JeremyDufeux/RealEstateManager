@@ -15,8 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityCameraBinding
-import com.openclassrooms.realestatemanager.models.FileState
-import com.openclassrooms.realestatemanager.models.FileType
+import com.openclassrooms.realestatemanager.models.sealedClasses.FileState
+import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.ui.camera.CameraActivityViewModel.CameraMode.*
 import com.openclassrooms.realestatemanager.ui.mediaViewer.*
@@ -215,7 +215,7 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFileType(mimeType: String?): FileType{
+    private fun getFileType(mimeType: String?): FileType {
         var type = FileType.OTHER
         if(mimeType != null){
             if(mimeType.contains("image")){

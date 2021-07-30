@@ -7,6 +7,10 @@ import com.google.firebase.firestore.Source
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.openclassrooms.realestatemanager.models.*
+import com.openclassrooms.realestatemanager.models.enums.FileType
+import com.openclassrooms.realestatemanager.models.enums.PointsOfInterest
+import com.openclassrooms.realestatemanager.models.enums.PropertyType
+import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -87,7 +91,7 @@ class PropertyApiService @Inject constructor() {
         getPropertiesCollection().document(property.id).set(property)
     }
 
-    suspend fun uploadMedia(url: String): State{
+    suspend fun uploadMedia(url: String): State {
         return try {
             val uuid = UUID.randomUUID().toString()
 

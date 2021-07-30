@@ -3,7 +3,7 @@ package com.openclassrooms.realestatemanager.services
 import android.content.Context
 import android.hardware.SensorManager
 import android.view.OrientationEventListener
-import com.openclassrooms.realestatemanager.models.OrientationMode
+import com.openclassrooms.realestatemanager.models.enums.OrientationMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 

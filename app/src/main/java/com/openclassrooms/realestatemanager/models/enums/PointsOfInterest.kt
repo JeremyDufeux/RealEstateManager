@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.models
+package com.openclassrooms.realestatemanager.models.enums
 
 import com.openclassrooms.realestatemanager.R
 

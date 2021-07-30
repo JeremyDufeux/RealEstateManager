@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.models
+package com.openclassrooms.realestatemanager.models.enums
 
 enum class PropertyType(val description : String) {
     FLAT("Flat"),

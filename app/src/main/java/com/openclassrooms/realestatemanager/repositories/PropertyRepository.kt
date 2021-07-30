@@ -1,7 +1,7 @@
 package com.openclassrooms.realestatemanager.repositories
 
 import com.openclassrooms.realestatemanager.models.Property
-import com.openclassrooms.realestatemanager.models.State
+import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.services.PropertyApiService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

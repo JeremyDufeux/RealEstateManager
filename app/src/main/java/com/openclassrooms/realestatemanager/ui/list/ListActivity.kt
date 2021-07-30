@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayoutMediator
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityListBinding
-import com.openclassrooms.realestatemanager.models.State
+import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.ui.add.AddPropertyActivity
 import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint

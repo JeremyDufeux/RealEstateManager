@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.models
 
 import android.os.Parcelable
+import com.openclassrooms.realestatemanager.models.enums.FileType
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

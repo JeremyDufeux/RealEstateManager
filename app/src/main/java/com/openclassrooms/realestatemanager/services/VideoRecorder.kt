@@ -13,10 +13,10 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.net.toUri
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.models.FileState
-import com.openclassrooms.realestatemanager.models.FileType
+import com.openclassrooms.realestatemanager.models.sealedClasses.FileState
+import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.MediaItem
-import com.openclassrooms.realestatemanager.models.OrientationMode
+import com.openclassrooms.realestatemanager.models.enums.OrientationMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber

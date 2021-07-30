@@ -2,6 +2,9 @@ package com.openclassrooms.realestatemanager.utils
 
 import com.openclassrooms.realestatemanager.BuildConfig
 import com.openclassrooms.realestatemanager.models.*
+import com.openclassrooms.realestatemanager.models.enums.FileType
+import com.openclassrooms.realestatemanager.models.enums.PointsOfInterest
+import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import java.util.*
 
 fun generateProperties() : List<Property> {

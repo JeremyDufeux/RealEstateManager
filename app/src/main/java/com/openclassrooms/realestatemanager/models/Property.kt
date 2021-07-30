@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.models
 
+import com.openclassrooms.realestatemanager.models.enums.PointsOfInterest
+import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import java.util.*
 
 data class Property(
