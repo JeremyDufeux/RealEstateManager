@@ -1,6 +1,6 @@
 package com.openclassrooms.realestatemanager.models
 
-import com.openclassrooms.realestatemanager.models.enums.PointsOfInterest
+import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import java.util.*
 
@@ -21,9 +21,9 @@ data class Property(
     var latitude: Double = 0.0,
     var longitude: Double = 0.0,
     var mapPictureUrl: String = "",
-    var pointOfInterest: List<PointsOfInterest> = listOf(),
+    var pointOfInterestList: List<PointOfInterest> = listOf(),
     var available: Boolean = true,
-    var saleDate: Long = 0,
-    var dateOfSale: Long? = null,
+    var postDate: Long = 0,
+    var soldDate: Long? = null,
     var agentName: String = ""
 )

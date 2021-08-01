@@ -7,14 +7,15 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyMediasItemBinding
-import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.MediaItem
-import com.openclassrooms.realestatemanager.modules.GlideApp
+import com.openclassrooms.realestatemanager.models.enums.FileType
 
-class AddPropertyMediaListAdapter(private var mMediaListener: MediaListener) : ListAdapter<MediaItem, AddPropertyMediaListAdapter.PropertyViewHolder>(DiffCallback) {
+class AddPropertyMediaListAdapter(private var mMediaListener: MediaListener)
+    : ListAdapter<MediaItem, AddPropertyMediaListAdapter.PropertyViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
         val binding : ActivityAddPropertyMediasItemBinding = ActivityAddPropertyMediasItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -32,7 +33,7 @@ class AddPropertyMediaListAdapter(private var mMediaListener: MediaListener) : L
         fun updateViewHolder(media: MediaItem) {
             val context = mBinding.root.context
 
-            GlideApp.with(context)
+            Glide.with(context)
                 .load(media.url)
                 .centerCrop()
                 .timeout(2000)

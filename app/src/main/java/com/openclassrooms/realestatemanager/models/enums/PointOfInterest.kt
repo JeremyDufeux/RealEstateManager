@@ -2,8 +2,8 @@ package com.openclassrooms.realestatemanager.models.enums
 
 import com.openclassrooms.realestatemanager.R
 
-enum class PointsOfInterest(val description : String,
-                            val icon :Int) {
+enum class PointOfInterest(val description : String,
+                           val icon :Int) {
     SCHOOL("School", R.drawable.ic_school),
     GROCERY("Grocery", R.drawable.ic_grocery),
     PARK("Park", R.drawable.ic_park),

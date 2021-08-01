@@ -6,8 +6,8 @@ import timber.log.Timber
 import timber.log.Timber.DebugTree
 
 
-@HiltAndroidApp
-class RealEstateManagerApplication : MultiDexApplication() {
+@HiltAndroidApp(MultiDexApplication::class)
+class RealEstateManagerApplication : Hilt_RealEstateManagerApplication() {
 
     override fun onCreate() {
         super.onCreate()

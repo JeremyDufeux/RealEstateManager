@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.models.MediaItem
-import com.openclassrooms.realestatemanager.models.enums.PointsOfInterest
 import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.modules.IoCoroutineScope
 import com.openclassrooms.realestatemanager.repositories.PropertyRepository
@@ -44,7 +44,7 @@ class AddActivityViewModel @Inject constructor(
     private var latitude : Double = 0.0
     private var longitude : Double = 0.0
     var agent = String()
-    var pointOfInterestList : MutableList<PointsOfInterest> = ArrayList()
+    var mPointOfInterestList : MutableList<PointOfInterest> = ArrayList()
 
     private val _mediaListLiveData = MutableLiveData<MutableList<MediaItem>>()
     val mediaListLiveData : LiveData<MutableList<MediaItem>> = _mediaListLiveData
@@ -77,10 +77,10 @@ class AddActivityViewModel @Inject constructor(
                 latitude = latitude,
                 longitude = longitude,
                 mapPictureUrl = getGeoApifyUrl(latitude, longitude),
-                pointOfInterest = pointOfInterestList,
+                pointOfInterestList = mPointOfInterestList,
                 available = true,
-                saleDate = Calendar.getInstance().timeInMillis,
-                dateOfSale = null,
+                postDate = Calendar.getInstance().timeInMillis,
+                soldDate = null,
                 agentName = agent
             )
             mPropertyRepository.addPropertyAndFetch(property)

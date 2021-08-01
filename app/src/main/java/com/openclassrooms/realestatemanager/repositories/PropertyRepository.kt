@@ -5,7 +5,6 @@ import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.services.PropertyApiService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,33 +12,25 @@ import javax.inject.Singleton
 class PropertyRepository @Inject constructor(
     private val mPropertyApiService: PropertyApiService){
 
-    private var mProperties: MutableList<Property> = mutableListOf()
-
-    private val _propertiesFlow = MutableStateFlow<State>(State.Idle)
-    val propertiesFlow = _propertiesFlow.asStateFlow()
+    private val _stateFlow = MutableStateFlow<State>(State.Idle)
+    val stateFlow = _stateFlow.asStateFlow()
 
     suspend fun fetchProperties() {
-        _propertiesFlow.value = State.Download.Downloading
-        mPropertyApiService.fetchProperties()
-            .collect { result ->
-                if(result is State.Download.DownloadSuccess){
-                    mProperties = result.propertiesList as MutableList<Property>
-                }
-                _propertiesFlow.value = result
+        _stateFlow.value = State.Download.Downloading
+        mPropertyApiService.fetchProperties().let { result ->
+            _stateFlow.value = result
         }
     }
 
-    fun getPropertyWithId(propertyId: String): Property {
-        val estateToUpdate = mProperties.find {it.id == propertyId }
-        val estateIndex = mProperties.indexOf(estateToUpdate)
-        return mProperties[estateIndex]
+    private fun addProperty(property: Property) {
+        mPropertyApiService.addProperty(property)
     }
 
     suspend fun addPropertyAndFetch(property: Property) {
-        _propertiesFlow.value = State.Upload.Uploading
+        _stateFlow.value = State.Upload.Uploading
         uploadMedias(property)
         addProperty(property)
-        _propertiesFlow.value = State.Download.Downloading
+        _stateFlow.value = State.Download.Downloading
         fetchProperties()
     }
 
@@ -47,13 +38,9 @@ class PropertyRepository @Inject constructor(
         for(medias in property.mediaList){
             when(val state = mPropertyApiService.uploadMedia(medias.url)){
                 is State.Upload.UploadSuccess -> medias.url = state.url
-                is State.Upload.Error -> _propertiesFlow.value = state
+                is State.Upload.Error -> _stateFlow.value = state
                 else -> {}
             }
         }
-    }
-
-    private fun addProperty(property: Property) {
-        mPropertyApiService.addProperty(property)
     }
 }

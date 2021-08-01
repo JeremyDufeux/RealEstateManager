@@ -10,12 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding
 import com.openclassrooms.realestatemanager.models.Property
-import com.openclassrooms.realestatemanager.modules.GlideApp
 import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_MEDIA_LIST
 import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_SELECTED_MEDIA_INDEX
 import com.openclassrooms.realestatemanager.ui.mediaViewer.MediaViewerActivity
@@ -63,14 +63,14 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
 
         mMediaAdapter.submitList(property.mediaList)
 
-        if(property.pointOfInterest.isEmpty()){
+        if(property.pointOfInterestList.isEmpty()){
             mBinding.apply {
                 fragmentDetailPointOfInterestCg.visibility = View.GONE
                 fragmentDetailPointOfInterestIv.visibility = View.GONE
                 fragmentDetailPointOfInterestTitleTv.visibility = View.GONE
             }
         } else {
-            property.pointOfInterest.map {
+            property.pointOfInterestList.map {
                 val image = ResourcesCompat.getDrawable(mBinding.root.context.resources, it.icon, null)
                 val chip = Chip(requireContext())
                 chip.text = it.description
@@ -82,7 +82,7 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
             }
         }
 
-        GlideApp.with(this)
+        Glide.with(this)
             .load(property.mapPictureUrl)
             .centerCrop()
             .timeout(2000)
@@ -99,7 +99,7 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
             fragmentDetailBedroomsTv.text = property.bedroomsAmount.toString()
             val address = "${property.address}\n${property.city}\n${property.postalCode}\n${property.country}"
             fragmentDetailLocationTv.text = address
-            fragmentDetailAvailableTv.text = formatCalendarToString(property.saleDate)
+            fragmentDetailAvailableTv.text = formatCalendarToString(property.postDate)
             fragmentDetailAgentTv.text = property.agentName
         }
 

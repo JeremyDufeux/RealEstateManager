@@ -32,7 +32,7 @@ class ListActivity : AppCompatActivity() {
         configureToolBar()
         configureViewPager()
 
-        mViewModel.propertyListLiveData.observe(this, propertyRepositoryObserver)
+        mViewModel.stateLiveData.observe(this, propertyRepositoryObserver)
     }
 
     private fun configureToolBar() {

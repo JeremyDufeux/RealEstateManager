@@ -18,6 +18,7 @@ import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.ui.details.DetailsActivity
 import com.openclassrooms.realestatemanager.utils.showToast
+import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -39,7 +40,7 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
     }
 
     private fun configureViewModel() {
-        mViewModel.propertyListLiveData.observe(this, propertyListObserver)
+        mViewModel.stateLiveData.observe(this, stateObserver)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +54,6 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
 
     private fun configureUi() {
         mBinding.fragmentListSrl.setOnRefreshListener { mViewModel.fetchProperties() }
-        mBinding.fragmentListSrl.isRefreshing = true
 
         mBinding.fragmentListRv.adapter = mAdapter
         mBinding.fragmentListRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -62,17 +62,24 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
         mBinding.fragmentListRv.addItemDecoration(itemDecoration)
     }
 
-    private val propertyListObserver = Observer<State> { state ->
+    private val stateObserver = Observer<State> { state ->
         when(state) {
-            is State.Download.DownloadSuccess -> {
+            is State.Download.Downloading -> {
+                mBinding.fragmentListSrl.isRefreshing = true
+            }
+            is State.Download.DownloadSuccess ->{
                 mPropertyList = state.propertiesList
                 mAdapter.updateList(mPropertyList)
                 hideProgress()
             }
             is State.Download.Error -> {
                 hideProgress()
-                showToast(requireContext(), R.string.an_error_append)
-                Timber.e("Error ListFragment.propertyListObserver: ${state.throwable.toString()}")
+                if (state.throwable is OfflineError) {
+                    showToast(requireContext(), R.string.you_re_not_connected_to_internet)
+                } else {
+                    showToast(requireContext(), R.string.an_error_append)
+                }
+                Timber.e("Error ListFragment.stateObserver: ${state.throwable.toString()}")
             }
             else -> {
                 hideProgress()

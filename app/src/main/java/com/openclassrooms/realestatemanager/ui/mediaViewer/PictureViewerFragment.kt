@@ -7,10 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.openclassrooms.realestatemanager.databinding.FragmentPrictureViewerBinding
-import com.openclassrooms.realestatemanager.modules.GlideApp
 
 
 class PictureViewerFragment : Fragment() {
@@ -24,7 +24,7 @@ class PictureViewerFragment : Fragment() {
 
         val url = arguments?.getString(BUNDLE_KEY_MEDIA_URL)
 
-        GlideApp.with(requireActivity())
+        Glide.with(requireActivity())
             .asBitmap()
             .load(url)
             .into(bitmapTarget())

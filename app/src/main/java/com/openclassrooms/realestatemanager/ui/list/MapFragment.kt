@@ -26,6 +26,7 @@ import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.ui.details.DetailsActivity
 import com.openclassrooms.realestatemanager.utils.showToast
+import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -73,10 +74,10 @@ class MapFragment : Fragment(),
     }
 
     private fun startObserver() {
-        mViewModel.propertyListLiveData.observe(this, propertyListObserver)
+        mViewModel.stateLiveData.observe(this, stateObserver)
     }
 
-    private val propertyListObserver = Observer<State> { state ->
+    private val stateObserver = Observer<State> { state ->
         when(state){
             is State.Download.Downloading -> {
                 mBinding.mapViewFragmentPb.visibility = View.VISIBLE
@@ -87,8 +88,12 @@ class MapFragment : Fragment(),
             }
             is State.Download.Error -> {
                 mBinding.mapViewFragmentPb.visibility = View.GONE
-                showToast(requireContext(), R.string.an_error_append)
-                Timber.e("Error MapFragment.propertyListObserver: ${state.throwable.toString()}")
+                if (state.throwable is OfflineError) {
+                    showToast(requireContext(), R.string.you_re_not_connected_to_internet)
+                } else {
+                    showToast(requireContext(), R.string.an_error_append)
+                }
+                Timber.e("Error ListFragment.stateObserver: ${state.throwable.toString()}")
             }
             else -> {}
         }

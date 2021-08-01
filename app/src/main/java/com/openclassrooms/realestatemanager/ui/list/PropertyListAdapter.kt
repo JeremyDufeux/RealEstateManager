@@ -6,11 +6,11 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding
 import com.openclassrooms.realestatemanager.models.Property
-import com.openclassrooms.realestatemanager.modules.GlideApp
 
 class PropertyListAdapter(private var mPropertyListener: PropertyListener) : RecyclerView.Adapter<PropertyListAdapter.PropertyViewHolder>() {
 
@@ -20,7 +20,7 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
         }
 
         override fun areContentsTheSame(oldItem: Property, newItem: Property): Boolean {
-            return oldItem.description == newItem.description
+            return oldItem == newItem
         }
     }
 
@@ -51,7 +51,7 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
             val context = mBinding.root.context
 
             if (property.mediaList.isNotEmpty()) {
-                GlideApp.with(context)
+                Glide.with(context)
                     .load(property.mediaList[0].url)
                     .centerCrop()
                     .timeout(2000)
@@ -59,7 +59,7 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mBinding.fragmentListItemIv)
             } else{
-                GlideApp.with(context)
+                Glide.with(context)
                     .load(ResourcesCompat.getDrawable(context.resources, R.drawable.ic_building, null))
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)

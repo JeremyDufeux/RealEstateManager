@@ -6,15 +6,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Source
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.openclassrooms.realestatemanager.models.*
+import com.openclassrooms.realestatemanager.models.MediaItem
+import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.enums.FileType
-import com.openclassrooms.realestatemanager.models.enums.PointsOfInterest
+import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
@@ -27,7 +24,7 @@ class PropertyApiService @Inject constructor() {
         return FirebaseFirestore.getInstance().collection(COLLECTION_PROPERTIES_NAME)
     }
 
-    fun fetchProperties() : Flow<State> = flow {
+    suspend fun fetchProperties() : State {
         try {
             val snapshot = getPropertiesCollection().get(Source.SERVER).await()
             val properties = mutableListOf<Property>()
@@ -37,14 +34,13 @@ class PropertyApiService @Inject constructor() {
                 val bathroomsAmount = (doc["bathroomsAmount"] as Long).toInt()
                 val bedroomsAmount = (doc["bedroomsAmount"] as Long).toInt()
                 val type = PropertyType.valueOf(doc["type"] as String)
-                val poiList = mutableListOf<PointsOfInterest>()
 
-                for (item in doc["pointOfInterest"] as List<*> ){
-                    poiList.add(PointsOfInterest.valueOf(item as String))
+                val poiList = mutableListOf<PointOfInterest>()
+                for (item in doc["pointOfInterestList"] as List<*> ){
+                    poiList.add(PointOfInterest.valueOf(item as String))
                 }
 
                 val medialList = mutableListOf<MediaItem>()
-
                 for (item in doc["mediaList"] as List<*>){
                     val map = item as HashMap<*, *>
                     val id = map["id"] as String
@@ -72,20 +68,20 @@ class PropertyApiService @Inject constructor() {
                     latitude = doc["latitude"] as Double,
                     longitude = doc["longitude"] as Double,
                     mapPictureUrl = doc["mapPictureUrl"] as String,
-                    pointOfInterest = poiList,
+                    pointOfInterestList = poiList,
                     available = doc["available"] as Boolean,
-                    saleDate = doc["saleDate"] as Long,
-                    dateOfSale = doc["dateOfSale"] as Long?,
+                    postDate = doc["postDate"] as Long,
+                    soldDate = doc["soldDate"] as Long?,
                     agentName = doc["agentName"] as String
                 )
                 properties.add(property)
             }
 
-            emit(State.Download.DownloadSuccess(properties))
+            return State.Download.DownloadSuccess(properties)
         }catch (e: Exception){
-            emit(State.Download.Error(e))
+            return State.Download.Error(e)
         }
-    }.flowOn(Dispatchers.IO)
+    }
 
     fun addProperty(property: Property) {
         getPropertiesCollection().document(property.id).set(property)

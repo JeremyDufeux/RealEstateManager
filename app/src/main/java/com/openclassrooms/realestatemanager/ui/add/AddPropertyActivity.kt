@@ -22,7 +22,7 @@ import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBinding
 import com.openclassrooms.realestatemanager.models.MediaItem
-import com.openclassrooms.realestatemanager.models.enums.PointsOfInterest
+import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.ui.camera.CAMERA_RESULT_MEDIA_KEY
 import com.openclassrooms.realestatemanager.ui.camera.CameraActivity
@@ -64,7 +64,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         }
 
         // Points of interest chips
-        for (point in PointsOfInterest.values()) {
+        for (point in PointOfInterest.values()) {
             val chip = layoutInflater.inflate(
                 R.layout.single_chip_layout,
                 mBinding.activityAddPropertyPointOfInterestCg,
@@ -76,14 +76,14 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
                 ResourcesCompat.getDrawable(mBinding.root.context.resources, point.icon, null)
             chip.chipIcon = image
             chip.isCheckable = true
-            if (mViewModel.pointOfInterestList.contains(point)) {
+            if (mViewModel.mPointOfInterestList.contains(point)) {
                 chip.isChecked = true
             }
             chip.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
-                    mViewModel.pointOfInterestList.add(buttonView.tag as PointsOfInterest)
+                    mViewModel.mPointOfInterestList.add(buttonView.tag as PointOfInterest)
                 } else {
-                    mViewModel.pointOfInterestList.remove(buttonView.tag as PointsOfInterest)
+                    mViewModel.mPointOfInterestList.remove(buttonView.tag as PointOfInterest)
                 }
             }
             mBinding.activityAddPropertyPointOfInterestCg.addView(chip)

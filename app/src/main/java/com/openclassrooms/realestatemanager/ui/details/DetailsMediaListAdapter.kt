@@ -7,12 +7,12 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsMediaItemBinding
-import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.MediaItem
-import com.openclassrooms.realestatemanager.modules.GlideApp
+import com.openclassrooms.realestatemanager.models.enums.FileType
 
 class DetailsMediaListAdapter(private var mMediaListener: MediaListener) : ListAdapter<MediaItem, DetailsMediaListAdapter.PropertyViewHolder>(DiffCallback) {
 
@@ -32,7 +32,7 @@ class DetailsMediaListAdapter(private var mMediaListener: MediaListener) : ListA
         fun updateViewHolder(media: MediaItem) {
             val context = mBinding.root.context
 
-            GlideApp.with(context)
+            Glide.with(context)
                 .load(media.url)
                 .centerCrop()
                 .timeout(2000)
