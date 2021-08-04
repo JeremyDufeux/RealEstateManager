@@ -8,7 +8,6 @@ import com.google.android.exoplayer2.offline.DownloadService
 import com.google.android.exoplayer2.scheduler.PlatformScheduler
 import com.google.android.exoplayer2.scheduler.Scheduler
 import com.google.android.exoplayer2.util.Util
-import com.openclassrooms.realestatemanager.RealEstateManagerApplication
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -27,8 +26,11 @@ class VideoDownloadService: DownloadService(
     @ApplicationContext
     lateinit var mContext: Context
 
+    @Inject
+    lateinit var mDownloadManager: DownloadManager
+
     override fun getDownloadManager(): DownloadManager {
-        return (application as RealEstateManagerApplication).appContainer.downloadManager.apply {
+        return mDownloadManager.apply {
             maxParallelDownloads = 5
         }
     }

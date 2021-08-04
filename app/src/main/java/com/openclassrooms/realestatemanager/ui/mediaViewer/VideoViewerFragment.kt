@@ -11,11 +11,14 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.upstream.cache.Cache
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory
-import com.openclassrooms.realestatemanager.RealEstateManagerApplication
 import com.openclassrooms.realestatemanager.databinding.FragmentVideoViewerBinding
+import com.openclassrooms.realestatemanager.modules.HiltVideoDownloadServiceModule
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class VideoViewerFragment : Fragment() {
     private val  mViewModel : VideoViewerViewModel by viewModels()
     private lateinit var mBinding: FragmentVideoViewerBinding
@@ -67,9 +70,16 @@ class VideoViewerFragment : Fragment() {
         releasePlayer()
     }
 
+    @Inject
+    @HiltVideoDownloadServiceModule.UserAgent
+    lateinit var userAgent: String
+
+    @Inject
+    lateinit var downloadCache: Cache
+
     private fun initializePlayer() {
-        val dataSourceFactory = DefaultDataSourceFactory(requireContext(), (requireContext().applicationContext as RealEstateManagerApplication).appContainer.userAgent)
-        val cachedDataSourceFactory = CacheDataSourceFactory((requireContext().applicationContext as RealEstateManagerApplication).appContainer.mDownloadCache, dataSourceFactory)
+        val dataSourceFactory = DefaultDataSourceFactory(requireContext(), userAgent)
+        val cachedDataSourceFactory = CacheDataSourceFactory(downloadCache, dataSourceFactory)
         val mediaSources = ProgressiveMediaSource.Factory(cachedDataSourceFactory).createMediaSource(
             Uri.parse(mViewModel.url))
 

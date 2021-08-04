@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.openclassrooms.realestatemanager.databinding.ActivityMediaViewerBinding
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.utils.ZoomOutPageTransformer
+import dagger.hilt.android.AndroidEntryPoint
 
 const val BUNDLE_KEY_EDIT_MODE = "BUNDLE_KEY_EDIT_MODE"
 const val BUNDLE_KEY_MEDIA_LIST = "BUNDLE_KEY_MEDIA_LIST"
@@ -15,6 +16,7 @@ const val BUNDLE_KEY_SELECTED_MEDIA_INDEX = "BUNDLE_KEY_SELECTED_MEDIA_INDEX"
 
 const val MEDIA_VIEWER_RESULT_MEDIA_KEY = "MEDIA_VIEWER_RESULT_MEDIA_KEY"
 
+@AndroidEntryPoint
 class MediaViewerActivity : AppCompatActivity() {
     private lateinit var mBinding : ActivityMediaViewerBinding
     private var mMediaList = mutableListOf<MediaItem>()
