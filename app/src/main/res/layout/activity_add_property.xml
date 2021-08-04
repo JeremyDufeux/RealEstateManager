@@ -463,7 +463,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/fragment_add_property_spacing"
                 android:text="@string/save"
-                android:enabled="false"
                 app:layout_constraintTop_toBottomOf="@id/activity_add_property_agent_et"
                 app:backgroundTint="@color/colorAccent"
                 />

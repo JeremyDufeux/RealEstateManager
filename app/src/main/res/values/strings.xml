@@ -56,4 +56,11 @@
     <string name="add_description">Add description</string>
     <string name="remove_media">Remove media</string>
     <string name="please_add_a_description">Please add a description</string>
+    <string name="please_add_a_picture_or_a_video">Please add a picture or a video</string>
+    <string name="price_amount">price</string>
+    <string name="bedroom_amount">bedroom amount</string>
+    <string name="bathroom_amount">bathroom amount</string>
+    <string name="room_amount">room amount</string>
+    <string name="surface_amount">surface</string>
+    <string name="please_enter_between">Please enter a %s between 0 and %d</string>
 </resources>

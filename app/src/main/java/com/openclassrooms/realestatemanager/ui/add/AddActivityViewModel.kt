@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
-import kotlin.properties.Delegates
 
 @HiltViewModel
 class AddActivityViewModel @Inject constructor(
@@ -29,12 +28,12 @@ class AddActivityViewModel @Inject constructor(
 ) : ViewModel(){
 
     var propertyType : PropertyType = PropertyType.FLAT
-    var mediaList : MutableList<MediaItem> = mutableListOf()
-    var price by Delegates.notNull<Long>()
-    var surface by Delegates.notNull<Int>()
-    var rooms by Delegates.notNull<Int>()
-    var bathrooms by Delegates.notNull<Int>()
-    var bedrooms by Delegates.notNull<Int>()
+    private var mMediaList : MutableList<MediaItem> = mutableListOf()
+    var price: Long = 0
+    var surface: Int = 0
+    var rooms: Int = 0
+    var bathrooms: Int = 0
+    var bedrooms: Int = 0
     var description = String()
     var address1 = String()
     var address2 = String()
@@ -69,7 +68,7 @@ class AddActivityViewModel @Inject constructor(
                 bathroomsAmount = bathrooms,
                 bedroomsAmount = bedrooms,
                 description = description,
-                mediaList = mediaList,
+                mediaList = mMediaList,
                 address = address1,
                 city = city,
                 postalCode = postalCode,
@@ -89,15 +88,15 @@ class AddActivityViewModel @Inject constructor(
 
     fun addMediaUri(mediaItem: MediaItem) {
         viewModelScope.launch(Dispatchers.Default) {
-            mediaList.add(mediaItem)
-            _mediaListLiveData.postValue(mediaList)
+            mMediaList.add(mediaItem)
+            _mediaListLiveData.postValue(mMediaList)
         }
     }
 
     fun removeMediaAtPosition(position: Int) {
         viewModelScope.launch(Dispatchers.Default) {
-            mediaList.removeAt(position)
-            _mediaListLiveData.postValue(mediaList)
+            mMediaList.removeAt(position)
+            _mediaListLiveData.postValue(mMediaList)
         }
     }
 }

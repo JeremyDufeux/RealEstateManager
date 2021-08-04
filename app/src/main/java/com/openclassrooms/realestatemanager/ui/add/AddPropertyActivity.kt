@@ -6,8 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.Menu
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -29,6 +27,7 @@ import com.openclassrooms.realestatemanager.ui.camera.CameraActivity
 import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_MEDIA_LIST
 import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_SELECTED_MEDIA_INDEX
 import com.openclassrooms.realestatemanager.ui.mediaViewer.MediaViewerActivity
+import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -95,18 +94,6 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         mBinding.apply {
             activityAddPropertyAddMediaIb.setOnClickListener{ startCameraActivity() }
             activityAddPropertyTypeTvInput.onItemClickListener = dropdownListener()
-            activityAddPropertyPriceEtInput.addTextChangedListener(priceTextWatcher())
-            activityAddPropertySurfaceEtInput.addTextChangedListener(surfaceTextWatcher())
-            activityAddPropertyRoomsEtInput.addTextChangedListener(roomsTextWatcher())
-            activityAddPropertyBathroomsEtInput.addTextChangedListener(bathroomsTextWatcher())
-            activityAddPropertyBedroomsEtInput.addTextChangedListener(bedroomsTextWatcher())
-            activityAddPropertyDescriptionEtInput.addTextChangedListener(descriptionTextWatcher())
-            activityAddPropertyAddressLine1EtInput.addTextChangedListener(address1TextWatcher())
-            activityAddPropertyAddressLine2EtInput.addTextChangedListener(address2TextWatcher())
-            activityAddPropertyAddressCityEtInput.addTextChangedListener(cityTextWatcher())
-            activityAddPropertyAddressPostalCodeEtInput.addTextChangedListener(postalCodeTextWatcher())
-            activityAddPropertyAddressCountryEtInput.addTextChangedListener(countryTextWatcher())
-            activityAddPropertyAgentEtInput.addTextChangedListener(agentTextWatcher())
             activityAddPropertySaveBtn.setOnClickListener { saveProperty() }
         }
     }
@@ -126,181 +113,109 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         AdapterView.OnItemClickListener { parent, _, position, _ ->
             if (parent != null) {
                 mViewModel.propertyType = parent.getItemAtPosition(position) as PropertyType
-                checkFields()
             }
         }
-
-    private fun priceTextWatcher() = object: TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {
-            if(!s.isNullOrEmpty()) {
-                try {
-                    mViewModel.price = s.toString().toLong()
-                } catch (e: Exception) {
-                    mBinding.activityAddPropertyPriceEtInput.apply {
-                        setText(mViewModel.price.toString())
-                        setSelection(mViewModel.price.toString().length)
-                    }
-                }
-            }
-            checkFields()
-        }
-    }
-
-    private fun surfaceTextWatcher() = object: TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {
-            if(!s.isNullOrEmpty()) {
-                try {
-                    mViewModel.surface = s.toString().toInt()
-                } catch (e: Exception) {
-                    mBinding.activityAddPropertySurfaceEtInput.apply {
-                        setText(mViewModel.surface.toString())
-                        setSelection(mViewModel.surface.toString().length)
-                    }
-                }
-            }
-            checkFields()
-        }
-    }
-
-    private fun roomsTextWatcher() = object: TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {
-            if(!s.isNullOrEmpty()) {
-                try {
-                    mViewModel.rooms = s.toString().toInt()
-                } catch (e : Exception){
-                    mBinding.activityAddPropertyRoomsEtInput.apply {
-                        setText(mViewModel.rooms.toString())
-                        setSelection(mViewModel.rooms.toString().length)
-                    }
-                }
-            }
-            checkFields()
-        }
-    }
-
-    private fun bathroomsTextWatcher() = object: TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {
-            if(!s.isNullOrEmpty()) {
-                try {
-                    mViewModel.bathrooms = s.toString().toInt()
-                } catch (e: Exception) {
-                    mBinding.activityAddPropertyBathroomsEtInput.apply {
-                        setText(mViewModel.bathrooms.toString())
-                        setSelection(mViewModel.bathrooms.toString().length)
-                    }
-                }
-            }
-            checkFields()
-        }
-    }
-
-    private fun bedroomsTextWatcher() = object: TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {
-            if(!s.isNullOrEmpty()) {
-                try {
-                    mViewModel.bedrooms = s.toString().toInt()
-                } catch (e: Exception) {
-                    mBinding.activityAddPropertyBedroomsEtInput.apply {
-                        setText(mViewModel.bedrooms.toString())
-                        setSelection(mViewModel.bedrooms.toString().length)
-                    }
-                }
-            }
-            checkFields()
-        }
-    }
-
-    private fun descriptionTextWatcher() = object: TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {
-            mViewModel.description = s.toString()
-            checkFields()
-        }
-    }
-
-    private fun address1TextWatcher() = object: TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {
-            mViewModel.address1 = s.toString()
-            checkFields()
-        }
-    }
-
-    private fun address2TextWatcher() = object: TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {
-            mViewModel.address2 = s.toString()
-        }
-    }
-
-    private fun cityTextWatcher() = object: TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {
-            mViewModel.city = s.toString()
-            checkFields()
-        }
-    }
-
-    private fun postalCodeTextWatcher() = object: TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {
-            mViewModel.postalCode = s.toString()
-            checkFields()
-        }
-    }
-
-    private fun countryTextWatcher() = object: TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {
-            mViewModel.country = s.toString()
-            checkFields()
-        }
-    }
-
-    private fun agentTextWatcher() = object: TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {
-            mViewModel.agent = s.toString()
-            checkFields()
-        }
-    }
 
     private fun saveProperty(){
+        if(mViewModel.mediaListLiveData.value != null && mViewModel.mediaListLiveData.value?.size!! >= 1) {
+            loadDataToViewModel()
             mViewModel.saveProperty()
             finish()
+        } else {
+            showToast(this, R.string.please_add_a_picture_or_a_video)
+        }
     }
 
-    private fun checkFields(){
+    private fun loadDataToViewModel(){
         mBinding.apply {
-            val enableSaveBtn =
-                !activityAddPropertyPriceEtInput.text.isNullOrEmpty() &&
-                !activityAddPropertySurfaceEtInput.text.isNullOrEmpty() &&
-                !activityAddPropertyRoomsEtInput.text.isNullOrEmpty() &&
-                !activityAddPropertyBathroomsEtInput.text.isNullOrEmpty() &&
-                !activityAddPropertyBedroomsEtInput.text.isNullOrEmpty() &&
-                !activityAddPropertyAddressLine1EtInput.text.isNullOrEmpty() &&
-                !activityAddPropertyAddressCityEtInput.text.isNullOrEmpty() &&
-                !activityAddPropertyAddressPostalCodeEtInput.text.isNullOrEmpty() &&
-                !activityAddPropertyAddressCountryEtInput.text.isNullOrEmpty() &&
-                !activityAddPropertyAgentEtInput.text.isNullOrEmpty()
-            activityAddPropertySaveBtn.isEnabled = enableSaveBtn
+            if (!activityAddPropertyPriceEtInput.text.isNullOrEmpty()) {
+                try {
+                    mViewModel.price = activityAddPropertyPriceEtInput.text.toString().toLong()
+                } catch (e: Exception) {
+                    showToast(
+                        this@AddPropertyActivity,
+                        getString(
+                            R.string.please_enter_between,
+                            getString(R.string.price_amount),
+                            Long.MAX_VALUE
+                        )
+                    )
+                    return
+                }
+            }
+
+            if (!activityAddPropertySurfaceEtInput.text.isNullOrEmpty()) {
+                try {
+                    mViewModel.surface = activityAddPropertySurfaceEtInput.text.toString().toInt()
+                } catch (e: Exception) {
+                    showToast(
+                        this@AddPropertyActivity,
+                        getString(
+                            R.string.please_enter_between,
+                            getString(R.string.surface_amount),
+                            Int.MAX_VALUE
+                        )
+                    )
+                    return
+                }
+            }
+
+            if (!activityAddPropertyRoomsEtInput.text.isNullOrEmpty()) {
+                try {
+                    mViewModel.rooms = activityAddPropertyRoomsEtInput.text.toString().toInt()
+                } catch (e: Exception) {
+                    showToast(
+                        this@AddPropertyActivity,
+                        getString(
+                            R.string.please_enter_between,
+                            getString(R.string.room_amount),
+                            Int.MAX_VALUE
+                        )
+                    )
+                    return
+                }
+            }
+
+            if (!activityAddPropertyBathroomsEtInput.text.isNullOrEmpty()) {
+                try {
+                    mViewModel.bathrooms =
+                        activityAddPropertyBathroomsEtInput.text.toString().toInt()
+                } catch (e: Exception) {
+                    showToast(
+                        this@AddPropertyActivity,
+                        getString(
+                            R.string.please_enter_between,
+                            getString(R.string.bathroom_amount),
+                            Int.MAX_VALUE
+                        )
+                    )
+                    return
+                }
+            }
+
+            if (!activityAddPropertyBedroomsEtInput.text.isNullOrEmpty()) {
+                try {
+                    mViewModel.bedrooms = activityAddPropertyBedroomsEtInput.text.toString().toInt()
+                } catch (e: Exception) {
+                    showToast(
+                        this@AddPropertyActivity,
+                        getString(
+                            R.string.please_enter_between,
+                            getString(R.string.bedroom_amount),
+                            Int.MAX_VALUE
+                        )
+                    )
+                    return
+                }
+            }
+
+            mViewModel.description = activityAddPropertyDescriptionEtInput.text.toString()
+            mViewModel.address1 = activityAddPropertyAddressLine1EtInput.text.toString()
+            mViewModel.address2 = activityAddPropertyAddressLine2EtInput.text.toString()
+            mViewModel.city = activityAddPropertyAddressCityEtInput.text.toString()
+            mViewModel.postalCode = activityAddPropertyAddressPostalCodeEtInput.text.toString()
+            mViewModel.country = activityAddPropertyAddressCountryEtInput.text.toString()
+            mViewModel.agent = activityAddPropertyAgentEtInput.text.toString()
         }
     }
 
@@ -378,7 +293,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
                 val mediaItem = data.getParcelableExtra<MediaItem>(CAMERA_RESULT_MEDIA_KEY)
 
                 if (mediaItem != null) {
-                    mViewModel.addMediaUri(mediaItem) // TODO Add media id
+                    mViewModel.addMediaUri(mediaItem)
                 }
             }
         }
@@ -386,7 +301,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
     override fun onMediaClick(position: Int) {
         val intent = Intent(this, MediaViewerActivity::class.java)
-        intent.putParcelableArrayListExtra(BUNDLE_KEY_MEDIA_LIST, mViewModel.mediaList as ArrayList)
+        intent.putParcelableArrayListExtra(BUNDLE_KEY_MEDIA_LIST, mViewModel.mediaListLiveData.value as ArrayList)
         intent.putExtra(BUNDLE_KEY_SELECTED_MEDIA_INDEX, position)
         startActivity(intent)
     }
@@ -395,3 +310,5 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         mViewModel.removeMediaAtPosition(position)
     }
 }
+
+
