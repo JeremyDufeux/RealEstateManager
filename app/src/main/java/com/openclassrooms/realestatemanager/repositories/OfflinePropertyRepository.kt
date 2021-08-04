@@ -44,6 +44,8 @@ class OfflinePropertyRepository @Inject constructor(
             val propertyEntity = PropertyToPropertyEntityMapper.map(property)
             mPropertyDao.insertProperty(propertyEntity)
 
+            cachePicture(property.mapPictureUrl)
+
             for (media in property.mediaList) {
                 val mediaItemEntity = MediaItemToMediaItemEntityMapper.map(property.id, media)
                 mPropertyDao.insertMediaItem(mediaItemEntity)
