@@ -5,9 +5,10 @@ import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
-
 @HiltAndroidApp(MultiDexApplication::class)
 class RealEstateManagerApplication : Hilt_RealEstateManagerApplication() {
+
+    lateinit var appContainer: AppContainer
 
     override fun onCreate() {
         super.onCreate()
@@ -15,5 +16,7 @@ class RealEstateManagerApplication : Hilt_RealEstateManagerApplication() {
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
         }
+
+        appContainer = AppContainer(this)
     }
 }
