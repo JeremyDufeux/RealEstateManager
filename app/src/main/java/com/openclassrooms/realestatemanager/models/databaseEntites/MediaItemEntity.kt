@@ -13,6 +13,6 @@ data class MediaItemEntity(
     val mediaId: String,
     val propertyId: String,
     var url: String,
-    var description: String?,
+    var description: String,
     val fileType: FileType
 ) : Parcelable

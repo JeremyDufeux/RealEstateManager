@@ -12,7 +12,7 @@ import com.openclassrooms.realestatemanager.models.databaseEntites.PropertyPoint
     MediaItemEntity::class,
     PointOfInterestEntity::class,
     PropertyPointOfInterestCrossRef::class],
-    version = 1, exportSchema = true)
+    version = 2, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun propertyDao(): PropertyDao
 }

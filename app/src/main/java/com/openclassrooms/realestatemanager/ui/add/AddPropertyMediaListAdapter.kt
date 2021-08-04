@@ -41,12 +41,7 @@ class AddPropertyMediaListAdapter(private var mMediaListener: MediaListener)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mBinding.activityAddPropertyMediaItemIv)
 
-            if(!media.description.isNullOrEmpty()) {
-                mBinding.activityAddPropertyMediaItemTv.apply {
-                    visibility = View.VISIBLE
-                    text = media.description
-                }
-            }
+            mBinding.activityAddPropertyMediaItemTv.text = media.description
 
             if(media.fileType == FileType.VIDEO){
                 mBinding.activityAddPropertyVideoIv.visibility = View.VISIBLE

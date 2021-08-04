@@ -36,10 +36,7 @@ class VideoViewerFragment : Fragment() {
             mViewModel.url = it
         }
         arguments?.getString(BUNDLE_KEY_MEDIA_DESCRIPTION) ?.let {
-            if (it.isNotBlank() && it.isNotEmpty()) {
-                mBinding.videoViewerFragmentTv.text = it
-                mBinding.videoViewerFragmentTv.visibility = View.VISIBLE
-            }
+            mBinding.videoViewerFragmentTv.text = it
         }
 
         return mBinding.root

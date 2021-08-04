@@ -22,6 +22,7 @@ class HiltDatabaseModule {
             context,
             AppDatabase::class.java,
             "RealEstateManager.db")
+            .fallbackToDestructiveMigrationOnDowngrade()
             .build()
     }
 

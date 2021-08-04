@@ -40,7 +40,6 @@
         style="@style/detailMediaText"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:visibility="gone"
         android:layout_gravity="center_horizontal|bottom"
         android:ellipsize="end"
         android:maxLines="2"

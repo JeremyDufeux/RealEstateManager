@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
+import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityMediaViewerBinding
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.utils.ZoomOutPageTransformer
+import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 
 const val BUNDLE_KEY_EDIT_MODE = "BUNDLE_KEY_EDIT_MODE"
@@ -36,18 +38,26 @@ class MediaViewerActivity : AppCompatActivity() {
 
                 activityMediaViewerDescriptionEt.setOnEditorActionListener { _, actionId, _ ->
                     if(actionId == EditorInfo.IME_ACTION_SEND){
-                        finishActivityWithFile()
+                        checkDescriptionEditText()
                     }
                     return@setOnEditorActionListener true
                 }
 
                 activityMediaViewerCheckBtn.setOnClickListener {
-                    finishActivityWithFile()
+                    checkDescriptionEditText()
                 }
             }
         }
 
         configureAdapter()
+    }
+
+    private fun checkDescriptionEditText(){
+        if(mBinding.activityMediaViewerDescriptionEt.text.isNullOrEmpty()){
+            showToast(this, R.string.please_add_a_description)
+        } else {
+            finishActivityWithFile()
+        }
     }
 
     private fun configureAdapter() {

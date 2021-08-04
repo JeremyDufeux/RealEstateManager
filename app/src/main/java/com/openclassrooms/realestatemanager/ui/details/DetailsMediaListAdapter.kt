@@ -40,12 +40,7 @@ class DetailsMediaListAdapter(private var mMediaListener: MediaListener) : ListA
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mBinding.fragmentDetailMediaItemIv)
 
-            if(!media.description.isNullOrEmpty()) {
-                mBinding.fragmentDetailMediaItemTv.apply {
-                    visibility = View.VISIBLE
-                    text = media.description
-                }
-            }
+            mBinding.fragmentDetailMediaItemTv.text = media.description
 
             if(media.fileType == FileType.VIDEO){
                 mBinding.fragmentDetailVideoIv.visibility = View.VISIBLE

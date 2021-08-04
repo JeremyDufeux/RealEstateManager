@@ -45,7 +45,7 @@ class PropertyApiService @Inject constructor() {
                     val map = item as HashMap<*, *>
                     val id = map["id"] as String
                     val url = map["url"] as String
-                    val description = map["description"] as String?
+                    val description = map["description"] as String
                     val fileType = FileType.valueOf(map["fileType"] as String)
 
                     medialList.add(MediaItem(id, url, description, fileType))

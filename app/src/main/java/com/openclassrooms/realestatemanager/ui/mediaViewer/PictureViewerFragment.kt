@@ -30,10 +30,7 @@ class PictureViewerFragment : Fragment() {
             .into(bitmapTarget())
 
         arguments?.getString(BUNDLE_KEY_MEDIA_DESCRIPTION) ?.let {
-            if (it.isNotBlank() && it.isNotEmpty()) {
-                mBinding.pictureViewerFragmentTv.text = it
-                mBinding.pictureViewerFragmentTv.visibility = View.VISIBLE
-            }
+            mBinding.pictureViewerFragmentTv.text = it
         }
 
         return mBinding.root

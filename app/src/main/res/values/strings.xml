@@ -55,4 +55,5 @@
     <string name="capture_picture">Capture picture</string>
     <string name="add_description">Add description</string>
     <string name="remove_media">Remove media</string>
+    <string name="please_add_a_description">Please add a description</string>
 </resources>

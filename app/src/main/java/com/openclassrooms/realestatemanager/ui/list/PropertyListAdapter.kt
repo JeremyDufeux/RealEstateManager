@@ -50,21 +50,13 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
         fun updateViewHolder(property: Property) {
             val context = mBinding.root.context
 
-            if (property.mediaList.isNotEmpty()) {
-                Glide.with(context)
-                    .load(property.mediaList[0].url)
-                    .centerCrop()
-                    .timeout(2000)
-                    .error(ResourcesCompat.getDrawable(context.resources, R.drawable.ic_building, null))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(mBinding.fragmentListItemIv)
-            } else{
-                Glide.with(context)
-                    .load(ResourcesCompat.getDrawable(context.resources, R.drawable.ic_building, null))
-                    .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(mBinding.fragmentListItemIv)
-            }
+            Glide.with(context)
+                .load(property.mediaList[0].url)
+                .centerCrop()
+                .timeout(2000)
+                .error(ResourcesCompat.getDrawable(context.resources, R.drawable.ic_building, null))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(mBinding.fragmentListItemIv)
 
             mBinding.fragmentListItemCityTv.text = property.city
             mBinding.fragmentListItemPriceTv.text = String.format("$%,d", property.price)
