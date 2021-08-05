@@ -30,6 +30,7 @@ class PropertyApiService @Inject constructor() {
             val properties = mutableListOf<Property>()
 
             for (doc in snapshot.documents){
+                val surface = (doc["surface"] as Long).toInt()
                 val roomAmount = (doc["roomsAmount"] as Long).toInt()
                 val bathroomsAmount = (doc["bathroomsAmount"] as Long).toInt()
                 val bedroomsAmount = (doc["bedroomsAmount"] as Long).toInt()
@@ -55,7 +56,7 @@ class PropertyApiService @Inject constructor() {
                     id = doc["id"] as String,
                     type = type,
                     price = doc["price"] as Long,
-                    surface = doc["surface"] as String,
+                    surface = surface,
                     roomsAmount = roomAmount,
                     bathroomsAmount = bathroomsAmount,
                     bedroomsAmount = bedroomsAmount,

@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.openclassrooms.realestatemanager.mappers.getPriceVisibility
+import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
 import com.openclassrooms.realestatemanager.services.LocationService
@@ -31,8 +33,11 @@ class ListViewModel @Inject constructor(
         fetchProperties()
 
         viewModelScope.launch {
-            mPropertyUseCase.stateFlow.collect {
-                _stateLiveData.postValue(it)
+            mPropertyUseCase.stateFlow.collect { state ->
+                if (state is State.Download.DownloadSuccess){
+                    updatePropertyFields(state.propertiesList)
+                }
+                _stateLiveData.postValue(state)
             }
         }
     }
@@ -55,5 +60,11 @@ class ListViewModel @Inject constructor(
 
     fun stopLocationUpdates() {
         mLocationService.stopLocationUpdates()
+    }
+
+    private fun updatePropertyFields(properties: List<Property>) {
+        for (property in properties){
+            property.priceVisibility = getPriceVisibility(property)
+        }
     }
 }

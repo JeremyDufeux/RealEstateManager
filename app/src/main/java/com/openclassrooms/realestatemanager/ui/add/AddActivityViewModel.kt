@@ -63,7 +63,7 @@ class AddActivityViewModel @Inject constructor(
                 id = UUID.randomUUID().toString(),
                 type = propertyType,
                 price = price,
-                surface = "$surface sq ft",
+                surface = surface,
                 roomsAmount = rooms,
                 bathroomsAmount = bathrooms,
                 bedroomsAmount = bedrooms,

@@ -10,7 +10,7 @@ data class PropertyEntity(
     val propertyId: String,
     var type: PropertyType,
     var price: Long,
-    var surface: String,
+    var surface: Int,
     var roomsAmount: Int,
     var bathroomsAmount: Int,
     var bedroomsAmount: Int,

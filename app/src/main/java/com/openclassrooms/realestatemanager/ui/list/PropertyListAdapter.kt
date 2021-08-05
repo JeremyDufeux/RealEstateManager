@@ -60,6 +60,7 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
 
             mBinding.fragmentListItemCityTv.text = property.city
             mBinding.fragmentListItemPriceTv.text = String.format("$%,d", property.price)
+            mBinding.fragmentListItemPriceTv.visibility = property.priceVisibility
             mBinding.fragmentListItemTypeTv.text = property.type.description
 
             mBinding.root.setOnClickListener { mPropertyListener.onPropertyClick(adapterPosition) }

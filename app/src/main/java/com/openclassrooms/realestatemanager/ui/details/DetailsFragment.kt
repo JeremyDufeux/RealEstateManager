@@ -63,23 +63,15 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
 
         mMediaAdapter.submitList(property.mediaList)
 
-        if(property.pointOfInterestList.isEmpty()){
-            mBinding.apply {
-                fragmentDetailPointOfInterestCg.visibility = View.GONE
-                fragmentDetailPointOfInterestIv.visibility = View.GONE
-                fragmentDetailPointOfInterestTitleTv.visibility = View.GONE
-            }
-        } else {
-            property.pointOfInterestList.map {
-                val image = ResourcesCompat.getDrawable(mBinding.root.context.resources, it.icon, null)
-                val chip = Chip(requireContext())
-                chip.text = it.description
-                chip.tag = it
-                chip.chipIcon = image
-                chip.setChipIconTintResource( R.color.colorAccent)
-                chip.isClickable = false
-                mBinding.fragmentDetailPointOfInterestCg.addView(chip)
-            }
+        property.pointOfInterestList.map {
+            val image = ResourcesCompat.getDrawable(mBinding.root.context.resources, it.icon, null)
+            val chip = Chip(requireContext())
+            chip.text = it.description
+            chip.tag = it
+            chip.chipIcon = image
+            chip.setChipIconTintResource( R.color.colorAccent)
+            chip.isClickable = false
+            mBinding.fragmentDetailPointOfInterestCg.addView(chip)
         }
 
         Glide.with(this)
@@ -91,16 +83,52 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
 
         mBinding.apply {
             fragmentDetailTypeTv.text = property.type.description
+
             fragmentDetailPriceTv.text = String.format("$%,d",property.price)
+            fragmentDetailPriceTv.visibility = property.priceVisibility
+
             fragmentDetailDescriptionTv.text = property.description
-            fragmentDetailSurfaceTv.text = property.surface
+            fragmentDetailDescriptionTv.visibility = property.descriptionVisibility
+            fragmentDetailDescriptionTitleTv.visibility = property.descriptionVisibility
+
+            fragmentDetailSurfaceTv.text = String.format("%d sq ft",property.surface)
+            fragmentDetailSurfaceTv.visibility = property.surfaceVisibility
+            fragmentDetailSurfaceTitleTv.visibility = property.surfaceVisibility
+            fragmentDetailSurfaceIv.visibility = property.surfaceVisibility
+
             fragmentDetailRoomsTv.text = property.roomsAmount.toString()
+            fragmentDetailRoomsTv.visibility = property.roomsVisibility
+            fragmentDetailRoomsIv.visibility = property.roomsVisibility
+            fragmentDetailRoomsTitleTv.visibility = property.roomsVisibility
+
             fragmentDetailBathroomsTv.text = property.bathroomsAmount.toString()
+            fragmentDetailBathroomsTv.visibility = property.bathroomsVisibility
+            fragmentDetailBathroomsIv.visibility = property.bathroomsVisibility
+            fragmentDetailBathroomsTitleTv.visibility = property.bathroomsVisibility
+
             fragmentDetailBedroomsTv.text = property.bedroomsAmount.toString()
-            val address = "${property.address}\n${property.city}\n${property.postalCode}\n${property.country}"
-            fragmentDetailLocationTv.text = address
+            fragmentDetailBedroomsTv.visibility = property.bedroomsVisibility
+            fragmentDetailBedroomsIv.visibility = property.bedroomsVisibility
+            fragmentDetailBedroomsTitleTv.visibility = property.bedroomsVisibility
+
+            fragmentDetailLocationTv.text = property.formattedAddress
+            fragmentDetailLocationTv.visibility = property.addressVisibility
+            fragmentDetailLocationIv.visibility = property.addressVisibility
+            fragmentDetailLocationTitleTv.visibility = property.addressVisibility
+
+            fragmentDetailMapIv.visibility = property.mapVisibility
+            fragmentDetailMapCv.visibility = property.mapVisibility
+
+            mBinding.fragmentDetailPointOfInterestCg.visibility = property.pointsOfInterestVisibility
+            mBinding.fragmentDetailPointOfInterestIv.visibility = property.pointsOfInterestVisibility
+            mBinding.fragmentDetailPointOfInterestTitleTv.visibility = property.pointsOfInterestVisibility
+
             fragmentDetailAvailableTv.text = formatCalendarToString(property.postDate)
+
             fragmentDetailAgentTv.text = property.agentName
+            fragmentDetailAgentTv.visibility = property.agentVisibility
+            fragmentDetailAgentIv.visibility = property.agentVisibility
+            fragmentDetailAgentTitleTv.visibility = property.agentVisibility
         }
 
     }
