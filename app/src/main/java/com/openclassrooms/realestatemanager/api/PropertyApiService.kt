@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.services
+package com.openclassrooms.realestatemanager.api
 
 import android.net.Uri
 import com.google.firebase.firestore.CollectionReference

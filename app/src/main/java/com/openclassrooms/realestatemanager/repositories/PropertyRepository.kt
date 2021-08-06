@@ -1,10 +1,10 @@
 package com.openclassrooms.realestatemanager.repositories
 
+import com.openclassrooms.realestatemanager.api.PropertyApiService
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
-import com.openclassrooms.realestatemanager.services.PropertyApiService
 import com.openclassrooms.realestatemanager.services.VideoDownloadService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
