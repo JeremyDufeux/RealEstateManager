@@ -4,9 +4,9 @@ import android.content.Context
 import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.offline.*
 import com.openclassrooms.realestatemanager.database.PropertyDao
-import com.openclassrooms.realestatemanager.mappers.MediaItemToMediaItemEntityMapper
-import com.openclassrooms.realestatemanager.mappers.PropertyEntityToPropertyMapper
-import com.openclassrooms.realestatemanager.mappers.PropertyToPropertyEntityMapper
+import com.openclassrooms.realestatemanager.mappers.mediaItemToMediaItemEntityMapper
+import com.openclassrooms.realestatemanager.mappers.propertyEntityToPropertyMapper
+import com.openclassrooms.realestatemanager.mappers.propertyToPropertyEntityMapper
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.databaseEntites.PointOfInterestEntity
@@ -29,25 +29,25 @@ class OfflinePropertyRepository @Inject constructor(
     fun getProperties(): Flow<List<Property>> = mPropertyDao.getProperties().map { list ->
         val propertyList = mutableListOf<Property>()
         for (property in list) {
-            propertyList.add(PropertyEntityToPropertyMapper.map(property))
+            propertyList.add(propertyEntityToPropertyMapper(property))
         }
         return@map propertyList
     }
 
     fun getPropertyWithId(propertyId: String): Flow<Property> =
         mPropertyDao.getPropertyWithId(propertyId).map { property ->
-            return@map PropertyEntityToPropertyMapper.map(property)
+            return@map propertyEntityToPropertyMapper(property)
         }
 
     suspend fun updateDatabase(propertiesList: List<Property>) {
         for (property in propertiesList) {
-            val propertyEntity = PropertyToPropertyEntityMapper.map(property)
+            val propertyEntity = propertyToPropertyEntityMapper(property)
             mPropertyDao.insertProperty(propertyEntity)
 
             cachePicture(property.mapPictureUrl)
 
             for (media in property.mediaList) {
-                val mediaItemEntity = MediaItemToMediaItemEntityMapper.map(property.id, media)
+                val mediaItemEntity = mediaItemToMediaItemEntityMapper(property.id, media)
                 mPropertyDao.insertMediaItem(mediaItemEntity)
 
                 cachePicture(media.url)
