@@ -6,9 +6,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class MediaItem(
-    val id: String,
-    var propertyId: String,
-    var url: String,
-    var description: String,
-    val fileType: FileType
+    var id: String = "",
+    var propertyId: String = "",
+    var url: String = "",
+    var description: String = "",
+    var fileType: FileType = FileType.PICTURE
 ) : Parcelable

@@ -8,15 +8,12 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.Property
-import com.openclassrooms.realestatemanager.models.enums.FileType
-import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
-import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import kotlinx.coroutines.tasks.await
-import java.util.*
 import javax.inject.Inject
 
 private const val COLLECTION_PROPERTIES_NAME = "Properties"
+private const val COLLECTION_MEDIAS_NAME = "Medias"
 
 class PropertyApiService @Inject constructor() {
 
@@ -25,68 +22,28 @@ class PropertyApiService @Inject constructor() {
     }
 
     suspend fun fetchProperties() : State {
-        try {
+        return try {
             val snapshot = getPropertiesCollection().get(Source.SERVER).await()
-            val properties = mutableListOf<Property>()
+            val properties = snapshot.toObjects(Property::class.java)
 
-            for (doc in snapshot.documents){
-                val surface = (doc["surface"] as Long?)?.toInt()
-                val roomAmount = (doc["roomsAmount"] as Long?)?.toInt()
-                val bathroomsAmount = (doc["bathroomsAmount"] as Long?)?.toInt()
-                val bedroomsAmount = (doc["bedroomsAmount"] as Long?)?.toInt()
-                val type = PropertyType.valueOf(doc["type"] as String)
+            for (property in properties){
+                val mediaSnapshot = getPropertiesCollection().document(property.id).collection(COLLECTION_MEDIAS_NAME).get(Source.SERVER).await()
+                val mediaItems = mediaSnapshot.toObjects(MediaItem::class.java)
 
-                val poiList = mutableListOf<PointOfInterest>()
-                for (item in doc["pointOfInterestList"] as List<*> ){
-                    poiList.add(PointOfInterest.valueOf(item as String))
-                }
-
-                val medialList = mutableListOf<MediaItem>()
-                for (item in doc["mediaList"] as List<*>){
-                    val map = item as HashMap<*, *>
-                    val id = map["id"] as String
-                    val propertyId = map["propertyId"] as String
-                    val url = map["url"] as String
-                    val description = map["description"] as String
-                    val fileType = FileType.valueOf(map["fileType"] as String)
-                    medialList.add(MediaItem(id, propertyId, url, description, fileType))
-                }
-
-                val property = Property(
-                    id = doc["id"] as String,
-                    type = type,
-                    price = doc["price"] as Long?,
-                    surface = surface,
-                    roomsAmount = roomAmount,
-                    bathroomsAmount = bathroomsAmount,
-                    bedroomsAmount = bedroomsAmount,
-                    description = doc["description"] as String,
-                    mediaList = medialList,
-                    addressLine1 = doc["addressLine1"] as String,
-                    addressLine2 = doc["addressLine2"] as String,
-                    city = doc["city"] as String,
-                    postalCode = doc["postalCode"] as String,
-                    country = doc["country"] as String,
-                    latitude = doc["latitude"] as Double?,
-                    longitude = doc["longitude"] as Double?,
-                    mapPictureUrl = doc["mapPictureUrl"] as String?,
-                    pointOfInterestList = poiList,
-                    available = doc["available"] as Boolean,
-                    postDate = doc["postDate"] as Long,
-                    soldDate = doc["soldDate"] as Long?,
-                    agentName = doc["agentName"] as String
-                )
-                properties.add(property)
+                property.mediaList = mediaItems
             }
 
-            return State.Download.DownloadSuccess(properties)
+            State.Download.DownloadSuccess(properties)
         }catch (e: Exception){
-            return State.Download.Error(e)
+            State.Download.Error(e)
         }
     }
 
     fun addProperty(property: Property) {
         getPropertiesCollection().document(property.id).set(property)
+        for(media in property.mediaList){
+            getPropertiesCollection().document(property.id).collection(COLLECTION_MEDIAS_NAME).document(media.id).set(media)
+        }
     }
 
     suspend fun uploadMedia(mediaItem: MediaItem): State {
