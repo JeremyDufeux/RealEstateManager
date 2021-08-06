@@ -38,6 +38,9 @@ class VideoViewerFragment : Fragment() {
         arguments?.getString(BUNDLE_KEY_MEDIA_DESCRIPTION) ?.let {
             mBinding.videoViewerFragmentTv.text = it
         }
+        arguments?.getBoolean(BUNDLE_KEY_EDIT_MODE) ?.let {
+            mBinding.videoViewerFragmentTv.visibility = View.GONE
+        }
 
         return mBinding.root
     }

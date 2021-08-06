@@ -32,6 +32,9 @@ class PictureViewerFragment : Fragment() {
         arguments?.getString(BUNDLE_KEY_MEDIA_DESCRIPTION) ?.let {
             mBinding.pictureViewerFragmentTv.text = it
         }
+        arguments?.getBoolean(BUNDLE_KEY_EDIT_MODE) ?.let {
+            mBinding.pictureViewerFragmentTv.visibility = View.GONE
+        }
 
         return mBinding.root
     }

@@ -129,4 +129,13 @@ class AddActivityViewModel @Inject constructor(
             _mediaListLiveData.postValue(mMediaList)
         }
     }
+
+    fun updateMedia(mediaItem: MediaItem) {
+        viewModelScope.launch(Dispatchers.Default) {
+            val index = mMediaList.indexOfFirst{ it.id == mediaItem.id }
+            mMediaList[index] = mediaItem
+
+            _mediaListLiveData.postValue(mMediaList)
+        }
+    }
 }

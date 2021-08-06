@@ -25,9 +25,7 @@ import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.ui.camera.CAMERA_RESULT_MEDIA_KEY
 import com.openclassrooms.realestatemanager.ui.camera.CameraActivity
-import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_MEDIA_LIST
-import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_SELECTED_MEDIA_INDEX
-import com.openclassrooms.realestatemanager.ui.mediaViewer.MediaViewerActivity
+import com.openclassrooms.realestatemanager.ui.mediaViewer.*
 import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -330,11 +328,25 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         }
     }
 
+    private var openMediaViewerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val data: Intent? = result.data
+
+            if(data != null) {
+                val mediaItem = data.getParcelableExtra<MediaItem>(MEDIA_VIEWER_RESULT_MEDIA_KEY)
+                if (mediaItem != null) {
+                    mViewModel.updateMedia(mediaItem)
+                }
+            }
+        }
+    }
+
     override fun onMediaClick(position: Int) {
         val intent = Intent(this, MediaViewerActivity::class.java)
-        intent.putParcelableArrayListExtra(BUNDLE_KEY_MEDIA_LIST, mViewModel.mediaListLiveData.value as ArrayList)
-        intent.putExtra(BUNDLE_KEY_SELECTED_MEDIA_INDEX, position)
-        startActivity(intent)
+        intent.putParcelableArrayListExtra(BUNDLE_KEY_MEDIA_LIST, arrayListOf(mViewModel.mediaListLiveData.value?.get(position)))
+        intent.putExtra(BUNDLE_KEY_SELECTED_MEDIA_INDEX, 0)
+        intent.putExtra(BUNDLE_KEY_EDIT_MODE, true)
+        openMediaViewerLauncher.launch(intent)
     }
 
     override fun onDeleteClick(position: Int) {

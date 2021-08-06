@@ -20,8 +20,10 @@ const val MEDIA_VIEWER_RESULT_MEDIA_KEY = "MEDIA_VIEWER_RESULT_MEDIA_KEY"
 
 @AndroidEntryPoint
 class MediaViewerActivity : AppCompatActivity() {
-    private lateinit var mBinding : ActivityMediaViewerBinding
-    private var mMediaList = mutableListOf<MediaItem>()
+    private lateinit var mBinding: ActivityMediaViewerBinding
+    private lateinit var mMediaList: MutableList<MediaItem>
+    private var mMediaIndex = 0
+    private var mEditMode =  false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,10 +33,15 @@ class MediaViewerActivity : AppCompatActivity() {
 
         mBinding.activityMediaViewerCloseBtn.setOnClickListener { finishActivityWithoutFile() }
 
-        if(intent?.extras?.getBoolean(BUNDLE_KEY_EDIT_MODE) != null && intent?.extras?.getBoolean(BUNDLE_KEY_EDIT_MODE) == true){
+        mMediaList = intent?.extras?.getParcelableArrayList<MediaItem>(BUNDLE_KEY_MEDIA_LIST) as MutableList<MediaItem>
+        mMediaIndex = intent?.extras?.getInt(BUNDLE_KEY_SELECTED_MEDIA_INDEX)!!
+        mEditMode = intent?.extras?.getBoolean(BUNDLE_KEY_EDIT_MODE)!!
+
+        if(mEditMode){
             mBinding.apply {
                 activityMediaViewerCheckBtn.visibility = View.VISIBLE
                 activityMediaViewerDescriptionEt.visibility = View.VISIBLE
+                activityMediaViewerDescriptionEt.setText(mMediaList[0].description)
 
                 activityMediaViewerDescriptionEt.setOnEditorActionListener { _, actionId, _ ->
                     if(actionId == EditorInfo.IME_ACTION_SEND){
@@ -61,12 +68,9 @@ class MediaViewerActivity : AppCompatActivity() {
     }
 
     private fun configureAdapter() {
-        mMediaList = intent?.extras?.getParcelableArrayList<MediaItem>(BUNDLE_KEY_MEDIA_LIST) as MutableList<MediaItem>
-        val index = intent?.extras?.getInt(BUNDLE_KEY_SELECTED_MEDIA_INDEX)!!
-
         mBinding.activityMediaViewerVp.apply {
-            adapter = MediaViewerAdapter(this@MediaViewerActivity, mMediaList)
-            currentItem = index
+            adapter = MediaViewerAdapter(this@MediaViewerActivity, mMediaList, mEditMode)
+            currentItem = mMediaIndex
             setPageTransformer(ZoomOutPageTransformer())
         }
     }
