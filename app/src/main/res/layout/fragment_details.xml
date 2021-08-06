@@ -269,7 +269,8 @@
             fragment_detail_bathrooms_title_tv,
             fragment_detail_bedrooms_title_tv,
             fragment_detail_location_title_tv,
-            fragment_detail_available_title_tv" />
+            fragment_detail_available_title_tv,
+            fragment_detail_agent_title_tv"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/fragment_detail_map_cv"
