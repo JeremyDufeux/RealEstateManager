@@ -40,19 +40,19 @@ class AddActivityViewModel @Inject constructor(
 
     var propertyType : PropertyType = PropertyType.FLAT
     private var mMediaList : MutableList<MediaItem> = mutableListOf()
-    var price: Long = 0
-    var surface: Int = 0
-    var rooms: Int = 0
-    var bathrooms: Int = 0
-    var bedrooms: Int = 0
+    var price: Long? = null
+    var surface: Int? = null
+    var rooms: Int? = null
+    var bathrooms: Int? = null
+    var bedrooms: Int? = null
     var description = String()
     var addressLine1 = String()
     var addressLine2 = String()
     var city = String()
     var postalCode = String()
     var country = String()
-    private var latitude : Double = 0.0
-    private var longitude : Double = 0.0
+    private var latitude : Double? = null
+    private var longitude : Double? = null
     var agent = String()
     var mPointOfInterestList : MutableList<PointOfInterest> = ArrayList()
 

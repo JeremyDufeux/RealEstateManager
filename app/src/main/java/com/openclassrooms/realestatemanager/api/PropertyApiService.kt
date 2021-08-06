@@ -30,10 +30,10 @@ class PropertyApiService @Inject constructor() {
             val properties = mutableListOf<Property>()
 
             for (doc in snapshot.documents){
-                val surface = (doc["surface"] as Long).toInt()
-                val roomAmount = (doc["roomsAmount"] as Long).toInt()
-                val bathroomsAmount = (doc["bathroomsAmount"] as Long).toInt()
-                val bedroomsAmount = (doc["bedroomsAmount"] as Long).toInt()
+                val surface = (doc["surface"] as Long?)?.toInt()
+                val roomAmount = (doc["roomsAmount"] as Long?)?.toInt()
+                val bathroomsAmount = (doc["bathroomsAmount"] as Long?)?.toInt()
+                val bedroomsAmount = (doc["bedroomsAmount"] as Long?)?.toInt()
                 val type = PropertyType.valueOf(doc["type"] as String)
 
                 val poiList = mutableListOf<PointOfInterest>()
@@ -55,7 +55,7 @@ class PropertyApiService @Inject constructor() {
                 val property = Property(
                     id = doc["id"] as String,
                     type = type,
-                    price = doc["price"] as Long,
+                    price = doc["price"] as Long?,
                     surface = surface,
                     roomsAmount = roomAmount,
                     bathroomsAmount = bathroomsAmount,
@@ -67,9 +67,9 @@ class PropertyApiService @Inject constructor() {
                     city = doc["city"] as String,
                     postalCode = doc["postalCode"] as String,
                     country = doc["country"] as String,
-                    latitude = doc["latitude"] as Double,
-                    longitude = doc["longitude"] as Double,
-                    mapPictureUrl = doc["mapPictureUrl"] as String,
+                    latitude = doc["latitude"] as Double?,
+                    longitude = doc["longitude"] as Double?,
+                    mapPictureUrl = doc["mapPictureUrl"] as String?,
                     pointOfInterestList = poiList,
                     available = doc["available"] as Boolean,
                     postDate = doc["postDate"] as Long,

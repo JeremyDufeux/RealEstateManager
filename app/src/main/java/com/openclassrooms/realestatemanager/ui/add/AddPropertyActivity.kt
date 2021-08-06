@@ -128,11 +128,11 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
     private val propertyObserver = Observer<Property> { property ->
         mBinding.apply {
-            activityAddPropertyPriceEtInput.setText(property.price.toString())
-            activityAddPropertySurfaceEtInput.setText(property.surface.toString())
-            activityAddPropertyRoomsEtInput.setText(property.roomsAmount.toString())
-            activityAddPropertyBathroomsEtInput.setText(property.bathroomsAmount.toString())
-            activityAddPropertyBedroomsEtInput.setText(property.bedroomsAmount.toString())
+            if(property.price != null) activityAddPropertyPriceEtInput.setText(property.price.toString())
+            if(property.surface != null) activityAddPropertySurfaceEtInput.setText(property.surface.toString())
+            if(property.roomsAmount != null) activityAddPropertyRoomsEtInput.setText(property.roomsAmount.toString())
+            if(property.bathroomsAmount != null) activityAddPropertyBathroomsEtInput.setText(property.bathroomsAmount.toString())
+            if(property.bedroomsAmount != null) activityAddPropertyBedroomsEtInput.setText(property.bedroomsAmount.toString())
             activityAddPropertyDescriptionEtInput.setText(property.description)
             activityAddPropertyAddressLine1EtInput.setText(property.addressLine1)
             activityAddPropertyAddressLine2EtInput.setText(property.addressLine2)

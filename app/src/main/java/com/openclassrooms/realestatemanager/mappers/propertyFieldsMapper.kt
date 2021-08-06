@@ -5,7 +5,7 @@ import com.openclassrooms.realestatemanager.models.Property
 
 
 fun getPriceVisibility(property: Property): Int {
-    return if (property.price == 0L) {
+    return if (property.price == null) {
         View.GONE
     } else {
         View.VISIBLE
@@ -13,7 +13,7 @@ fun getPriceVisibility(property: Property): Int {
 }
 
 fun getSurfaceVisibility(property: Property): Int {
-    return if (property.surface == 0) {
+    return if (property.surface == null) {
         View.GONE
     } else {
         View.VISIBLE
@@ -29,7 +29,7 @@ fun getDescriptionVisibility(property: Property): Int {
 }
 
 fun getRoomVisibility(property: Property): Int {
-    return if (property.roomsAmount == 0) {
+    return if (property.roomsAmount == null) {
         View.GONE
     } else {
         View.VISIBLE
@@ -37,7 +37,7 @@ fun getRoomVisibility(property: Property): Int {
 }
 
 fun getBathroomVisibility(property: Property): Int {
-    return if (property.bathroomsAmount == 0) {
+    return if (property.bathroomsAmount == null) {
         View.GONE
     } else {
         View.VISIBLE
@@ -45,7 +45,7 @@ fun getBathroomVisibility(property: Property): Int {
 }
 
 fun getBedroomVisibility(property: Property): Int {
-    return if (property.bedroomsAmount == 0) {
+    return if (property.bedroomsAmount == null) {
         View.GONE
     } else {
         View.VISIBLE
@@ -81,7 +81,7 @@ fun getPointsOfInterestVisibility(property: Property): Int {
 }
 
 fun getMapVisibility(property: Property): Int {
-    return if (property.latitude == 0.0 && property.longitude == 0.0) {
+    return if (property.mapPictureUrl == null) {
         View.GONE
     } else {
         View.VISIBLE

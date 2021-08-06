@@ -70,7 +70,7 @@ class OfflinePropertyRepository @Inject constructor(
         }
     }
 
-    private fun cachePicture(url: String) {
+    private fun cachePicture(url: String?) {
         Glide.with(mContext).load(url).submit()
     }
 

@@ -9,11 +9,11 @@ import java.util.*
 data class Property(
     val id: String = UUID.randomUUID().toString(),
     var type: PropertyType = PropertyType.FLAT,
-    var price: Long = 0, // In dollars
-    var surface: Int = 0, // In square feet
-    var roomsAmount: Int = 0,
-    var bathroomsAmount: Int = 0,
-    var bedroomsAmount: Int = 0,
+    var price: Long?, // In dollars
+    var surface: Int?, // In square feet
+    var roomsAmount: Int?,
+    var bathroomsAmount: Int?,
+    var bedroomsAmount: Int?,
     var description: String = "",
     var mediaList: List<MediaItem> = listOf(),
     var addressLine1: String = "",
@@ -21,9 +21,9 @@ data class Property(
     var city: String = "",
     var postalCode: String = "",
     var country: String = "",
-    var latitude: Double = 0.0,
-    var longitude: Double = 0.0,
-    var mapPictureUrl: String = "",
+    var latitude: Double?,
+    var longitude: Double?,
+    var mapPictureUrl: String?,
     var pointOfInterestList: List<PointOfInterest> = listOf(),
     var available: Boolean = true,
     var postDate: Long = 0, // Timestamp
