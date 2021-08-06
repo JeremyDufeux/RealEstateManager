@@ -63,8 +63,10 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
 
         mMediaAdapter.submitList(property.mediaList)
 
+        mBinding.fragmentDetailPointOfInterestCg.removeAllViews()
+
         property.pointOfInterestList.map {
-            val image = ResourcesCompat.getDrawable(mBinding.root.context.resources, it.icon, null)
+            val image = ResourcesCompat.getDrawable(requireContext().resources, it.icon, null)
             val chip = Chip(requireContext())
             chip.text = it.description
             chip.tag = it

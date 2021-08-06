@@ -51,4 +51,12 @@ class PropertyUseCase @Inject constructor(
     fun getPropertyWithId(propertyId: String): Flow<Property> {
         return mOfflinePropertyRepository.getPropertyWithId(propertyId)
     }
+
+    suspend fun addProperty(property: Property) {
+        mPropertyRepository.addPropertyAndFetch(property)
+    }
+
+    suspend fun updateProperty(oldProperty: Property, newProperty: Property) {
+        mPropertyRepository.updateProperty(oldProperty, newProperty)
+    }
 }

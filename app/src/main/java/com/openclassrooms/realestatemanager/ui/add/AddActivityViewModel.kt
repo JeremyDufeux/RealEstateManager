@@ -1,20 +1,20 @@
 package com.openclassrooms.realestatemanager.ui.add
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.modules.IoCoroutineScope
-import com.openclassrooms.realestatemanager.repositories.PropertyRepository
+import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
 import com.openclassrooms.realestatemanager.services.GeocoderClient
+import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.utils.getGeoApifyUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -22,10 +22,21 @@ import kotlin.collections.ArrayList
 
 @HiltViewModel
 class AddActivityViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     @IoCoroutineScope private val mIoScope: CoroutineScope,
-    private val mPropertyRepository: PropertyRepository,
+    private val mPropertyUseCase: PropertyUseCase,
     private val mGeocoderClient: GeocoderClient
 ) : ViewModel(){
+
+    private var _propertyLiveData : MutableLiveData<Property> = MutableLiveData()
+    var propertyLiveData: LiveData<Property> = _propertyLiveData
+
+    private val _mediaListLiveData = MutableLiveData<List<MediaItem>>()
+    val mediaListLiveData : LiveData<List<MediaItem>> = _mediaListLiveData
+
+    private var propertyId = savedStateHandle.get<String>(BUNDLE_KEY_PROPERTY_ID)
+    private lateinit var oldProperty: Property
+    private var editMode = false
 
     var propertyType : PropertyType = PropertyType.FLAT
     private var mMediaList : MutableList<MediaItem> = mutableListOf()
@@ -35,8 +46,8 @@ class AddActivityViewModel @Inject constructor(
     var bathrooms: Int = 0
     var bedrooms: Int = 0
     var description = String()
-    var address1 = String()
-    var address2 = String()
+    var addressLine1 = String()
+    var addressLine2 = String()
     var city = String()
     var postalCode = String()
     var country = String()
@@ -45,22 +56,35 @@ class AddActivityViewModel @Inject constructor(
     var agent = String()
     var mPointOfInterestList : MutableList<PointOfInterest> = ArrayList()
 
-    private val _mediaListLiveData = MutableLiveData<MutableList<MediaItem>>()
-    val mediaListLiveData : LiveData<MutableList<MediaItem>> = _mediaListLiveData
-    
+
+    init {
+        if (propertyId != null) {
+            editMode = true
+            viewModelScope.launch {
+                mPropertyUseCase.getPropertyWithId(propertyId!!).collect { property ->
+                    oldProperty = property
+                    _propertyLiveData.postValue(property)
+                    mMediaList = property.mediaList.toMutableList()
+                    _mediaListLiveData.postValue(mMediaList)
+                    this.cancel()
+                }
+            }
+        } else {
+            propertyId = UUID.randomUUID().toString()
+        }
+    }
+
     fun saveProperty() {
         mIoScope.launch {
             val latLng =
-                mGeocoderClient.getPropertyLocation(address1, address2, city, postalCode, country)
+                mGeocoderClient.getPropertyLocation(addressLine1, addressLine2, city, postalCode, country)
             if (latLng != null) {
                 latitude = latLng.latitude
                 longitude = latLng.longitude
             }
 
-            if (address2.isNotEmpty()) address1 += "\n$address2"
-
             val property = Property(
-                id = UUID.randomUUID().toString(),
+                id = propertyId!!,
                 type = propertyType,
                 price = price,
                 surface = surface,
@@ -69,7 +93,8 @@ class AddActivityViewModel @Inject constructor(
                 bedroomsAmount = bedrooms,
                 description = description,
                 mediaList = mMediaList,
-                address = address1,
+                addressLine1 = addressLine1,
+                addressLine2 = addressLine2,
                 city = city,
                 postalCode = postalCode,
                 country = country,
@@ -82,12 +107,17 @@ class AddActivityViewModel @Inject constructor(
                 soldDate = null,
                 agentName = agent
             )
-            mPropertyRepository.addPropertyAndFetch(property)
+            if(editMode){
+                mPropertyUseCase.updateProperty(oldProperty, property)
+            }else {
+                mPropertyUseCase.addProperty(property)
+            }
         }
     }
 
     fun addMediaUri(mediaItem: MediaItem) {
         viewModelScope.launch(Dispatchers.Default) {
+            mediaItem.propertyId = propertyId!!
             mMediaList.add(mediaItem)
             _mediaListLiveData.postValue(mMediaList)
         }

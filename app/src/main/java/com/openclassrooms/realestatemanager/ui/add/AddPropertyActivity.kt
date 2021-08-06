@@ -20,6 +20,7 @@ import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBinding
 import com.openclassrooms.realestatemanager.models.MediaItem
+import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.ui.camera.CAMERA_RESULT_MEDIA_KEY
@@ -37,17 +38,24 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
     private val mAdapter = AddPropertyMediaListAdapter(this)
 
+    private val mChipList = mutableMapOf<PointOfInterest, Chip>()
+
     override fun onCreate(savedInstancProperty: Bundle?) {
         super.onCreate(savedInstancProperty)
 
         mBinding = ActivityAddPropertyBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
+        configureViewModel()
         configureUi()
         configureListeners()
         configureRecyclerView()
 
         setSupportActionBar(mBinding.activityAddPropertyToolbar)
+    }
+
+    private fun configureViewModel() {
+        mViewModel.propertyLiveData.observe(this, propertyObserver)
     }
 
     private fun configureUi() {
@@ -85,6 +93,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
                     mViewModel.mPointOfInterestList.remove(buttonView.tag as PointOfInterest)
                 }
             }
+            mChipList[chip.tag as PointOfInterest] = chip
             mBinding.activityAddPropertyPointOfInterestCg.addView(chip)
         }
     }
@@ -115,6 +124,28 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
                 mViewModel.propertyType = parent.getItemAtPosition(position) as PropertyType
             }
         }
+
+
+    private val propertyObserver = Observer<Property> { property ->
+        mBinding.apply {
+            activityAddPropertyPriceEtInput.setText(property.price.toString())
+            activityAddPropertySurfaceEtInput.setText(property.surface.toString())
+            activityAddPropertyRoomsEtInput.setText(property.roomsAmount.toString())
+            activityAddPropertyBathroomsEtInput.setText(property.bathroomsAmount.toString())
+            activityAddPropertyBedroomsEtInput.setText(property.bedroomsAmount.toString())
+            activityAddPropertyDescriptionEtInput.setText(property.description)
+            activityAddPropertyAddressLine1EtInput.setText(property.addressLine1)
+            activityAddPropertyAddressLine2EtInput.setText(property.addressLine2)
+            activityAddPropertyAddressCityEtInput.setText(property.city)
+            activityAddPropertyAddressPostalCodeEtInput.setText(property.postalCode)
+            activityAddPropertyAddressCountryEtInput.setText(property.country)
+            activityAddPropertyAgentEtInput.setText(property.agentName)
+        }
+
+        for(poi in property.pointOfInterestList){
+            mChipList[poi]?.isChecked = true
+        }
+    }
 
     private fun saveProperty(){
         if(mViewModel.mediaListLiveData.value != null && mViewModel.mediaListLiveData.value?.size!! >= 1) {
@@ -210,8 +241,8 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
             }
 
             mViewModel.description = activityAddPropertyDescriptionEtInput.text.toString()
-            mViewModel.address1 = activityAddPropertyAddressLine1EtInput.text.toString()
-            mViewModel.address2 = activityAddPropertyAddressLine2EtInput.text.toString()
+            mViewModel.addressLine1 = activityAddPropertyAddressLine1EtInput.text.toString()
+            mViewModel.addressLine2 = activityAddPropertyAddressLine2EtInput.text.toString()
             mViewModel.city = activityAddPropertyAddressCityEtInput.text.toString()
             mViewModel.postalCode = activityAddPropertyAddressPostalCodeEtInput.text.toString()
             mViewModel.country = activityAddPropertyAddressCountryEtInput.text.toString()

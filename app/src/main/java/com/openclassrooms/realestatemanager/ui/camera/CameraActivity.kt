@@ -15,9 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityCameraBinding
-import com.openclassrooms.realestatemanager.models.sealedClasses.FileState
-import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.MediaItem
+import com.openclassrooms.realestatemanager.models.enums.FileType
+import com.openclassrooms.realestatemanager.models.sealedClasses.FileState
 import com.openclassrooms.realestatemanager.ui.camera.CameraActivityViewModel.CameraMode.*
 import com.openclassrooms.realestatemanager.ui.mediaViewer.*
 import com.openclassrooms.realestatemanager.utils.showToast
@@ -180,7 +180,7 @@ class CameraActivity : AppCompatActivity() {
                 val perms = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 contentResolver.takePersistableUriPermission(uri, perms)
             }
-            val mediaItem = MediaItem(UUID.randomUUID().toString(), uri.toString(), "", getFileType(getMimeType(uri)))
+            val mediaItem = MediaItem(UUID.randomUUID().toString(), "", uri.toString(), "", getFileType(getMimeType(uri)))
             mViewModel.setFileState(FileState.Success(mediaItem))
         }
     }

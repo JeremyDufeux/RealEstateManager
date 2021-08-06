@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.repositories
 
 import android.content.Context
-import android.net.Uri
 import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.offline.*
 import com.openclassrooms.realestatemanager.database.PropertyDao
@@ -24,6 +23,7 @@ import javax.inject.Singleton
 @Singleton
 class OfflinePropertyRepository @Inject constructor(
     @ApplicationContext private val mContext: Context,
+    private val mVideoDownloadService: VideoDownloadService,
     private val mPropertyDao: PropertyDao) {
 
     fun getProperties(): Flow<List<Property>> = mPropertyDao.getProperties().map { list ->
@@ -57,10 +57,7 @@ class OfflinePropertyRepository @Inject constructor(
                 }
             }
 
-            DownloadService.start(
-                mContext,
-                VideoDownloadService::class.java
-            )
+            mVideoDownloadService.startDownloads()
 
             for (pointOfInterest in property.pointOfInterestList) {
                 val pointOfInterestEntity = PointOfInterestEntity(pointOfInterest.toString())
@@ -78,14 +75,6 @@ class OfflinePropertyRepository @Inject constructor(
     }
 
     private fun cacheVideo(mediaItem: MediaItem) {
-        val uri = Uri.parse(mediaItem.url)
-        val downloadRequest = DownloadRequest.Builder(mediaItem.id, uri).build()
-
-        DownloadService.sendAddDownload(
-            mContext,
-            VideoDownloadService::class.java,
-            downloadRequest,
-            true
-        )
+        mVideoDownloadService.cacheVideo(mediaItem)
     }
 }

@@ -53,10 +53,15 @@ fun getBedroomVisibility(property: Property): Int {
 }
 
 fun getFormattedAddress(property: Property): String{
-    return "${property.address}\n" +
-            "${property.city}\n" +
-            "${property.postalCode}\n" +
-            property.country
+    var address = ""
+    property.apply {
+        if (addressLine1.isNotEmpty()) address += addressLine1
+        if (addressLine2.isNotEmpty()) address += "\n$addressLine2"
+        if (city.isNotEmpty()) address += "\n$city"
+        if (postalCode.isNotEmpty()) address += "\n$postalCode"
+        if (country.isNotEmpty()) address += "\n$country"
+    }
+    return address
 }
 
 fun getAddressVisibility(property: Property): Int {

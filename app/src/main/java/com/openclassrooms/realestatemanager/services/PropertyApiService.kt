@@ -45,11 +45,11 @@ class PropertyApiService @Inject constructor() {
                 for (item in doc["mediaList"] as List<*>){
                     val map = item as HashMap<*, *>
                     val id = map["id"] as String
+                    val propertyId = map["propertyId"] as String
                     val url = map["url"] as String
                     val description = map["description"] as String
                     val fileType = FileType.valueOf(map["fileType"] as String)
-
-                    medialList.add(MediaItem(id, url, description, fileType))
+                    medialList.add(MediaItem(id, propertyId, url, description, fileType))
                 }
 
                 val property = Property(
@@ -62,7 +62,8 @@ class PropertyApiService @Inject constructor() {
                     bedroomsAmount = bedroomsAmount,
                     description = doc["description"] as String,
                     mediaList = medialList,
-                    address = doc["address"] as String,
+                    addressLine1 = doc["addressLine1"] as String,
+                    addressLine2 = doc["addressLine2"] as String,
                     city = doc["city"] as String,
                     postalCode = doc["postalCode"] as String,
                     country = doc["country"] as String,
@@ -88,14 +89,29 @@ class PropertyApiService @Inject constructor() {
         getPropertiesCollection().document(property.id).set(property)
     }
 
-    suspend fun uploadMedia(url: String): State {
+    suspend fun uploadMedia(mediaItem: MediaItem): State {
         return try {
-            val uuid = UUID.randomUUID().toString()
+            val ref =  "${mediaItem.propertyId}/${mediaItem.id}"
+            val mediaRef: StorageReference = FirebaseStorage.getInstance().reference.child(ref)
+            val file = Uri.parse(mediaItem.url)
 
-            val mediaRef: StorageReference = FirebaseStorage.getInstance().getReference(uuid)
-            mediaRef.putFile(Uri.parse(url)).await()
+            mediaRef.putFile(file).await()
 
-            State.Upload.UploadSuccess(mediaRef.downloadUrl.await().toString())
+            val url = mediaRef.downloadUrl.await().toString()
+            State.Upload.UploadSuccess(url)
+        } catch (e: java.lang.Exception){
+            State.Upload.Error(e)
+        }
+    }
+
+    suspend fun deleteMedia(mediaItem: MediaItem): State {
+        return try {
+            val ref =  "${mediaItem.propertyId}/${mediaItem.id}"
+            val mediaRef: StorageReference = FirebaseStorage.getInstance().reference.child(ref)
+
+            mediaRef.delete().await()
+
+            State.Upload.UploadSuccess("")
         } catch (e: java.lang.Exception){
             State.Upload.Error(e)
         }

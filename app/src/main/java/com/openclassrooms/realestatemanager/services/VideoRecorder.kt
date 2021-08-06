@@ -13,10 +13,10 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.net.toUri
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.models.sealedClasses.FileState
-import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.MediaItem
+import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.enums.OrientationMode
+import com.openclassrooms.realestatemanager.models.sealedClasses.FileState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
@@ -75,7 +75,7 @@ class VideoRecorder @Inject constructor(private val mContext: Context) {
         mRecorder = null
         addVideoToGallery()
 
-        val mediaItem = MediaItem(UUID.randomUUID().toString(), mVideoFile.toUri().toString(), "", FileType.VIDEO)
+        val mediaItem = MediaItem(UUID.randomUUID().toString(), "", mVideoFile.toUri().toString(), "", FileType.VIDEO)
 
         _fileStateFlow.value = FileState.Success(mediaItem)
     }

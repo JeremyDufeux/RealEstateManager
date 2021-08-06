@@ -15,10 +15,10 @@ import android.provider.MediaStore
 import android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 import androidx.core.net.toUri
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.models.sealedClasses.FileState
-import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.MediaItem
+import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.enums.OrientationMode
+import com.openclassrooms.realestatemanager.models.sealedClasses.FileState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -51,7 +51,7 @@ class PictureSaver @Inject constructor(
                 writeFile()
 
                 addPictureToGallery()
-                val mediaItem = MediaItem(UUID.randomUUID().toString(), mPictureFile.toUri().toString(), "", FileType.PICTURE)
+                val mediaItem = MediaItem(UUID.randomUUID().toString(), "", mPictureFile.toUri().toString(), "", FileType.PICTURE)
                 _fileStateFlow.value = FileState.Success(mediaItem)
             }
         }

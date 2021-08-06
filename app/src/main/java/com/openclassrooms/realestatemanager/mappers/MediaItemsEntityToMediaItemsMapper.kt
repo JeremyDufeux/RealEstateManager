@@ -11,6 +11,7 @@ class MediaItemsEntityToMediaItemsMapper {
             for(entity in entitiesList){
                 val mediaItem = MediaItem(
                     id = entity.mediaId,
+                    propertyId = entity.propertyId,
                     url = entity.url,
                     description = entity.description,
                     fileType = entity.fileType

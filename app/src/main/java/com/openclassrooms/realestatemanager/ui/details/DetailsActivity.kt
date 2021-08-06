@@ -1,37 +1,52 @@
 package com.openclassrooms.realestatemanager.ui.details
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.Observer
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityDetailsBinding
+import com.openclassrooms.realestatemanager.models.sealedClasses.State
+import com.openclassrooms.realestatemanager.ui.add.AddPropertyActivity
+import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 const val BUNDLE_KEY_PROPERTY_ID = "BUNDLE_KEY_PROPERTY_ID"
 
 @AndroidEntryPoint
 class DetailsActivity : AppCompatActivity() {
+    private val mViewModel: DetailsActivityViewModel by viewModels()
+
     lateinit var mBinding : ActivityDetailsBinding
+
+    lateinit var propertyId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         mBinding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
         setSupportActionBar(mBinding.activityDetailsToolbar)
         configureFragment()
+        configureViewModel()
     }
 
     private fun configureFragment() {
         val detailFragment : DetailsFragment = supportFragmentManager.findFragmentById(R.id.activity_details_fragmentContainer) as DetailsFragment
-        val propertyId = intent?.extras?.getString(BUNDLE_KEY_PROPERTY_ID)
+        propertyId = intent?.extras?.getString(BUNDLE_KEY_PROPERTY_ID)!!
 
-        if (propertyId != null) {
-            detailFragment.setPropertyId(propertyId)
-        }
+        detailFragment.setPropertyId(propertyId)
+    }
+
+    private fun configureViewModel() {
+        mViewModel.stateLiveData.observe(this, stateObserver)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -45,5 +60,34 @@ class DetailsActivity : AppCompatActivity() {
 
         mBinding.activityDetailsToolbar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_back_arrow, null)
         mBinding.activityDetailsToolbar.setNavigationOnClickListener { onBackPressed()}
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.edit_property -> openAddPropertyActivity()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun openAddPropertyActivity() {
+        val intent = Intent(this, AddPropertyActivity::class.java)
+        intent.putExtra(BUNDLE_KEY_PROPERTY_ID, propertyId)
+        startActivity(intent)
+    }
+
+    private val stateObserver = Observer<State> { state ->
+        when(state){
+            is State.Upload.Uploading -> {
+                mBinding.activityDetailsProgressLine.visibility = View.VISIBLE
+            }
+            is State.Upload.Error -> {
+                mBinding.activityDetailsProgressLine.visibility = View.GONE
+                showToast(this, R.string.an_error_append)
+                Timber.e("Error DetailsActivity.stateObserver: ${state.throwable.toString()}")
+            }
+            else -> {
+                mBinding.activityDetailsProgressLine.visibility = View.GONE
+            }
+        }
     }
 }
