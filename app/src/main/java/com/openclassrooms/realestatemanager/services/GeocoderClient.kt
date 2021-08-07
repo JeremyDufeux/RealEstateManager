@@ -5,11 +5,9 @@ import android.location.Address
 import android.location.Geocoder
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ViewModelScoped
 import timber.log.Timber
 import javax.inject.Inject
 
-@ViewModelScoped
 class GeocoderClient @Inject constructor(@ApplicationContext private val mContext : Context) {
 
     val coder = Geocoder(mContext)
@@ -28,7 +26,7 @@ class GeocoderClient @Inject constructor(@ApplicationContext private val mContex
             val longitude = addressResult[0]?.longitude!!
             LatLng(latitude, longitude)
         } catch (e: Exception) {
-            Timber.d("getPropertyLocation: address not found")
+            Timber.e("getPropertyLocation: address not found")
             null
         }
     }

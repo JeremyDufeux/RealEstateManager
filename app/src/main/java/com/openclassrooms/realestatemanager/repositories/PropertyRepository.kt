@@ -5,7 +5,9 @@ import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
+import com.openclassrooms.realestatemanager.services.GeocoderClient
 import com.openclassrooms.realestatemanager.services.VideoDownloadService
+import com.openclassrooms.realestatemanager.utils.getGeoApifyUrl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
@@ -14,7 +16,9 @@ import javax.inject.Singleton
 @Singleton
 class PropertyRepository @Inject constructor(
     private val mPropertyApiService: PropertyApiService,
-    private val mVideoDownloadService: VideoDownloadService){
+    private val mVideoDownloadService: VideoDownloadService,
+    private val mGeocoderClient: GeocoderClient
+){
 
     private val _stateFlow = MutableStateFlow<State>(State.Idle)
     val stateFlow = _stateFlow.asStateFlow()
@@ -28,7 +32,8 @@ class PropertyRepository @Inject constructor(
     }
 
     fun addProperty(property: Property) {
-        mPropertyApiService.addProperty(property)
+        val propertyWithLocation = getPropertyLocation(property)
+        mPropertyApiService.addProperty(propertyWithLocation)
     }
 
     suspend fun addPropertyWithMedias(property: Property) {
@@ -60,6 +65,24 @@ class PropertyRepository @Inject constructor(
 
         if(mediaItem.fileType == FileType.VIDEO){
             mVideoDownloadService.deleteVideo(mediaItem)
+        }
+    }
+
+    private fun getPropertyLocation(property: Property): Property{
+        return property.apply {
+            val latLng =
+                mGeocoderClient.getPropertyLocation(
+                    addressLine1,
+                    addressLine2,
+                    city,
+                    postalCode,
+                    country
+                )
+            if (latLng != null) {
+                latitude = latLng.latitude
+                longitude = latLng.longitude
+                mapPictureUrl = getGeoApifyUrl(latitude, longitude)
+            }
         }
     }
 }

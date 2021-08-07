@@ -7,9 +7,7 @@ import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.modules.IoCoroutineScope
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
-import com.openclassrooms.realestatemanager.services.GeocoderClient
 import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
-import com.openclassrooms.realestatemanager.utils.getGeoApifyUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,8 +21,7 @@ import kotlin.collections.ArrayList
 class AddActivityViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     @IoCoroutineScope private val mIoScope: CoroutineScope,
-    private val mPropertyUseCase: PropertyUseCase,
-    private val mGeocoderClient: GeocoderClient
+    private val mPropertyUseCase: PropertyUseCase
 ) : ViewModel(){
 
     private var _propertyLiveData : MutableLiveData<Property> = MutableLiveData()
@@ -50,8 +47,6 @@ class AddActivityViewModel @Inject constructor(
     var city = String()
     var postalCode = String()
     var country = String()
-    private var latitude : Double? = null
-    private var longitude : Double? = null
     var agent = String()
     var mPointOfInterestList : MutableList<PointOfInterest> = ArrayList()
 
@@ -74,13 +69,6 @@ class AddActivityViewModel @Inject constructor(
 
     fun saveProperty() {
         mIoScope.launch {
-            val latLng =
-                mGeocoderClient.getPropertyLocation(addressLine1, addressLine2, city, postalCode, country)
-            if (latLng != null) {
-                latitude = latLng.latitude
-                longitude = latLng.longitude
-            }
-
             val property = Property(
                 id = propertyId!!,
                 type = propertyType,
@@ -96,9 +84,6 @@ class AddActivityViewModel @Inject constructor(
                 city = city,
                 postalCode = postalCode,
                 country = country,
-                latitude = latitude,
-                longitude = longitude,
-                mapPictureUrl = getGeoApifyUrl(latitude, longitude),
                 pointOfInterestList = mPointOfInterestList,
                 available = true,
                 postDate = Calendar.getInstance().timeInMillis,
