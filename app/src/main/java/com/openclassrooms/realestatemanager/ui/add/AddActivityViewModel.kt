@@ -98,10 +98,11 @@ class AddActivityViewModel @Inject constructor(
         }
     }
 
-    fun addMediaUri(mediaItem: MediaItem) {
+    fun addMedia(mediaItem: MediaItem) {
         viewModelScope.launch(Dispatchers.Default) {
             mediaItem.propertyId = propertyId!!
             mMediaList.add(mediaItem)
+            mMediaList.sortBy { it.id }
             _mediaListLiveData.postValue(mMediaList)
         }
     }

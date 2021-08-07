@@ -331,7 +331,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
                 val mediaItem = data.getParcelableExtra<MediaItem>(CAMERA_RESULT_MEDIA_KEY)
 
                 if (mediaItem != null) {
-                    mViewModel.addMediaUri(mediaItem)
+                    mViewModel.addMedia(mediaItem)
                 }
             }
         }
