@@ -26,4 +26,16 @@ interface PropertyDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPropertyPointOfInterestCrossRef(propertyPointOfInterestCrossRef: PropertyPointOfInterestCrossRef)
+
+    @Query("DELETE FROM properties")
+    fun deleteAllProperties()
+
+    @Query("DELETE FROM media_items")
+    fun deleteAllMediaItems()
+
+    @Query("DELETE FROM points_of_interest")
+    fun deleteAllPointsOfInterest()
+
+    @Query("DELETE FROM properties_point_of_interest_cross_ref")
+    fun deleteAllPropertiesPointOfInterestCrossRef()
 }

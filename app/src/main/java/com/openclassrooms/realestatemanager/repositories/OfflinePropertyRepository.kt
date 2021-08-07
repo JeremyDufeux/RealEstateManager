@@ -40,6 +40,8 @@ class OfflinePropertyRepository @Inject constructor(
         }
 
     suspend fun updateDatabase(propertiesList: List<Property>) {
+        clearDatabase()
+
         for (property in propertiesList) {
             val propertyEntity = propertyToPropertyEntityMapper(property)
             mPropertyDao.insertProperty(propertyEntity)
@@ -68,6 +70,13 @@ class OfflinePropertyRepository @Inject constructor(
                 mPropertyDao.insertPropertyPointOfInterestCrossRef(crossRef)
             }
         }
+    }
+
+    private fun clearDatabase() {
+        mPropertyDao.deleteAllProperties()
+        mPropertyDao.deleteAllMediaItems()
+        mPropertyDao.deleteAllPointsOfInterest()
+        mPropertyDao.deleteAllPropertiesPointOfInterestCrossRef()
     }
 
     private fun cachePicture(url: String?) {
