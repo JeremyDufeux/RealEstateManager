@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.models.databaseEntites
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
+import com.openclassrooms.realestatemanager.models.enums.ServerState
 
 @Entity(tableName = "properties")
 data class PropertyEntity(
@@ -26,5 +27,6 @@ data class PropertyEntity(
     var available: Boolean,
     var postDate: Long,
     var soldDate: Long?,
-    var agentName: String
+    var agentName: String,
+    var serverState: ServerState
 )

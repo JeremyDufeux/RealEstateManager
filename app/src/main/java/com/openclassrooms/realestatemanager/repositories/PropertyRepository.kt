@@ -26,7 +26,7 @@ class PropertyRepository @Inject constructor(
         }
     }
 
-    private fun addProperty(property: Property) {
+    fun addProperty(property: Property) {
         mPropertyApiService.addProperty(property)
     }
 
@@ -40,7 +40,7 @@ class PropertyRepository @Inject constructor(
         fetchProperties()
     }
 
-    private suspend fun uploadMedia(mediaItem: MediaItem) {
+    suspend fun uploadMedia(mediaItem: MediaItem) {
         when (val state = mPropertyApiService.uploadMedia(mediaItem)) {
             is State.Upload.UploadSuccess -> {
                 mediaItem.url = state.url

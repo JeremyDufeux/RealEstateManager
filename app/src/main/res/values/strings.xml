@@ -43,6 +43,7 @@
     <string name="cancel">Cancel</string>
     <string name="an_error_append">An error append</string>
     <string name="you_re_not_connected_to_internet">You\'re not connected to internet</string>
+    <string name="the_property_will_be_uploaded_when_connected">The property will be uploaded when connected</string>
     <string name="error_creating_folder">An error append when creating folder</string>
     <string name="error_saving_file">Error when saving file</string>
     <string name="error_opening_camera">Error when opening camera</string>

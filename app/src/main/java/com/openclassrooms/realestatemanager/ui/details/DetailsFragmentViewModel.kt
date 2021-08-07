@@ -8,7 +8,7 @@ import com.openclassrooms.realestatemanager.mappers.*
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,11 +21,10 @@ class DetailsFragmentViewModel @Inject constructor(
     var propertyLiveData: LiveData<Property> = mPropertyMutableLiveData
 
     fun setPropertyId(propertyId: String) {
-        viewModelScope.launch {
-            mPropertyUseCase.getPropertyWithId(propertyId).collect { property ->
-                updatePropertyFields(property)
-                mPropertyMutableLiveData.postValue(property)
-            }
+        viewModelScope.launch(Dispatchers.IO) {
+            val property = mPropertyUseCase.getPropertyWithId(propertyId)
+            updatePropertyFields(property)
+            mPropertyMutableLiveData.postValue(property)
         }
     }
 

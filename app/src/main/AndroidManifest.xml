@@ -73,6 +73,11 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            tools:node="remove" />
+
         <service android:name="com.openclassrooms.realestatemanager.services.VideoDownloadService"
             android:enabled="true"
             android:exported="false">

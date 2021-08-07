@@ -11,6 +11,7 @@ import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
 import com.openclassrooms.realestatemanager.services.LocationService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,7 +33,7 @@ class ListViewModel @Inject constructor(
     init {
         fetchProperties()
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             mPropertyUseCase.stateFlow.collect { state ->
                 if (state is State.Download.DownloadSuccess){
                     updatePropertyFields(state.propertiesList)
@@ -43,14 +44,13 @@ class ListViewModel @Inject constructor(
     }
 
     fun fetchProperties(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             mPropertyUseCase.fetchProperties()
-
         }
     }
 
     fun startLocationUpdates(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             mLocationService.startLocationUpdates()
             mLocationService.locationFlow.collect { location ->
                 _location.postValue(location)

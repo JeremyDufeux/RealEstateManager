@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,7 +21,7 @@ class DetailsActivityViewModel @Inject constructor(
     val stateLiveData: LiveData<State> = _stateLiveData
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             mPropertyUseCase.stateFlow.collect { state ->
                 _stateLiveData.postValue(state)
             }

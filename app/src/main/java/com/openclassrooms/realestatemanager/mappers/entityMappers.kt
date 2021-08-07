@@ -6,6 +6,7 @@ import com.openclassrooms.realestatemanager.models.databaseEntites.MediaItemEnti
 import com.openclassrooms.realestatemanager.models.databaseEntites.PointOfInterestEntity
 import com.openclassrooms.realestatemanager.models.databaseEntites.PropertyEntity
 import com.openclassrooms.realestatemanager.models.databaseEntites.PropertyWithMediaItemAndPointsOfInterestEntity
+import com.openclassrooms.realestatemanager.models.enums.ServerState
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 
 fun propertyToPropertyEntityMapper(property: Property): PropertyEntity {
@@ -29,7 +30,8 @@ fun propertyToPropertyEntityMapper(property: Property): PropertyEntity {
         available = property.available,
         postDate = property.postDate,
         soldDate = property.soldDate,
-        agentName = property.agentName
+        agentName = property.agentName,
+        serverState = ServerState.SERVER
     )
 }
 
@@ -79,7 +81,8 @@ fun mediaItemToMediaItemEntityMapper(propertyId: String, mediaItem: MediaItem): 
         propertyId = propertyId,
         url = mediaItem.url,
         description = mediaItem.description,
-        fileType = mediaItem.fileType
+        fileType = mediaItem.fileType,
+        serverState = ServerState.SERVER
     )
 }
 
