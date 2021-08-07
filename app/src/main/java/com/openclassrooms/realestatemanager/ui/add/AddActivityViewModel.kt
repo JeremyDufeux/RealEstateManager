@@ -7,7 +7,9 @@ import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.modules.IoCoroutineScope
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
+import com.openclassrooms.realestatemanager.services.GeocoderClient
 import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
+import com.openclassrooms.realestatemanager.utils.getGeoApifyUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +23,8 @@ import kotlin.collections.ArrayList
 class AddActivityViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     @IoCoroutineScope private val mIoScope: CoroutineScope,
-    private val mPropertyUseCase: PropertyUseCase
+    private val mPropertyUseCase: PropertyUseCase,
+    private val mGeocoderClient: GeocoderClient
 ) : ViewModel(){
 
     private var _propertyLiveData : MutableLiveData<Property> = MutableLiveData()
@@ -31,7 +34,6 @@ class AddActivityViewModel @Inject constructor(
     val mediaListLiveData : LiveData<List<MediaItem>> = _mediaListLiveData
 
     private var propertyId = savedStateHandle.get<String>(BUNDLE_KEY_PROPERTY_ID)
-    private lateinit var oldProperty: Property
     private var editMode = false
 
     var propertyType : PropertyType = PropertyType.FLAT
@@ -56,7 +58,6 @@ class AddActivityViewModel @Inject constructor(
             editMode = true
             viewModelScope.launch(Dispatchers.IO) {
                 mPropertyUseCase.getPropertyWithIdFlow(propertyId!!).collect { property ->
-                    oldProperty = property
                     _propertyLiveData.postValue(property)
                     mMediaList = property.mediaList.toMutableList()
                     _mediaListLiveData.postValue(mMediaList)
@@ -69,6 +70,9 @@ class AddActivityViewModel @Inject constructor(
 
     fun saveProperty() {
         mIoScope.launch {
+            val latLng =
+                mGeocoderClient.getPropertyLocation(addressLine1, addressLine2, city, postalCode, country)
+
             val property = Property(
                 id = propertyId!!,
                 type = propertyType,
@@ -84,6 +88,9 @@ class AddActivityViewModel @Inject constructor(
                 city = city,
                 postalCode = postalCode,
                 country = country,
+                latitude = latLng?.latitude,
+                longitude = latLng?.longitude,
+                mapPictureUrl = getGeoApifyUrl(latLng?.latitude, latLng?.longitude),
                 pointOfInterestList = mPointOfInterestList,
                 available = true,
                 postDate = Calendar.getInstance().timeInMillis,

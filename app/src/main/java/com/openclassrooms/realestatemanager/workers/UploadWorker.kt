@@ -20,7 +20,6 @@ class UploadWorker @AssistedInject constructor(
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         return@withContext try {
             mPropertyUseCase.uploadPendingProperties()
-            Result.success()
         } catch (error: Throwable){
             Result.failure()
         }

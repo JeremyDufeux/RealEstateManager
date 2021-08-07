@@ -1,11 +1,14 @@
 package com.openclassrooms.realestatemanager.repositories
 
 import android.content.Context
+import androidx.work.ListenableWorker.Result
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.enums.ServerState
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.modules.IoCoroutineScope
+import com.openclassrooms.realestatemanager.services.GeocoderClient
 import com.openclassrooms.realestatemanager.utils.Utils
+import com.openclassrooms.realestatemanager.utils.getGeoApifyUrl
 import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import com.openclassrooms.realestatemanager.workers.UploadService
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -24,7 +27,9 @@ class PropertyUseCase @Inject constructor(
     @IoCoroutineScope private val mIoScope: CoroutineScope,
     private val mPropertyRepository: PropertyRepository,
     private val mOfflinePropertyRepository: OfflinePropertyRepository,
-    private val mUploadService: UploadService) {
+    private val mUploadService: UploadService,
+    private val mGeocoderClient: GeocoderClient
+) {
 
     private val _stateFlow = MutableStateFlow<State>(State.Idle)
     val stateFlow = _stateFlow.asStateFlow()
@@ -76,13 +81,13 @@ class PropertyUseCase @Inject constructor(
     suspend fun updateProperty(newProperty: Property) {
         val oldProperty = mOfflinePropertyRepository.getPropertyWithId(newProperty.id)
 
+        updatePropertyOffline(oldProperty, newProperty)
         if (Utils.isInternetAvailable(mContext)) {
             updatePropertyOnline(oldProperty, newProperty)
             mPropertyRepository.fetchProperties()
         }
         else {
             _stateFlow.value = State.Upload.Error(OfflineError())
-            updatePropertyOffline(oldProperty, newProperty)
             mUploadService.enqueueUploadWorker()
             getOfflineProperties()
             _stateFlow.value = State.Idle
@@ -120,7 +125,7 @@ class PropertyUseCase @Inject constructor(
         mOfflinePropertyRepository.updateProperty(newProperty)
     }
 
-    suspend fun uploadPendingProperties(){
+    suspend fun uploadPendingProperties(): Result {
         _stateFlow.value = State.Upload.Uploading
 
         for (mediaItem in mOfflinePropertyRepository.getMediaItemsToUpload()) {
@@ -133,9 +138,29 @@ class PropertyUseCase @Inject constructor(
         }
 
         for (property in mOfflinePropertyRepository.getPropertiesToUpload()) {
+            updatePropertyLocation(property)
             mPropertyRepository.addProperty(property)
         }
 
         mPropertyRepository.fetchProperties()
+
+        return Result.success()
+    }
+
+    private fun updatePropertyLocation(property: Property){
+            val latLng =
+                mGeocoderClient.getPropertyLocation(
+                    property.addressLine1,
+                    property.addressLine2,
+                    property.city,
+                    property.postalCode,
+                    property.country
+                )
+
+        if (latLng != null) {
+            property.latitude = latLng.latitude
+            property.longitude = latLng.longitude
+            property.mapPictureUrl = getGeoApifyUrl(property.latitude, property.longitude)
+        }
     }
 }

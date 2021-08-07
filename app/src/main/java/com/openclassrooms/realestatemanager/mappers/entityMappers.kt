@@ -6,8 +6,8 @@ import com.openclassrooms.realestatemanager.models.databaseEntites.MediaItemEnti
 import com.openclassrooms.realestatemanager.models.databaseEntites.PointOfInterestEntity
 import com.openclassrooms.realestatemanager.models.databaseEntites.PropertyEntity
 import com.openclassrooms.realestatemanager.models.databaseEntites.PropertyWithMediaItemAndPointsOfInterestEntity
-import com.openclassrooms.realestatemanager.models.enums.ServerState
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
+import com.openclassrooms.realestatemanager.models.enums.ServerState
 
 fun propertyToPropertyEntityMapper(property: Property): PropertyEntity {
     return PropertyEntity(
@@ -36,7 +36,7 @@ fun propertyToPropertyEntityMapper(property: Property): PropertyEntity {
 }
 
 fun propertyEntityToPropertyMapper(entity: PropertyWithMediaItemAndPointsOfInterestEntity): Property {
-    val mediaList = mediaItemsEntityToMediaItemsMapper(entity.mediaList)
+    val mediaList = mediaItemsEntityToMediaItemsMapper(entity.mediaList).sortedBy { it.id }
     val pointOfInterestList = pointsOfInterestEntityToPointsOfInterestMapper(entity.pointOfInterestList)
 
     return Property(

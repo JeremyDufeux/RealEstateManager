@@ -18,6 +18,7 @@ class UploadService @Inject constructor(
 
         val notificationWork = OneTimeWorkRequest.Builder(UploadWorker::class.java)
             .setConstraints(constraints)
+            .setInitialDelay(10000, TimeUnit.MILLISECONDS)
             .setBackoffCriteria(
                 BackoffPolicy.EXPONENTIAL,
                 OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
