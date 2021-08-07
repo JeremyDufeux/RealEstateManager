@@ -9,6 +9,7 @@ import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,9 +23,10 @@ class DetailsFragmentViewModel @Inject constructor(
 
     fun setPropertyId(propertyId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val property = mPropertyUseCase.getPropertyWithId(propertyId)
-            updatePropertyFields(property)
-            mPropertyMutableLiveData.postValue(property)
+            mPropertyUseCase.getPropertyWithIdFlow(propertyId).collect { property ->
+                updatePropertyFields(property)
+                mPropertyMutableLiveData.postValue(property)
+            }
         }
     }
 

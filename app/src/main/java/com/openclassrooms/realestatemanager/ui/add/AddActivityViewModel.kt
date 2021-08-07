@@ -13,6 +13,7 @@ import com.openclassrooms.realestatemanager.utils.getGeoApifyUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -58,12 +59,13 @@ class AddActivityViewModel @Inject constructor(
     init {
         if (propertyId != null) {
             editMode = true
-            viewModelScope.launch {
-                val property = mPropertyUseCase.getPropertyWithId(propertyId!!)
-                oldProperty = property
-                _propertyLiveData.postValue(property)
-                mMediaList = property.mediaList.toMutableList()
-                _mediaListLiveData.postValue(mMediaList)
+            viewModelScope.launch(Dispatchers.IO) {
+                mPropertyUseCase.getPropertyWithIdFlow(propertyId!!).collect { property ->
+                    oldProperty = property
+                    _propertyLiveData.postValue(property)
+                    mMediaList = property.mediaList.toMutableList()
+                    _mediaListLiveData.postValue(mMediaList)
+                }
             }
         } else {
             propertyId = UUID.randomUUID().toString()
@@ -104,7 +106,7 @@ class AddActivityViewModel @Inject constructor(
                 agentName = agent
             )
             if(editMode){
-                mPropertyUseCase.updateProperty(oldProperty, property)
+                mPropertyUseCase.updateProperty(property)
             }else {
                 mPropertyUseCase.addProperty(property)
             }

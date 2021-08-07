@@ -10,6 +10,7 @@ import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import com.openclassrooms.realestatemanager.workers.UploadService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
@@ -44,35 +45,91 @@ class PropertyUseCase @Inject constructor(
             mPropertyRepository.fetchProperties()
         } else {
             _stateFlow.value = State.Download.Error(OfflineError())
-            mOfflinePropertyRepository.getProperties().let {
-                _stateFlow.value = State.Download.DownloadSuccess(it)
-            }
+            getOfflineProperties()
         }
     }
 
-    fun getPropertyWithId(propertyId: String): Property = mOfflinePropertyRepository.getPropertyWithId(propertyId)
+    private fun getOfflineProperties() {
+        mOfflinePropertyRepository.getProperties().let {
+            _stateFlow.value = State.Download.DownloadSuccess(it)
+        }
+    }
+
+    fun getPropertyWithIdFlow(propertyId: String): Flow<Property> {
+        return mOfflinePropertyRepository.getPropertyWithIdFlow(propertyId)
+    }
 
     suspend fun addProperty(property: Property) {
         if (Utils.isInternetAvailable(mContext)) {
-            mPropertyRepository.addPropertyAndFetch(property)
-        } else {
+            mPropertyRepository.addPropertyWithMedias(property)
+            mPropertyRepository.fetchProperties()
+        }
+        else {
             _stateFlow.value = State.Upload.Error(OfflineError())
             mOfflinePropertyRepository.addProperty(property, ServerState.WAITING_UPLOAD)
             mUploadService.enqueueUploadWorker()
-            mOfflinePropertyRepository.getProperties().let {
-                _stateFlow.value = State.Download.DownloadSuccess(it)
-            }
+            getOfflineProperties()
+            _stateFlow.value = State.Idle
         }
     }
 
-    suspend fun updateProperty(oldProperty: Property, newProperty: Property) {
-        mPropertyRepository.updateProperty(oldProperty, newProperty)
+    suspend fun updateProperty(newProperty: Property) {
+        val oldProperty = mOfflinePropertyRepository.getPropertyWithId(newProperty.id)
+
+        if (Utils.isInternetAvailable(mContext)) {
+            updatePropertyOnline(oldProperty, newProperty)
+            mPropertyRepository.fetchProperties()
+        }
+        else {
+            _stateFlow.value = State.Upload.Error(OfflineError())
+            updatePropertyOffline(oldProperty, newProperty)
+            mUploadService.enqueueUploadWorker()
+            getOfflineProperties()
+            _stateFlow.value = State.Idle
+        }
+    }
+
+    private suspend fun updatePropertyOnline(oldProperty: Property, newProperty: Property) {
+        _stateFlow.value = State.Upload.Uploading
+
+        for(mediaItem in newProperty.mediaList){
+            if(oldProperty.mediaList.firstOrNull{ it.id == mediaItem.id} == null){ // Media as been added
+                mPropertyRepository.uploadMedia(mediaItem)
+            }
+        }
+        for(mediaItem in oldProperty.mediaList){
+            if(newProperty.mediaList.firstOrNull{ it.id == mediaItem.id} == null){ // Media as been deleted
+                mPropertyRepository.deleteMedia(mediaItem)
+                mOfflinePropertyRepository.deleteMedia(mediaItem)
+            }
+        }
+        mPropertyRepository.addProperty(newProperty)
+    }
+
+    private suspend fun updatePropertyOffline(oldProperty: Property, newProperty: Property) {
+        for(mediaItem in newProperty.mediaList){
+            if(oldProperty.mediaList.firstOrNull{ it.id == mediaItem.id} == null){ // Media as been added
+                mOfflinePropertyRepository.addMediaToUpload(mediaItem)
+            }
+        }
+        for(mediaItem in oldProperty.mediaList){
+            if(newProperty.mediaList.firstOrNull{ it.id == mediaItem.id} == null){ // Media as been deleted
+                mOfflinePropertyRepository.setMediaToDelete(mediaItem)
+            }
+        }
+        mOfflinePropertyRepository.updateProperty(newProperty)
     }
 
     suspend fun uploadPendingProperties(){
         _stateFlow.value = State.Upload.Uploading
-        for (media in mOfflinePropertyRepository.getMediaItemsToUpload()) {
-            mPropertyRepository.uploadMedia(media)
+
+        for (mediaItem in mOfflinePropertyRepository.getMediaItemsToUpload()) {
+            mPropertyRepository.uploadMedia(mediaItem)
+        }
+
+        for (mediaItem in mOfflinePropertyRepository.getMediaItemsToDelete()) {
+            mPropertyRepository.deleteMedia(mediaItem)
+            mOfflinePropertyRepository.deleteMedia(mediaItem)
         }
 
         for (property in mOfflinePropertyRepository.getPropertiesToUpload()) {

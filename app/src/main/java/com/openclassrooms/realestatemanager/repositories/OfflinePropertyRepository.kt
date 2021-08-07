@@ -15,6 +15,8 @@ import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.enums.ServerState
 import com.openclassrooms.realestatemanager.services.VideoDownloadService
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -33,24 +35,21 @@ class OfflinePropertyRepository @Inject constructor(
         return propertyList
     }
 
-    fun getPropertyWithId(propertyId: String): Property =
-        mPropertyDao.getPropertyWithId(propertyId).let { property ->
-            return propertyEntityToPropertyMapper(property)
+    fun getPropertyWithId(propertyId: String): Property{
+        val propertyEntity = mPropertyDao.getPropertyWithId(propertyId)
+
+        return propertyEntityToPropertyMapper(propertyEntity)
+    }
+
+    fun getPropertyWithIdFlow(propertyId: String): Flow<Property> =
+        mPropertyDao.getPropertyWithIdFlow(propertyId).map { property ->
+            return@map propertyEntityToPropertyMapper(property)
         }
 
     suspend fun updateDatabase(propertiesList: List<Property>) {
-        clearDatabase()
-
         for (property in propertiesList) {
             addProperty(property, ServerState.SERVER)
         }
-    }
-
-    private fun clearDatabase() {
-        mPropertyDao.deleteAllProperties()
-        mPropertyDao.deleteAllMediaItems()
-        mPropertyDao.deleteAllPointsOfInterest()
-        mPropertyDao.deleteAllPropertiesPointOfInterestCrossRef()
     }
 
     private fun cachePicture(url: String?) {
@@ -69,7 +68,7 @@ class OfflinePropertyRepository @Inject constructor(
         cachePicture(property.mapPictureUrl)
 
         for (media in property.mediaList) {
-            val mediaItemEntity = mediaItemToMediaItemEntityMapper(property.id, media)
+            val mediaItemEntity = mediaItemToMediaItemEntityMapper(media)
             mediaItemEntity.serverState = serverState
             mPropertyDao.insertMediaItem(mediaItemEntity)
 
@@ -84,14 +83,7 @@ class OfflinePropertyRepository @Inject constructor(
 
         mVideoDownloadService.startDownloads()
 
-        for (pointOfInterest in property.pointOfInterestList) {
-            val pointOfInterestEntity = PointOfInterestEntity(pointOfInterest.toString())
-            mPropertyDao.insertPointOfInterest(pointOfInterestEntity)
-
-            val crossRef =
-                PropertyPointOfInterestCrossRef(property.id, pointOfInterest.toString())
-            mPropertyDao.insertPropertyPointOfInterestCrossRef(crossRef)
-        }
+        insertPointsOfInterestForProperty(property)
     }
 
     fun getPropertiesToUpload(): List<Property> {
@@ -104,5 +96,47 @@ class OfflinePropertyRepository @Inject constructor(
 
     fun getMediaItemsToUpload(): List<MediaItem> {
         return mediaItemsEntityToMediaItemsMapper(mPropertyDao.getMediaItemsToUpload())
+    }
+
+    fun getMediaItemsToDelete(): List<MediaItem> {
+        return mediaItemsEntityToMediaItemsMapper(mPropertyDao.getMediaItemsToDelete())
+    }
+
+    suspend fun addMediaToUpload(mediaItem: MediaItem) {
+        val mediaItemEntity = mediaItemToMediaItemEntityMapper(mediaItem)
+        mediaItemEntity.serverState = ServerState.WAITING_UPLOAD
+        mPropertyDao.insertMediaItem(mediaItemEntity)
+    }
+
+    suspend fun setMediaToDelete(mediaItem: MediaItem) {
+        val mediaItemEntity = mediaItemToMediaItemEntityMapper(mediaItem)
+        mediaItemEntity.serverState = ServerState.WAITING_DELETE
+        mPropertyDao.insertMediaItem(mediaItemEntity)
+    }
+
+    fun deleteMedia(media: MediaItem) {
+        mPropertyDao.deleteMediaWithId(media.id)
+    }
+
+    suspend fun updateProperty(property: Property) {
+
+        val propertyEntity = propertyToPropertyEntityMapper(property)
+        propertyEntity.serverState = ServerState.WAITING_UPLOAD
+
+        mPropertyDao.insertProperty(propertyEntity)
+
+        mPropertyDao.deletePointsOfInterestForProperty(property.id)
+        insertPointsOfInterestForProperty(property)
+    }
+
+    private suspend fun insertPointsOfInterestForProperty(property: Property){
+        for (pointOfInterest in property.pointOfInterestList) {
+            val pointOfInterestEntity = PointOfInterestEntity(pointOfInterest.toString())
+            mPropertyDao.insertPointOfInterest(pointOfInterestEntity)
+
+            val crossRef =
+                PropertyPointOfInterestCrossRef(property.id, pointOfInterest.toString())
+            mPropertyDao.insertPropertyPointOfInterestCrossRef(crossRef)
+        }
     }
 }

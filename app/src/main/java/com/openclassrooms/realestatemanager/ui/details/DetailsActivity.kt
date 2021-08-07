@@ -14,6 +14,7 @@ import com.openclassrooms.realestatemanager.databinding.ActivityDetailsBinding
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.ui.add.AddPropertyActivity
 import com.openclassrooms.realestatemanager.utils.showToast
+import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -82,7 +83,11 @@ class DetailsActivity : AppCompatActivity() {
             }
             is State.Upload.Error -> {
                 mBinding.activityDetailsProgressLine.visibility = View.GONE
-                showToast(this, R.string.an_error_append)
+                if (state.throwable is OfflineError) {
+                    showToast(this, R.string.the_property_will_be_uploaded_when_connected)
+                } else {
+                    showToast(this, R.string.an_error_append)
+                }
                 Timber.e("Error DetailsActivity.stateObserver: ${state.throwable.toString()}")
             }
             else -> {

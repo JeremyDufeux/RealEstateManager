@@ -21,6 +21,7 @@ class PropertyRepository @Inject constructor(
 
     suspend fun fetchProperties() {
         _stateFlow.value = State.Download.Downloading
+
         mPropertyApiService.fetchProperties().let { result ->
             _stateFlow.value = result
         }
@@ -30,14 +31,13 @@ class PropertyRepository @Inject constructor(
         mPropertyApiService.addProperty(property)
     }
 
-    suspend fun addPropertyAndFetch(property: Property) {
+    suspend fun addPropertyWithMedias(property: Property) {
         _stateFlow.value = State.Upload.Uploading
+
         for(mediaItem in property.mediaList) {
             uploadMedia(mediaItem)
         }
         addProperty(property)
-        _stateFlow.value = State.Download.Downloading
-        fetchProperties()
     }
 
     suspend fun uploadMedia(mediaItem: MediaItem) {
@@ -52,31 +52,14 @@ class PropertyRepository @Inject constructor(
         }
     }
 
-    private suspend fun deleteMedia(mediaItem: MediaItem) {
+    suspend fun deleteMedia(mediaItem: MediaItem) {
         val state = mPropertyApiService.deleteMedia(mediaItem)
         if(state is State.Upload.Error){
             _stateFlow.value = state
         }
+
         if(mediaItem.fileType == FileType.VIDEO){
             mVideoDownloadService.deleteVideo(mediaItem)
         }
-    }
-
-    suspend fun updateProperty(oldProperty: Property, newProperty: Property) {
-        _stateFlow.value = State.Upload.Uploading
-
-        for(mediaItem in newProperty.mediaList){
-            if(oldProperty.mediaList.firstOrNull{ it.id == mediaItem.id} == null){
-                uploadMedia(mediaItem)
-            }
-        }
-        for(mediaItem in oldProperty.mediaList){
-            if(newProperty.mediaList.firstOrNull{ it.id == mediaItem.id} == null){
-                deleteMedia(mediaItem)
-            }
-        }
-        addProperty(newProperty)
-        _stateFlow.value = State.Download.Downloading
-        fetchProperties()
     }
 }

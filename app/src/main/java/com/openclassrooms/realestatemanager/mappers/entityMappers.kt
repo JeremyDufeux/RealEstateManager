@@ -75,10 +75,10 @@ fun pointsOfInterestEntityToPointsOfInterestMapper(entitiesList: List<PointOfInt
     return pointsOfInterest
 }
 
-fun mediaItemToMediaItemEntityMapper(propertyId: String, mediaItem: MediaItem): MediaItemEntity {
+fun mediaItemToMediaItemEntityMapper(mediaItem: MediaItem): MediaItemEntity {
     return MediaItemEntity(
         mediaId = mediaItem.id,
-        propertyId = propertyId,
+        propertyId = mediaItem.propertyId,
         url = mediaItem.url,
         description = mediaItem.description,
         fileType = mediaItem.fileType,

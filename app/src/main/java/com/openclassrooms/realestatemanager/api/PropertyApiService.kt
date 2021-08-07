@@ -67,6 +67,7 @@ class PropertyApiService @Inject constructor() {
             val mediaRef: StorageReference = FirebaseStorage.getInstance().reference.child(ref)
 
             mediaRef.delete().await()
+            getPropertiesCollection().document(mediaItem.propertyId).collection(COLLECTION_MEDIAS_NAME).document(mediaItem.id).delete().await()
 
             State.Upload.UploadSuccess("")
         } catch (e: java.lang.Exception){
