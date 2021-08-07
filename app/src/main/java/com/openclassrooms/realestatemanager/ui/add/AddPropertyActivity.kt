@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
@@ -249,6 +250,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.add_activity_toolbar_menu, menu)
         configureToolBar()
         return true
     }
@@ -257,6 +259,13 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         mBinding.activityAddPropertyToolbar.title = resources.getString(R.string.toolbar_title_add_property)
         mBinding.activityAddPropertyToolbar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_back_arrow, null)
         mBinding.activityAddPropertyToolbar.setNavigationOnClickListener { finish() }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.save_property -> saveProperty()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     // ---------------
