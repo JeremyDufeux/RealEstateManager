@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.details
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -120,6 +121,7 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
 
             fragmentDetailMapIv.visibility = property.mapVisibility
             fragmentDetailMapCv.visibility = property.mapVisibility
+            fragmentDetailMapCv.setOnClickListener { openGoogleMaps(property.latitude, property.longitude) }
 
             mBinding.fragmentDetailPointOfInterestCg.visibility = property.pointsOfInterestVisibility
             mBinding.fragmentDetailPointOfInterestIv.visibility = property.pointsOfInterestVisibility
@@ -133,6 +135,15 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
             fragmentDetailAgentTitleTv.visibility = property.agentVisibility
         }
 
+    }
+
+    private fun openGoogleMaps(latitude: Double?, longitude: Double?){
+        val gmmIntentUri: Uri = Uri.parse("geo:0,0?q=$latitude,$longitude")
+        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+        mapIntent.setPackage("com.google.android.apps.maps")
+        if (mapIntent.resolveActivity(requireContext().packageManager) != null) {
+            startActivity(mapIntent)
+        }
     }
 
     override fun onMediaClick(position: Int) {
