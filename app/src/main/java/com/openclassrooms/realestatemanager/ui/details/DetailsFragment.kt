@@ -69,7 +69,7 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
         property.pointOfInterestList.map {
             val image = ResourcesCompat.getDrawable(requireContext().resources, it.icon, null)
             val chip = Chip(requireContext())
-            chip.text = it.description
+            chip.text = getString(it.description)
             chip.tag = it
             chip.chipIcon = image
             chip.setChipIconTintResource( R.color.colorAccent)

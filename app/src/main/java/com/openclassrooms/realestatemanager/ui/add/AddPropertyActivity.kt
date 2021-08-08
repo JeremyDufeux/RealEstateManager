@@ -78,7 +78,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
                 mBinding.activityAddPropertyPointOfInterestCg,
                 false
             ) as Chip
-            chip.text = point.description
+            chip.text = getString(point.description)
             chip.tag = point
             val image =
                 ResourcesCompat.getDrawable(mBinding.root.context.resources, point.icon, null)
