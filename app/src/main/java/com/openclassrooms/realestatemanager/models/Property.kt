@@ -52,5 +52,7 @@ data class Property(
     @Exclude @set:Exclude @get:Exclude
     var mapVisibility: Int = View.VISIBLE,
     @Exclude @set:Exclude @get:Exclude
+    var soldDateVisibility: Int = View.VISIBLE,
+    @Exclude @set:Exclude @get:Exclude
     var agentVisibility: Int = View.VISIBLE,
 )

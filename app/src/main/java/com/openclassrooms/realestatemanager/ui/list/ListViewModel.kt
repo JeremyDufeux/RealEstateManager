@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.openclassrooms.realestatemanager.mappers.getPriceVisibility
+import com.openclassrooms.realestatemanager.mappers.updatePriceVisibility
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
@@ -64,7 +64,7 @@ class ListViewModel @Inject constructor(
 
     private fun updatePropertyFields(properties: List<Property>) {
         for (property in properties){
-            property.priceVisibility = getPriceVisibility(property)
+            updatePriceVisibility(property)
         }
     }
 }

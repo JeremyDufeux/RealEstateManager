@@ -63,4 +63,8 @@
         <item name="chipBackgroundColor">@color/background_color_chip_points_of_interest</item>
     </style>
 
+    <style name="datePicker" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorOnPrimary">@color/dark_grey</item>
+    </style>
 </resources>

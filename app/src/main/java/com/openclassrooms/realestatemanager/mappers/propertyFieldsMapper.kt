@@ -4,55 +4,61 @@ import android.view.View
 import com.openclassrooms.realestatemanager.models.Property
 
 
-fun getPriceVisibility(property: Property): Int {
-    return if (property.price == null) {
-        View.GONE
-    } else {
-        View.VISIBLE
-    }
+fun updatePriceVisibility(property: Property) {
+    property.priceVisibility =
+        if (property.price == null) { 
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
 }
 
-fun getSurfaceVisibility(property: Property): Int {
-    return if (property.surface == null) {
-        View.GONE
-    } else {
-        View.VISIBLE
-    }
+fun updateSurfaceVisibility(property: Property) {
+    property.surfaceVisibility =
+        if (property.surface == null) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
 }
 
-fun getDescriptionVisibility(property: Property): Int {
-    return if (property.description.isBlank()) {
-        View.GONE
-    } else {
-        View.VISIBLE
-    }
+fun updateDescriptionVisibility(property: Property) {
+    property.descriptionVisibility =
+        if (property.description.isBlank()) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
 }
 
-fun getRoomVisibility(property: Property): Int {
-    return if (property.roomsAmount == null) {
-        View.GONE
-    } else {
-        View.VISIBLE
-    }
+fun updateRoomVisibility(property: Property) {
+    property.roomsVisibility =
+        if (property.roomsAmount == null) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
 }
 
-fun getBathroomVisibility(property: Property): Int {
-    return if (property.bathroomsAmount == null) {
-        View.GONE
-    } else {
-        View.VISIBLE
-    }
+fun updateBathroomVisibility(property: Property) {
+    property.bathroomsVisibility =
+        if (property.bathroomsAmount == null) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
 }
 
-fun getBedroomVisibility(property: Property): Int {
-    return if (property.bedroomsAmount == null) {
-        View.GONE
-    } else {
-        View.VISIBLE
-    }
+fun updateBedroomVisibility(property: Property) {
+    property.bedroomsVisibility =
+        if (property.bedroomsAmount == null) {
+             View.GONE
+        } else {
+            View.VISIBLE
+        }
 }
 
-fun getFormattedAddress(property: Property): String{
+fun updateFormattedAddress(property: Property){
     var address = ""
     property.apply {
         if (addressLine1.isNotEmpty()) address += addressLine1
@@ -61,37 +67,50 @@ fun getFormattedAddress(property: Property): String{
         if (postalCode.isNotEmpty()) address += "\n$postalCode"
         if (country.isNotEmpty()) address += "\n$country"
     }
-    return address
+    property.formattedAddress = address
 }
 
-fun getAddressVisibility(property: Property): Int {
-    return if (property.formattedAddress.isBlank()) {
-        View.GONE
-    } else {
-        View.VISIBLE
-    }
+fun updateAddressVisibility(property: Property) {
+    property.addressVisibility =
+        if (property.formattedAddress.isBlank()) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
 }
 
-fun getPointsOfInterestVisibility(property: Property): Int {
-    return if (property.pointOfInterestList.isEmpty()) {
-        View.GONE
-    } else {
-        View.VISIBLE
-    }
+fun updatePointsOfInterestVisibility(property: Property) {
+    property.pointsOfInterestVisibility =
+        if (property.pointOfInterestList.isEmpty()) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
 }
 
-fun getMapVisibility(property: Property): Int {
-    return if (property.mapPictureUrl == null) {
-        View.GONE
-    } else {
-        View.VISIBLE
-    }
+fun updateMapVisibility(property: Property) {
+    property.mapVisibility =
+        if (property.mapPictureUrl == null) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
 }
 
-fun getAgentVisibility(property: Property): Int {
-    return if (property.agentName.isBlank()) {
-        View.GONE
-    } else {
-        View.VISIBLE
-    }
+fun updateSoldDateVisibility(property: Property) {
+    property.soldDateVisibility =
+        if (property.soldDate == null) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
+}
+
+fun updateAgentVisibility(property: Property) {
+    property.agentVisibility =
+        if (property.agentName.isBlank()) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
 }

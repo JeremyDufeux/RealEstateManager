@@ -127,7 +127,11 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
             mBinding.fragmentDetailPointOfInterestIv.visibility = property.pointsOfInterestVisibility
             mBinding.fragmentDetailPointOfInterestTitleTv.visibility = property.pointsOfInterestVisibility
 
-            fragmentDetailAvailableTv.text = formatCalendarToString(property.postDate)
+            fragmentDetailPostDateTv.text = formatCalendarToString(property.postDate)
+
+            fragmentDetailSoldDateTv.text = property.soldDate?.let { formatCalendarToString(it) }
+            fragmentDetailSoldDateTv.visibility = property.soldDateVisibility
+            fragmentDetailSoldDateTitleTv.visibility = property.soldDateVisibility
 
             fragmentDetailAgentTv.text = property.agentName
             fragmentDetailAgentTv.visibility = property.agentVisibility

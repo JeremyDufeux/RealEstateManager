@@ -17,7 +17,8 @@
     <string name="surface">Surface</string>
     <string name="description">Description</string>
     <string name="location">Location</string>
-    <string name="available_since">Available since</string>
+    <string name="post_date">Post date</string>
+    <string name="sold_date">Sold date</string>
     <string name="real_estate_agent">Real estate agent</string>
     <string name="point_of_interest">Points of interest</string>
     <string name="property_type">Property type</string>
@@ -68,4 +69,5 @@
     <string name="channel_description">Upload notification channel</string>
     <string name="notification_title">Uploads done!</string>
     <string name="all_properties_has_been_uploaded">All properties has been uploaded!</string>
+    <string name="select_sold_date">Select sold date</string>
 </resources>

@@ -31,18 +31,17 @@ class DetailsFragmentViewModel @Inject constructor(
     }
 
     private fun updatePropertyFields(property: Property) {
-        property.apply {
-            priceVisibility = getPriceVisibility(this)
-            surfaceVisibility = getSurfaceVisibility(this)
-            descriptionVisibility = getDescriptionVisibility(this)
-            roomsVisibility = getRoomVisibility(this)
-            bathroomsVisibility = getBathroomVisibility(this)
-            bedroomsVisibility = getBedroomVisibility(this)
-            formattedAddress = getFormattedAddress(this)
-            addressVisibility = getAddressVisibility(this)
-            pointsOfInterestVisibility = getPointsOfInterestVisibility(this)
-            mapVisibility = getMapVisibility(this)
-            agentVisibility = getAgentVisibility(this)
-        }
+        updatePriceVisibility(property)
+        updateSurfaceVisibility(property)
+        updateDescriptionVisibility(property)
+        updateRoomVisibility(property)
+        updateBathroomVisibility(property)
+        updateBedroomVisibility(property)
+        updateFormattedAddress(property)
+        updateAddressVisibility(property)
+        updatePointsOfInterestVisibility(property)
+        updateMapVisibility(property)
+        updateSoldDateVisibility(property)
+        updateAgentVisibility(property)
     }
 }

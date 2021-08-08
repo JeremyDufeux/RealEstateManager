@@ -1,13 +1,13 @@
 package com.openclassrooms.realestatemanager.ui.add
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,6 +18,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBinding
 import com.openclassrooms.realestatemanager.models.MediaItem
@@ -27,6 +28,7 @@ import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.ui.camera.CAMERA_RESULT_MEDIA_KEY
 import com.openclassrooms.realestatemanager.ui.camera.CameraActivity
 import com.openclassrooms.realestatemanager.ui.mediaViewer.*
+import com.openclassrooms.realestatemanager.utils.formatCalendarToString
 import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -97,7 +99,6 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun configureListeners() {
         mBinding.apply {
             activityAddPropertyAddMediaIb.setOnClickListener{ startCameraActivity() }
@@ -139,10 +140,32 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
             activityAddPropertyAddressPostalCodeEtInput.setText(property.postalCode)
             activityAddPropertyAddressCountryEtInput.setText(property.country)
             activityAddPropertyAgentEtInput.setText(property.agentName)
+
+            activityAddPropertySoldDateEt.visibility = View.VISIBLE
+            activityAddPropertySoldDateEt.setEndIconOnClickListener { openDatePicker() }
+            activityAddPropertySoldDateEtInput.setText(property.soldDate?.let { formatCalendarToString(it) })
+            activityAddPropertySoldDateEtInput.setOnClickListener { openDatePicker() }
+            activityAddPropertySoldDateIv.visibility = View.VISIBLE
+
         }
 
         for(poi in property.pointOfInterestList){
             mChipList[poi]?.isChecked = true
+        }
+    }
+
+    private fun openDatePicker() {
+        val date = mViewModel.soldDate ?: MaterialDatePicker.todayInUtcMilliseconds()
+
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText(getString(R.string.select_sold_date))
+                .setSelection(date)
+                .setTheme(R.style.datePicker)
+                .build()
+        datePicker.show(supportFragmentManager, "DatePicker")
+        datePicker.addOnPositiveButtonClickListener {
+            mViewModel.soldDate = it
+            mBinding.activityAddPropertySoldDateEtInput.setText(formatCalendarToString(it))
         }
     }
 

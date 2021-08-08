@@ -457,13 +457,50 @@
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <ImageView
+                android:id="@+id/activity_add_property_sold_date_iv"
+                style="@style/detailIcon"
+                android:layout_width="@dimen/fragment_add_property_image_size"
+                android:layout_height="@dimen/fragment_add_property_image_size"
+                android:contentDescription="@string/real_estate_agent"
+                android:src="@drawable/ic_sold_date"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_add_property_sold_date_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/activity_add_property_sold_date_et" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/activity_add_property_sold_date_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/fragment_add_property_spacing"
+                android:layout_marginTop="@dimen/fragment_add_property_padding"
+                android:autofillHints="@string/real_estate_agent"
+                android:hint="@string/sold_date"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconMode="custom"
+                app:endIconContentDescription="Date picker"
+                android:visibility="gone"
+                style="@style/editText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/activity_add_property_sold_date_iv"
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_agent_et">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activity_add_property_sold_date_et_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:clickable="false" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <Button
                 android:id="@+id/activity_add_property_save_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/fragment_add_property_spacing"
                 android:text="@string/save"
-                app:layout_constraintTop_toBottomOf="@id/activity_add_property_agent_et"
+                app:layout_constraintTop_toBottomOf="@id/activity_add_property_sold_date_et"
                 app:backgroundTint="@color/colorAccent"
                 />
 
