@@ -7,6 +7,7 @@ import com.openclassrooms.realestatemanager.models.enums.ServerState
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.modules.IoCoroutineScope
 import com.openclassrooms.realestatemanager.services.GeocoderClient
+import com.openclassrooms.realestatemanager.services.NotificationService
 import com.openclassrooms.realestatemanager.utils.Utils
 import com.openclassrooms.realestatemanager.utils.getGeoApifyUrl
 import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
@@ -28,7 +29,8 @@ class PropertyUseCase @Inject constructor(
     private val mPropertyRepository: PropertyRepository,
     private val mOfflinePropertyRepository: OfflinePropertyRepository,
     private val mUploadService: UploadService,
-    private val mGeocoderClient: GeocoderClient
+    private val mGeocoderClient: GeocoderClient,
+    private val mNotificationService: NotificationService
 ) {
 
     private val _stateFlow = MutableStateFlow<State>(State.Idle)
@@ -40,6 +42,10 @@ class PropertyUseCase @Inject constructor(
                 _stateFlow.value = result
                 if(result is State.Download.DownloadSuccess){
                     mOfflinePropertyRepository.updateDatabase(result.propertiesList)
+                }
+                else if(result is State.Upload.UploadSuccess.Success){
+                    mNotificationService.createNotification()
+                    mPropertyRepository.fetchProperties()
                 }
             }
         }
@@ -67,7 +73,6 @@ class PropertyUseCase @Inject constructor(
     suspend fun addProperty(property: Property) {
         if (Utils.isInternetAvailable(mContext)) {
             mPropertyRepository.addPropertyWithMedias(property)
-            mPropertyRepository.fetchProperties()
         }
         else {
             _stateFlow.value = State.Upload.Error(OfflineError())
@@ -84,7 +89,6 @@ class PropertyUseCase @Inject constructor(
         updatePropertyOffline(oldProperty, newProperty)
         if (Utils.isInternetAvailable(mContext)) {
             updatePropertyOnline(oldProperty, newProperty)
-            mPropertyRepository.fetchProperties()
         }
         else {
             _stateFlow.value = State.Upload.Error(OfflineError())
@@ -141,8 +145,6 @@ class PropertyUseCase @Inject constructor(
             updatePropertyLocation(property)
             mPropertyRepository.addProperty(property)
         }
-
-        mPropertyRepository.fetchProperties()
 
         return Result.success()
     }

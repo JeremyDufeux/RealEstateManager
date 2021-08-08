@@ -64,4 +64,8 @@
     <string name="room_amount">room amount</string>
     <string name="surface_amount">surface</string>
     <string name="please_enter_between">Please enter a %s between 0 and %d</string>
+    <string name="channel_name">Uploads</string>
+    <string name="channel_description">Upload notification channel</string>
+    <string name="notification_title">Uploads done!</string>
+    <string name="all_properties_has_been_uploaded">All properties has been uploaded!</string>
 </resources>

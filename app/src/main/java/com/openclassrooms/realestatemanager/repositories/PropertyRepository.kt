@@ -29,7 +29,7 @@ class PropertyRepository @Inject constructor(
     }
 
     fun addProperty(property: Property) {
-        mPropertyApiService.addProperty(property)
+        _stateFlow.value = mPropertyApiService.addProperty(property)
     }
 
     suspend fun addPropertyWithMedias(property: Property) {
@@ -43,7 +43,7 @@ class PropertyRepository @Inject constructor(
 
     suspend fun uploadMedia(mediaItem: MediaItem) {
         when (val state = mPropertyApiService.uploadMedia(mediaItem)) {
-            is State.Upload.UploadSuccess -> {
+            is State.Upload.UploadSuccess.SuccessWithUrl -> {
                 mediaItem.url = state.url
                 _stateFlow.value = State.Idle
             }
