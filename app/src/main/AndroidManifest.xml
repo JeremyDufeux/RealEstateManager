@@ -42,15 +42,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.details.DetailsActivity" />
+
+        <activity android:name=".ui.details.DetailsActivity"
+            android:parentActivityName=".ui.list.ListActivity" />
+
         <activity android:name=".ui.add.AddPropertyActivity" />
+
         <activity android:name=".ui.mediaViewer.MediaViewerActivity"
             android:theme="@style/fullscreenTheme"
             android:screenOrientation="fullSensor"/>
+
         <activity
             android:name=".ui.camera.CameraActivity"
             android:screenOrientation="portrait"
             android:theme="@style/fullscreenTheme"
+            android:parentActivityName=".ui.add.Hilt_AddPropertyActivity"
             tools:ignore="LockedOrientationActivity" />
 
         <meta-data
