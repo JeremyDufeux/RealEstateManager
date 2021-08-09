@@ -5,11 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.openclassrooms.realestatemanager.mappers.updatePriceVisibility
-import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiListView
+import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiMapView
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
 import com.openclassrooms.realestatemanager.services.LocationService
+import com.openclassrooms.realestatemanager.models.ui.PropertyUiListView
+import com.openclassrooms.realestatemanager.models.ui.PropertyUiMapView
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -25,6 +27,12 @@ class ListViewModel @Inject constructor(
     private var _stateLiveData : MutableLiveData<State> = MutableLiveData()
     val stateLiveData: LiveData<State> = _stateLiveData
 
+    private val _propertiesUiListViewLiveData: MutableLiveData<List<PropertyUiListView>> = MutableLiveData()
+    val propertiesUiListViewLiveData: LiveData<List<PropertyUiListView>> = _propertiesUiListViewLiveData
+    
+    private val _propertiesUiMapViewLiveData: MutableLiveData<List<PropertyUiMapView>> = MutableLiveData()
+    val propertiesUiMapViewLiveData: LiveData<List<PropertyUiMapView>> = _propertiesUiMapViewLiveData
+
     private val _location: MutableLiveData<Location> = MutableLiveData()
     val location: LiveData<Location> = _location
 
@@ -36,7 +44,8 @@ class ListViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             mPropertyUseCase.stateFlow.collect { state ->
                 if (state is State.Download.DownloadSuccess){
-                    updatePropertyFields(state.propertiesList)
+                    _propertiesUiListViewLiveData.postValue(propertyToPropertyUiListView(state.propertiesList))
+                    _propertiesUiMapViewLiveData.postValue(propertyToPropertyUiMapView(state.propertiesList))
                 }
                 _stateLiveData.postValue(state)
             }
@@ -60,11 +69,5 @@ class ListViewModel @Inject constructor(
 
     fun stopLocationUpdates() {
         mLocationService.stopLocationUpdates()
-    }
-
-    private fun updatePropertyFields(properties: List<Property>) {
-        for (property in properties){
-            updatePriceVisibility(property)
-        }
     }
 }

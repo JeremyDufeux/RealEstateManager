@@ -21,10 +21,10 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentMapBinding
-import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.ui.details.DetailsActivity
+import com.openclassrooms.realestatemanager.models.ui.PropertyUiMapView
 import com.openclassrooms.realestatemanager.utils.showToast
 import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import dagger.hilt.android.AndroidEntryPoint
@@ -75,6 +75,7 @@ class MapFragment : Fragment(),
 
     private fun startObserver() {
         mViewModel.stateLiveData.observe(this, stateObserver)
+        mViewModel.propertiesUiMapViewLiveData.observe(this, propertiesObserver)
     }
 
     private val stateObserver = Observer<State> { state ->
@@ -84,7 +85,6 @@ class MapFragment : Fragment(),
             }
             is State.Download.DownloadSuccess -> {
                 mBinding.mapViewFragmentPb.visibility = View.GONE
-                updateMap(state.propertiesList)
             }
             is State.Download.Error -> {
                 mBinding.mapViewFragmentPb.visibility = View.GONE
@@ -99,7 +99,11 @@ class MapFragment : Fragment(),
         }
     }
 
-    private fun updateMap(properties: List<Property>){
+    private val propertiesObserver = Observer<List<PropertyUiMapView>> { properties ->
+        updateMap(properties)
+    }
+
+    private fun updateMap(properties: List<PropertyUiMapView>){
         mMap.clear()
 
         for(property in properties){

@@ -22,9 +22,9 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBinding
 import com.openclassrooms.realestatemanager.models.MediaItem
-import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
+import com.openclassrooms.realestatemanager.models.ui.PropertyUiAddView
 import com.openclassrooms.realestatemanager.ui.camera.CAMERA_RESULT_MEDIA_KEY
 import com.openclassrooms.realestatemanager.ui.camera.CameraActivity
 import com.openclassrooms.realestatemanager.ui.mediaViewer.*
@@ -128,17 +128,16 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
             }
         }
 
-
-    private val propertyObserver = Observer<Property> { property ->
+    private val propertyObserver = Observer<PropertyUiAddView> { property ->
         mBinding.apply {
             val typeIndex = mTypeAdapter.getPosition(property.type)
             mBinding.activityAddPropertyTypeTvInput.setText(mTypeAdapter.getItem(typeIndex).toString(), false)
 
-            if(property.price != null) activityAddPropertyPriceEtInput.setText(property.price.toString())
-            if(property.surface != null) activityAddPropertySurfaceEtInput.setText(property.surface.toString())
-            if(property.roomsAmount != null) activityAddPropertyRoomsEtInput.setText(property.roomsAmount.toString())
-            if(property.bathroomsAmount != null) activityAddPropertyBathroomsEtInput.setText(property.bathroomsAmount.toString())
-            if(property.bedroomsAmount != null) activityAddPropertyBedroomsEtInput.setText(property.bedroomsAmount.toString())
+            activityAddPropertyPriceEtInput.setText(property.price)
+            activityAddPropertySurfaceEtInput.setText(property.surface)
+            activityAddPropertyRoomsEtInput.setText(property.roomsAmount)
+            activityAddPropertyBathroomsEtInput.setText(property.bathroomsAmount)
+            activityAddPropertyBedroomsEtInput.setText(property.bedroomsAmount)
             activityAddPropertyDescriptionEtInput.setText(property.description)
             activityAddPropertyAddressLine1EtInput.setText(property.addressLine1)
             activityAddPropertyAddressLine2EtInput.setText(property.addressLine2)
@@ -148,11 +147,10 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
             activityAddPropertyAgentEtInput.setText(property.agentName)
 
             activityAddPropertySoldDateEt.visibility = View.VISIBLE
+            activityAddPropertySoldDateIv.visibility = View.VISIBLE
             activityAddPropertySoldDateEt.setEndIconOnClickListener { openDatePicker() }
             activityAddPropertySoldDateEtInput.setText(property.soldDate?.let { formatCalendarToString(it) })
             activityAddPropertySoldDateEtInput.setOnClickListener { openDatePicker() }
-            activityAddPropertySoldDateIv.visibility = View.VISIBLE
-
         }
 
         for(poi in property.pointOfInterestList){
@@ -391,5 +389,3 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         mViewModel.removeMediaAtPosition(position)
     }
 }
-
-

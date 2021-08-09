@@ -24,7 +24,6 @@ data class PropertyEntity(
     var latitude: Double?,
     var longitude: Double?,
     var mapPictureUrl: String?,
-    var available: Boolean,
     var postDate: Long,
     var soldDate: Long?,
     var agentName: String,

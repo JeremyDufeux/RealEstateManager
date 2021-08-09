@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
-import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
+import com.openclassrooms.realestatemanager.models.ui.PropertyUiListView
 import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.ui.details.DetailsActivity
 import com.openclassrooms.realestatemanager.utils.showToast
@@ -27,7 +27,7 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
     private val mViewModel: ListViewModel by activityViewModels()
     private lateinit var mBinding : FragmentListBinding
     private val mAdapter = PropertyListAdapter(this)
-    private lateinit var mPropertyList : List<Property>
+    private lateinit var mPropertyList : List<PropertyUiListView>
 
     companion object {
         fun newInstance() = ListFragment()
@@ -41,6 +41,7 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
 
     private fun configureViewModel() {
         mViewModel.stateLiveData.observe(this, stateObserver)
+        mViewModel.propertiesUiListViewLiveData.observe(this, propertiesObserver)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -62,14 +63,17 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
         mBinding.fragmentListRv.addItemDecoration(itemDecoration)
     }
 
+    private val propertiesObserver = Observer<List<PropertyUiListView>> { properties ->
+        mPropertyList = properties
+        mAdapter.updateList(properties)
+    }
+
     private val stateObserver = Observer<State> { state ->
         when(state) {
             is State.Download.Downloading -> {
                 mBinding.fragmentListSrl.isRefreshing = true
             }
             is State.Download.DownloadSuccess ->{
-                mPropertyList = state.propertiesList
-                mAdapter.updateList(mPropertyList)
                 hideProgress()
             }
             is State.Download.Error -> {

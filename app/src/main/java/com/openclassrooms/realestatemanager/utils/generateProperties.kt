@@ -37,7 +37,6 @@ fun generateProperties() : List<Property> {
             latitude = 40.7589408497391,
             longitude = -73.97983110154246,
             pointOfInterestList = listOf(PointOfInterest.SCHOOL, PointOfInterest.PARK),
-            available = true,
             postDate = Calendar.getInstance().also { it.set(2021, 5, 20) }.timeInMillis,
             agentName = "John McLaughlin",
             mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.979831,40.758941&zoom=14.8&marker=lonlat:-73.97983110154246,40.7589408497391;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
@@ -80,7 +79,6 @@ fun generateProperties() : List<Property> {
                 PointOfInterest.PUBLIC_TRANSPORT,
                 PointOfInterest.SCHOOL
             ),
-            available = true,
             postDate = Calendar.getInstance().also { it.set(2021, 5, 18) }.timeInMillis,
             agentName = "Kristen Fortino",
             mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.9648487396234,40.759524542858905&zoom=16&marker=lonlat:-73.9648487396234,40.759524542858905;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
@@ -125,7 +123,6 @@ fun generateProperties() : List<Property> {
                 PointOfInterest.SWIMMING_POOL,
                 PointOfInterest.PUBLIC_TRANSPORT
             ),
-            available = true,
             postDate = Calendar.getInstance().also { it.set(2021, 4, 28) }.timeInMillis,
             agentName = "Douglas Elliman",
             mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-74.19466925910078,40.553881452248525&zoom=16&marker=lonlat:-74.19466925910078,40.553881452248525;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
@@ -163,7 +160,6 @@ fun generateProperties() : List<Property> {
                 PointOfInterest.GROCERY,
                 PointOfInterest.FITNESS_CLUB
             ),
-            available = true,
             postDate = Calendar.getInstance().also { it.set(2021, 2, 6) }.timeInMillis,
             agentName = "Douglas Elliman",
             mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.97782416556161,40.76482158883576&zoom=16&marker=lonlat:-73.97782416556161,40.76482158883576;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
@@ -191,7 +187,6 @@ fun generateProperties() : List<Property> {
             latitude = 40.697167874862615,
             longitude = -73.78038285309472,
             pointOfInterestList = listOf(PointOfInterest.GROCERY, PointOfInterest.PUBLIC_TRANSPORT),
-            available = true,
             postDate = Calendar.getInstance().also { it.set(2021, 4, 15) }.timeInMillis,
             agentName = "John McLaughlin",
             mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.78038285309472,40.697167874862615&zoom=16&marker=lonlat:-73.78038285309472,40.697167874862615;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
@@ -222,7 +217,6 @@ fun generateProperties() : List<Property> {
                 PointOfInterest.PUBLIC_TRANSPORT,
                 PointOfInterest.FITNESS_CLUB
             ),
-            available = true,
             postDate = Calendar.getInstance().also { it.set(2021, 3, 10) }.timeInMillis,
             agentName = "Kristen Fortino",
             mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.94261050737286,40.82568643585645&zoom=16&marker=lonlat:-73.94261050737286,40.82568643585645;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"
@@ -262,7 +256,6 @@ fun generateProperties() : List<Property> {
                 PointOfInterest.PUBLIC_TRANSPORT,
                 PointOfInterest.FITNESS_CLUB
             ),
-            available = true,
             postDate = Calendar.getInstance().also { it.set(2021, 4, 20) }.timeInMillis,
             agentName = "Douglas Elliman",
             mapPictureUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:-73.95191893544883,40.7267017136229&zoom=16&marker=lonlat:-73.95191893544883,40.7267017136229;color:%23ff4081;size:medium&apiKey=${BuildConfig.GEOAPIFY_API_KEY}"

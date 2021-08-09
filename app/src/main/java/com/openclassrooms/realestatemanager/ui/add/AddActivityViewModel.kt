@@ -1,10 +1,12 @@
 package com.openclassrooms.realestatemanager.ui.add
 
 import androidx.lifecycle.*
+import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiAddView
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
+import com.openclassrooms.realestatemanager.models.ui.PropertyUiAddView
 import com.openclassrooms.realestatemanager.modules.IoCoroutineScope
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
 import com.openclassrooms.realestatemanager.services.GeocoderClient
@@ -27,14 +29,14 @@ class AddActivityViewModel @Inject constructor(
     private val mGeocoderClient: GeocoderClient
 ) : ViewModel(){
 
-    private var _propertyLiveData : MutableLiveData<Property> = MutableLiveData()
-    var propertyLiveData: LiveData<Property> = _propertyLiveData
+    private var _propertyLiveData : MutableLiveData<PropertyUiAddView> = MutableLiveData()
+    var propertyLiveData: LiveData<PropertyUiAddView> = _propertyLiveData
 
     private val _mediaListLiveData = MutableLiveData<List<MediaItem>>()
     val mediaListLiveData : LiveData<List<MediaItem>> = _mediaListLiveData
 
     private var propertyId = savedStateHandle.get<String>(BUNDLE_KEY_PROPERTY_ID)
-    var editMode = false
+    private var editMode = false
 
     var propertyType : PropertyType = PropertyType.FLAT
     private var mMediaList : MutableList<MediaItem> = mutableListOf()
@@ -59,7 +61,7 @@ class AddActivityViewModel @Inject constructor(
             editMode = true
             viewModelScope.launch(Dispatchers.IO) {
                 mPropertyUseCase.getPropertyWithIdFlow(propertyId!!).collect { property ->
-                    _propertyLiveData.postValue(property)
+                    _propertyLiveData.postValue(propertyToPropertyUiAddView(property))
                     postDate = property.postDate
                     mMediaList = property.mediaList.toMutableList()
                     _mediaListLiveData.postValue(mMediaList)
@@ -94,7 +96,6 @@ class AddActivityViewModel @Inject constructor(
                 longitude = latLng?.longitude,
                 mapPictureUrl = getGeoApifyUrl(latLng?.latitude, latLng?.longitude),
                 pointOfInterestList = mPointOfInterestList,
-                available = true,
                 postDate = postDate ?: Calendar.getInstance().timeInMillis,
                 soldDate = soldDate,
                 agentName = agent

@@ -16,11 +16,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding
-import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.models.ui.PropertyUiDetailsView
 import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_MEDIA_LIST
 import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_SELECTED_MEDIA_INDEX
 import com.openclassrooms.realestatemanager.ui.mediaViewer.MediaViewerActivity
-import com.openclassrooms.realestatemanager.utils.formatCalendarToString
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -60,7 +59,7 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
         mViewModel.setPropertyId(propertyId)
     }
 
-    private val propertyObserver = Observer<Property> { property ->
+    private val propertyObserver = Observer<PropertyUiDetailsView> { property ->
 
         mMediaAdapter.submitList(property.mediaList)
 
@@ -87,34 +86,34 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
         mBinding.apply {
             fragmentDetailTypeTv.text = property.type.description
 
-            fragmentDetailPriceTv.text = String.format("$%,d",property.price)
+            fragmentDetailPriceTv.text = property.price
             fragmentDetailPriceTv.visibility = property.priceVisibility
 
             fragmentDetailDescriptionTv.text = property.description
             fragmentDetailDescriptionTv.visibility = property.descriptionVisibility
             fragmentDetailDescriptionTitleTv.visibility = property.descriptionVisibility
 
-            fragmentDetailSurfaceTv.text = String.format("%d sq ft",property.surface)
+            fragmentDetailSurfaceTv.text = property.surface
             fragmentDetailSurfaceTv.visibility = property.surfaceVisibility
             fragmentDetailSurfaceTitleTv.visibility = property.surfaceVisibility
             fragmentDetailSurfaceIv.visibility = property.surfaceVisibility
 
-            fragmentDetailRoomsTv.text = property.roomsAmount.toString()
+            fragmentDetailRoomsTv.text = property.roomsAmount
             fragmentDetailRoomsTv.visibility = property.roomsVisibility
             fragmentDetailRoomsIv.visibility = property.roomsVisibility
             fragmentDetailRoomsTitleTv.visibility = property.roomsVisibility
 
-            fragmentDetailBathroomsTv.text = property.bathroomsAmount.toString()
+            fragmentDetailBathroomsTv.text = property.bathroomsAmount
             fragmentDetailBathroomsTv.visibility = property.bathroomsVisibility
             fragmentDetailBathroomsIv.visibility = property.bathroomsVisibility
             fragmentDetailBathroomsTitleTv.visibility = property.bathroomsVisibility
 
-            fragmentDetailBedroomsTv.text = property.bedroomsAmount.toString()
+            fragmentDetailBedroomsTv.text = property.bedroomsAmount
             fragmentDetailBedroomsTv.visibility = property.bedroomsVisibility
             fragmentDetailBedroomsIv.visibility = property.bedroomsVisibility
             fragmentDetailBedroomsTitleTv.visibility = property.bedroomsVisibility
 
-            fragmentDetailLocationTv.text = property.formattedAddress
+            fragmentDetailLocationTv.text = property.address
             fragmentDetailLocationTv.visibility = property.addressVisibility
             fragmentDetailLocationIv.visibility = property.addressVisibility
             fragmentDetailLocationTitleTv.visibility = property.addressVisibility
@@ -127,9 +126,9 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
             mBinding.fragmentDetailPointOfInterestIv.visibility = property.pointsOfInterestVisibility
             mBinding.fragmentDetailPointOfInterestTitleTv.visibility = property.pointsOfInterestVisibility
 
-            fragmentDetailPostDateTv.text = formatCalendarToString(property.postDate)
+            fragmentDetailPostDateTv.text = property.postDate
 
-            fragmentDetailSoldDateTv.text = property.soldDate?.let { formatCalendarToString(it) }
+            fragmentDetailSoldDateTv.text = property.soldDate
             fragmentDetailSoldDateTv.visibility = property.soldDateVisibility
             fragmentDetailSoldDateTitleTv.visibility = property.soldDateVisibility
 
