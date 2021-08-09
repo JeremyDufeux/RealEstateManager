@@ -7,6 +7,7 @@
     <string name="menu_add">Add</string>
     <string name="menu_save">Save</string>
     <string name="toolbar_title_add_property">Add property</string>
+    <string name="toolbar_title_settings">Settings</string>
     <string name="toolbar_title_property_details">Property details</string>
     <string name="property_picture">Property picture</string>
     <string name="media">Media</string>
@@ -77,4 +78,8 @@
     <string name="poi_swimming_pool">Swimming pool</string>
     <string name="poi_fitness_club">Fitness club</string>
     <string name="poi_parking">Parking</string>
+    <string name="add_property">Add a property</string>
+    <string name="settings">Settings</string>
+    <string name="currency">Currency</string>
+    <string name="unit">Unit</string>
 </resources>

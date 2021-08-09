@@ -13,6 +13,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityListBinding
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.ui.add.AddPropertyActivity
+import com.openclassrooms.realestatemanager.ui.settings.SettingsActivity
 import com.openclassrooms.realestatemanager.utils.showToast
 import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,9 +31,13 @@ class ListActivity : AppCompatActivity() {
         mBinding = ActivityListBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
+        configureViewModel()
         configureToolBar()
         configureViewPager()
+        configureUi()
+    }
 
+    private fun configureViewModel(){
         mViewModel.stateLiveData.observe(this, propertyRepositoryObserver)
     }
 
@@ -59,6 +64,10 @@ class ListActivity : AppCompatActivity() {
         }.attach()
     }
 
+    private fun configureUi(){
+        mBinding.activityListAddBtn.setOnClickListener { openAddPropertyActivity() }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.list_activity_toolbar_menu, menu)
         return true
@@ -66,13 +75,18 @@ class ListActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.add_property -> openAddPropertyActivity()
+            R.id.settings -> openSettingsActivity()
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun openAddPropertyActivity() {
         val addPropertyActivityIntent = Intent(this, AddPropertyActivity::class.java)
+        startActivity(addPropertyActivityIntent)
+    }
+
+    private fun openSettingsActivity() {
+        val addPropertyActivityIntent = Intent(this, SettingsActivity::class.java)
         startActivity(addPropertyActivityIntent)
     }
 
