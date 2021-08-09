@@ -39,6 +39,8 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
     private val mAdapter = AddPropertyMediaListAdapter(this)
 
+    private lateinit var mTypeAdapter: ArrayAdapter<PropertyType>
+
     private val mChipList = mutableMapOf<PointOfInterest, Chip>()
 
     override fun onCreate(savedInstancProperty: Bundle?) {
@@ -60,14 +62,15 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
     }
 
     private fun configureUi() {
-        // Property type dropdown list
-        val adapter: ArrayAdapter<PropertyType> = ArrayAdapter<PropertyType>(
+        mTypeAdapter= ArrayAdapter<PropertyType>(
             this,
             R.layout.list_item,
             PropertyType.values()
         )
+
+        // Property type dropdown list
         mBinding.activityAddPropertyTypeTvInput.apply {
-            setAdapter(adapter)
+            setAdapter(mTypeAdapter)
             setText(adapter.getItem(0).toString(), false)
         }
 
@@ -128,6 +131,9 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
     private val propertyObserver = Observer<Property> { property ->
         mBinding.apply {
+            val typeIndex = mTypeAdapter.getPosition(property.type)
+            mBinding.activityAddPropertyTypeTvInput.setText(mTypeAdapter.getItem(typeIndex).toString(), false)
+
             if(property.price != null) activityAddPropertyPriceEtInput.setText(property.price.toString())
             if(property.surface != null) activityAddPropertySurfaceEtInput.setText(property.surface.toString())
             if(property.roomsAmount != null) activityAddPropertyRoomsEtInput.setText(property.roomsAmount.toString())
