@@ -16,7 +16,7 @@ class UploadService @Inject constructor(
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val notificationWork = OneTimeWorkRequest.Builder(UploadWorker::class.java)
+        val uploadWork = OneTimeWorkRequest.Builder(UploadWorker::class.java)
             .setConstraints(constraints)
             .setInitialDelay(10000, TimeUnit.MILLISECONDS)
             .setBackoffCriteria(
@@ -25,6 +25,6 @@ class UploadService @Inject constructor(
                 TimeUnit.MILLISECONDS)
             .build()
 
-        WorkManager.getInstance(mContext).enqueueUniqueWork(UPLOAD_WORKER_NAME, ExistingWorkPolicy.REPLACE, notificationWork)
+        WorkManager.getInstance(mContext).enqueueUniqueWork(UPLOAD_WORKER_NAME, ExistingWorkPolicy.REPLACE, uploadWork)
     }
 }
