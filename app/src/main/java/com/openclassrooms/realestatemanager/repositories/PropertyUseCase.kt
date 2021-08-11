@@ -60,7 +60,7 @@ class PropertyUseCase @Inject constructor(
         }
     }
 
-    private fun getOfflineProperties() {
+    fun getOfflineProperties() {
         mOfflinePropertyRepository.getProperties().let {
             _stateFlow.value = State.Download.DownloadSuccess(it)
         }

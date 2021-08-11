@@ -49,6 +49,9 @@ class ListViewModel @Inject constructor(
 
     fun fetchProperties(){
         viewModelScope.launch(Dispatchers.IO) {
+            mPropertyUseCase.getOfflineProperties()
+        }
+        viewModelScope.launch(Dispatchers.IO) {
             mPropertyUseCase.fetchProperties()
         }
     }
