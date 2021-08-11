@@ -1,18 +1,29 @@
 package com.openclassrooms.realestatemanager.mappers
 
 import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.models.enums.Currency
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiListView
+import com.openclassrooms.realestatemanager.utils.Utils.convertDollarsToEuros
 
-fun propertyToPropertyUiListView(properties: List<Property>): List<PropertyUiListView>{
+fun propertyToPropertyUiListView(properties: List<Property>, currency: Currency): List<PropertyUiListView>{
     val propertiesUi = mutableListOf<PropertyUiListView>()
     for (property in properties){
-        val price = if(property.price != null) String.format("$%,d", property.price) else ""
+        val priceString =  if(property.price != null){
+            if(currency == Currency.DOLLAR) {
+                String.format("%s%,d", Currency.DOLLAR.symbol, property.price?.toInt())
+            } else {
+                String.format("%,d%s", convertDollarsToEuros(property.price!!).toInt(), Currency.EURO.symbol)
+            }
+        } else {
+            ""
+        }
 
         propertiesUi.add(
             PropertyUiListView(
                 id = property.id,
                 type = property.type,
-                price = price,
+                price = property.price,
+                priceString = priceString,
                 city = property.city,
                 pictureUrl = property.mediaList[0].url
             )

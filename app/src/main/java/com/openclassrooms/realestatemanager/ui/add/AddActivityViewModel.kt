@@ -4,18 +4,25 @@ import androidx.lifecycle.*
 import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiAddView
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.models.UserData
+import com.openclassrooms.realestatemanager.models.enums.Currency
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
+import com.openclassrooms.realestatemanager.models.enums.Unit
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiAddView
 import com.openclassrooms.realestatemanager.modules.IoCoroutineScope
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
+import com.openclassrooms.realestatemanager.repositories.UserDataRepository
 import com.openclassrooms.realestatemanager.services.GeocoderClient
 import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
+import com.openclassrooms.realestatemanager.utils.Utils.convertEurosToDollars
+import com.openclassrooms.realestatemanager.utils.Utils.convertSquareMetersToSquareFoot
 import com.openclassrooms.realestatemanager.utils.getGeoApifyUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -26,7 +33,8 @@ class AddActivityViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     @IoCoroutineScope private val mIoScope: CoroutineScope,
     private val mPropertyUseCase: PropertyUseCase,
-    private val mGeocoderClient: GeocoderClient
+    private val mGeocoderClient: GeocoderClient,
+    private val mUserDataRepository: UserDataRepository
 ) : ViewModel(){
 
     private var _propertyLiveData : MutableLiveData<PropertyUiAddView> = MutableLiveData()
@@ -35,13 +43,16 @@ class AddActivityViewModel @Inject constructor(
     private val _mediaListLiveData = MutableLiveData<List<MediaItem>>()
     val mediaListLiveData : LiveData<List<MediaItem>> = _mediaListLiveData
 
+    private var _userDataLiveData : MutableLiveData<UserData> = MutableLiveData()
+    var userDataLiveData: LiveData<UserData> = _userDataLiveData
+
     private var propertyId = savedStateHandle.get<String>(BUNDLE_KEY_PROPERTY_ID)
     private var editMode = false
 
     var propertyType : PropertyType = PropertyType.FLAT
     private var mMediaList : MutableList<MediaItem> = mutableListOf()
-    var price: Long? = null
-    var surface: Int? = null
+    var price: Double? = null
+    var surface: Double? = null
     var rooms: Int? = null
     var bathrooms: Int? = null
     var bedrooms: Int? = null
@@ -60,14 +71,24 @@ class AddActivityViewModel @Inject constructor(
         if (propertyId != null) {
             editMode = true
             viewModelScope.launch(Dispatchers.IO) {
-                mPropertyUseCase.getPropertyWithIdFlow(propertyId!!).collect { property ->
-                    _propertyLiveData.postValue(propertyToPropertyUiAddView(property))
-                    postDate = property.postDate
-                    mMediaList = property.mediaList.toMutableList()
-                    _mediaListLiveData.postValue(mMediaList)
-                }
+                mPropertyUseCase.getPropertyWithIdFlow(propertyId!!)
+                    .combine(mUserDataRepository.userDataFlow){ property, userData ->
+                        _userDataLiveData.postValue(userData)
+                        propertyToPropertyUiAddView(property, userData)
+                    }
+                    .collect { property ->
+                        postDate = property.postDate
+                        mMediaList = property.mediaList.toMutableList()
+                        _mediaListLiveData.postValue(mMediaList)
+                        _propertyLiveData.postValue(property)
+                    }
             }
         } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                mUserDataRepository.userDataFlow.collect {
+                    _userDataLiveData.postValue(it)
+                }
+            }
             propertyId = UUID.randomUUID().toString()
         }
     }
@@ -130,6 +151,30 @@ class AddActivityViewModel @Inject constructor(
             mMediaList[index] = mediaItem
 
             _mediaListLiveData.postValue(mMediaList)
+        }
+    }
+
+    fun setPrice(newPrice: String) {
+        price = if (newPrice != _propertyLiveData.value?.priceString){
+            if(userDataLiveData.value?.currency == Currency.EURO) {
+                convertEurosToDollars(newPrice.toDouble())
+            } else {
+                newPrice.toDouble()
+            }
+        } else {
+            _propertyLiveData.value?.price
+        }
+    }
+
+    fun setSurface(newSurface: String) {
+        surface = if (newSurface != _propertyLiveData.value?.surfaceString){
+            if(userDataLiveData.value?.unit == Unit.METRIC) {
+                convertSquareMetersToSquareFoot(newSurface.toDouble())
+            } else {
+                newSurface.toDouble()
+            }
+        } else {
+            _propertyLiveData.value?.surface
         }
     }
 }

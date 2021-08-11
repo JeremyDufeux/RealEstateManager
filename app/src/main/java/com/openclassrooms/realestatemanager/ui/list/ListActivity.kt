@@ -68,6 +68,11 @@ class ListActivity : AppCompatActivity() {
         mBinding.activityListAddBtn.setOnClickListener { openAddPropertyActivity() }
     }
 
+    override fun onStart() {
+        mViewModel.startFlowObserver()
+        super.onStart()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.list_activity_toolbar_menu, menu)
         return true

@@ -2,37 +2,47 @@ package com.openclassrooms.realestatemanager.repositories
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.openclassrooms.realestatemanager.models.UserData
 import com.openclassrooms.realestatemanager.models.enums.Currency
 import com.openclassrooms.realestatemanager.models.enums.Unit
 import com.openclassrooms.realestatemanager.utils.find
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
+import javax.inject.Singleton
 
 const val FILE_NAME = "UserData"
 const val PREF_KEY_UNIT = "PREF_KEY_UNIT"
 const val PREF_KEY_CURRENCY = "PREF_KEY_CURRENCY"
 
+@Singleton
 class UserDataRepository @Inject constructor(
     @ApplicationContext private val mContext: Context
 ) {
     private var mPreferences: SharedPreferences = mContext.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
 
-    val unitFlow: Flow<Unit> = flow{
-        val unitString = mPreferences.getString(PREF_KEY_UNIT, Unit.IMPERIAL.unitName)!!
-        val unit = Unit::unitName.find(unitString)!!
-        emit(unit)
+    private val _userDataFlow = MutableStateFlow(UserData(Unit.IMPERIAL, Currency.DOLLAR))
+    val userDataFlow = _userDataFlow.asStateFlow()
+
+    init {
+        readUserData()
     }
 
-    val currencyFlow: Flow<Currency> = flow{
+    private fun readUserData() {
+        val unitString = mPreferences.getString(PREF_KEY_UNIT, Unit.IMPERIAL.unitName)!!
+        val unit = Unit::unitName.find(unitString)!!
+
         val currencyString = mPreferences.getString(PREF_KEY_CURRENCY, Currency.DOLLAR.currencyName)!!
         val currency = Currency::currencyName.find(currencyString)!!
-        emit(currency)
+
+        _userDataFlow.value = UserData(unit, currency)
     }
 
     fun saveUserData(unit: Unit, currency: Currency){
         mPreferences.edit().putString(PREF_KEY_UNIT, unit.unitName).apply()
         mPreferences.edit().putString(PREF_KEY_CURRENCY, currency.currencyName).apply()
+
+        _userDataFlow.value = UserData(unit, currency)
     }
 }

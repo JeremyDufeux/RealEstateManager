@@ -8,8 +8,10 @@ import com.openclassrooms.realestatemanager.models.enums.PropertyType
 data class PropertyUiDetailsView(
     var id: String = "",
     var type: PropertyType = PropertyType.FLAT,
-    var price: String,
-    var surface: String,
+    val price: Double?,
+    val priceString: String,
+    var surface: Double?,
+    var surfaceString: String,
     var roomsAmount: String,
     var bathroomsAmount: String,
     var bedroomsAmount: String,
@@ -25,13 +27,13 @@ data class PropertyUiDetailsView(
     var mediaList: List<MediaItem> = listOf(),
     var pointOfInterestList: List<PointOfInterest> = listOf(),
 ){
-    val priceVisibility: Int = if (price.isBlank()){
+    val priceVisibility: Int = if (priceString.isBlank()){
         View.GONE
     } else {
         View.VISIBLE
     }
 
-    val surfaceVisibility: Int = if (surface.isBlank()){
+    val surfaceVisibility: Int = if (surfaceString.isBlank()){
         View.GONE
     } else {
         View.VISIBLE

@@ -22,12 +22,14 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBinding
 import com.openclassrooms.realestatemanager.models.MediaItem
+import com.openclassrooms.realestatemanager.models.UserData
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiAddView
 import com.openclassrooms.realestatemanager.ui.camera.CAMERA_RESULT_MEDIA_KEY
 import com.openclassrooms.realestatemanager.ui.camera.CameraActivity
 import com.openclassrooms.realestatemanager.ui.mediaViewer.*
+import com.openclassrooms.realestatemanager.utils.Utils.*
 import com.openclassrooms.realestatemanager.utils.formatCalendarToString
 import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,6 +61,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
     private fun configureViewModel() {
         mViewModel.propertyLiveData.observe(this, propertyObserver)
+        mViewModel.userDataLiveData.observe(this, userDataObserver)
     }
 
     private fun configureUi() {
@@ -121,6 +124,11 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         mAdapter.notifyDataSetChanged()
     }
 
+    private val userDataObserver = Observer<UserData> { userData ->
+        mBinding.activityAddPropertyPriceEt.suffixText = userData.currency.symbol
+        mBinding.activityAddPropertySurfaceEt.suffixText = userData.unit.abbreviation
+    }
+
     private fun dropdownListener() =
         AdapterView.OnItemClickListener { parent, _, position, _ ->
             if (parent != null) {
@@ -133,8 +141,8 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
             val typeIndex = mTypeAdapter.getPosition(property.type)
             mBinding.activityAddPropertyTypeTvInput.setText(mTypeAdapter.getItem(typeIndex).toString(), false)
 
-            activityAddPropertyPriceEtInput.setText(property.price)
-            activityAddPropertySurfaceEtInput.setText(property.surface)
+            activityAddPropertyPriceEtInput.setText(property.priceString)
+            activityAddPropertySurfaceEtInput.setText(property.surfaceString)
             activityAddPropertyRoomsEtInput.setText(property.roomsAmount)
             activityAddPropertyBathroomsEtInput.setText(property.bathroomsAmount)
             activityAddPropertyBedroomsEtInput.setText(property.bedroomsAmount)
@@ -187,7 +195,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         mBinding.apply {
             if (!activityAddPropertyPriceEtInput.text.isNullOrEmpty()) {
                 try {
-                    mViewModel.price = activityAddPropertyPriceEtInput.text.toString().toLong()
+                    mViewModel.setPrice(activityAddPropertyPriceEtInput.text.toString())
                 } catch (e: Exception) {
                     showToast(
                         this@AddPropertyActivity,
@@ -203,7 +211,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
             if (!activityAddPropertySurfaceEtInput.text.isNullOrEmpty()) {
                 try {
-                    mViewModel.surface = activityAddPropertySurfaceEtInput.text.toString().toInt()
+                    mViewModel.setSurface(activityAddPropertySurfaceEtInput.text.toString())
                 } catch (e: Exception) {
                     showToast(
                         this@AddPropertyActivity,

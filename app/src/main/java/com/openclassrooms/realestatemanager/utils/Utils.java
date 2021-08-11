@@ -16,17 +16,49 @@ public class Utils {
     /**
      * Conversion d'un prix d'un bien immobilier (Dollars vers Euros)
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
-     * @param dollars
-     * @return
+     * @param dollars Dollars
+     * @return euros
      */
-    public static int convertDollarToEuro(int dollars){
-        return (int) Math.round(dollars * 0.812);
+    public static double convertDollarsToEuros(double dollars){
+        return dollars * 0.852483;
+    }
+
+    /**
+     * Conversion d'un prix d'un bien immobilier (Euros vers Dollars)
+     * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
+     * @param euros Euros
+     * @return dollars
+     */
+    public static double convertEurosToDollars(double euros){
+        return euros * 1.17304;
+    }
+
+    /**
+     * Conversion d'une surface (pied carré vers metre carré)
+     * @param sqFt square foot
+     * @return square meter
+     */
+    public static double convertSquareFootToSquareMeters(double sqFt){
+        return sqFt * 0.09290304;
+    }
+
+    /**
+     * Conversion d'une surface (metre carré vers pied carré)
+     * @param m2 square meter
+     * @return square foot
+     */
+    public static double convertSquareMetersToSquareFoot(double m2){
+        return m2 * 10.76391041671;
+    }
+
+    public static double round(double value, int scale) {
+        return Math.round(value * Math.pow(10, scale)) / Math.pow(10, scale);
     }
 
     /**
      * Conversion de la date d'aujourd'hui en un format plus approprié
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
-     * @return
+     * @return today date as formatted string
      */
     public static String getTodayDate(){
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");

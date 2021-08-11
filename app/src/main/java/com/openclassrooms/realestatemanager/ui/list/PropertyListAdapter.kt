@@ -59,7 +59,7 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
                 .into(mBinding.fragmentListItemIv)
 
             mBinding.fragmentListItemCityTv.text = property.city
-            mBinding.fragmentListItemPriceTv.text = property.price
+            mBinding.fragmentListItemPriceTv.text = property.priceString
             mBinding.fragmentListItemPriceTv.visibility = property.priceVisibility
             mBinding.fragmentListItemTypeTv.text = property.type.description
 

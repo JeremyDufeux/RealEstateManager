@@ -6,11 +6,12 @@ import com.openclassrooms.realestatemanager.models.enums.PropertyType
 data class PropertyUiListView(
     val id: String = "",
     val type: PropertyType = PropertyType.FLAT,
-    val price: String,
+    val price: Double?,
+    val priceString: String,
     val city: String? = null,
     val pictureUrl: String
 ){
-    val priceVisibility: Int = if (price.isBlank()){
+    val priceVisibility: Int = if (priceString.isBlank()){
         View.INVISIBLE
     } else {
         View.VISIBLE

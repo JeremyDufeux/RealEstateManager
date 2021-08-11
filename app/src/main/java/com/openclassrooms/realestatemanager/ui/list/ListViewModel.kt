@@ -8,13 +8,17 @@ import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiListView
 import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiMapView
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
-import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
-import com.openclassrooms.realestatemanager.services.LocationService
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiListView
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiMapView
+import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
+import com.openclassrooms.realestatemanager.repositories.UserDataRepository
+import com.openclassrooms.realestatemanager.services.LocationService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +26,7 @@ import javax.inject.Inject
 class ListViewModel @Inject constructor(
     private val mPropertyUseCase: PropertyUseCase,
     private val mLocationService: LocationService,
+    private val mUserDataRepository: UserDataRepository
     ) : ViewModel(){
 
     private var _stateLiveData : MutableLiveData<State> = MutableLiveData()
@@ -40,21 +45,27 @@ class ListViewModel @Inject constructor(
 
     init {
         fetchProperties()
-
-        viewModelScope.launch(Dispatchers.IO) {
-            mPropertyUseCase.stateFlow.collect { state ->
-                if (state is State.Download.DownloadSuccess){
-                    _propertiesUiListViewLiveData.postValue(propertyToPropertyUiListView(state.propertiesList))
-                    _propertiesUiMapViewLiveData.postValue(propertyToPropertyUiMapView(state.propertiesList))
-                }
-                _stateLiveData.postValue(state)
-            }
-        }
     }
 
     fun fetchProperties(){
         viewModelScope.launch(Dispatchers.IO) {
             mPropertyUseCase.fetchProperties()
+        }
+    }
+
+    fun startFlowObserver(){
+        viewModelScope.launch(Dispatchers.IO) {
+            mPropertyUseCase.stateFlow
+                .map {
+                    _stateLiveData.postValue(it)
+                    it
+                }
+                .filterIsInstance<State.Download.DownloadSuccess>()
+                .combine(mUserDataRepository.userDataFlow) { state, userData ->
+                    _propertiesUiMapViewLiveData.postValue(propertyToPropertyUiMapView(state.propertiesList))
+                    _propertiesUiListViewLiveData.postValue(propertyToPropertyUiListView(state.propertiesList, userData.currency))
+                }
+                .collect { }
         }
     }
 

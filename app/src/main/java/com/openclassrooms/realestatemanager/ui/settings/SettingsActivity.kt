@@ -11,6 +11,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivitySettingsBinding
+import com.openclassrooms.realestatemanager.models.UserData
 import com.openclassrooms.realestatemanager.models.enums.Currency
 import com.openclassrooms.realestatemanager.models.enums.Unit
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,19 +38,17 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun configureViewModel() {
-        mViewModel.unitLiveData.observe(this, unitObserver)
-        mViewModel.currencyLiveData.observe(this, currencyObserver)
+        mViewModel.userDataLiveData.observe(this, userDataObserver)
     }
 
-    private val unitObserver = Observer<Unit> { unit ->
-        val index = mUnitAdapter.getPosition(unit)
+    private val userDataObserver = Observer<UserData> { userData ->
+        var index = mUnitAdapter.getPosition(userData.unit)
         mBinding.activitySettingsUnitTvInput.setText(mUnitAdapter.getItem(index).toString(), false)
-    }
 
-    private val currencyObserver = Observer<Currency> { currency ->
-        val index = mCurrencyAdapter.getPosition(currency)
+        index = mCurrencyAdapter.getPosition(userData.currency)
         mBinding.activitySettingsCurrencyTvInput.setText(mCurrencyAdapter.getItem(index).toString(), false)
     }
+
 
     private fun configureUi() {
         mUnitAdapter = ArrayAdapter<Unit>(
@@ -82,14 +81,14 @@ class SettingsActivity : AppCompatActivity() {
     private fun unitListener() =
         AdapterView.OnItemClickListener { parent, _, position, _ ->
             if (parent != null) {
-                mViewModel.unit = parent.getItemAtPosition(position) as Unit
+                mViewModel.userData.unit = parent.getItemAtPosition(position) as Unit
             }
         }
 
     private fun currencyListener() =
         AdapterView.OnItemClickListener { parent, _, position, _ ->
             if (parent != null) {
-                mViewModel.currency = parent.getItemAtPosition(position) as Currency
+                mViewModel.userData.currency = parent.getItemAtPosition(position) as Currency
             }
         }
 

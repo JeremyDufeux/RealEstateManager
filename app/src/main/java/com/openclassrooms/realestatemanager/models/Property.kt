@@ -7,8 +7,8 @@ import com.openclassrooms.realestatemanager.models.enums.PropertyType
 data class Property(
     var id: String = "",
     var type: PropertyType = PropertyType.FLAT,
-    var price: Long? = null, // In dollars
-    var surface: Int? = null, // In square feet
+    var price: Double? = null, // In dollars
+    var surface: Double? = null, // In square feet
     var roomsAmount: Int? = null,
     var bathroomsAmount: Int? = null,
     var bedroomsAmount: Int? = null,

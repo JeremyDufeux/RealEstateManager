@@ -7,8 +7,10 @@ import com.openclassrooms.realestatemanager.models.enums.PropertyType
 data class PropertyUiAddView(
     var id: String = "",
     var type: PropertyType = PropertyType.FLAT,
-    var price: String, // In dollars
-    var surface: String, // In square feet
+    val price: Double?,
+    val priceString: String,
+    var surface: Double?,
+    val surfaceString: String,
     var roomsAmount: String,
     var bathroomsAmount: String,
     var bedroomsAmount: String,
@@ -18,8 +20,8 @@ data class PropertyUiAddView(
     var city: String = "",
     var postalCode: String = "",
     var country: String = "",
-    var postDate: Long = 0, // Timestamp
-    var soldDate: Long? = null, // Timestamp
+    var postDate: Long = 0,
+    var soldDate: Long? = null,
     var agentName: String = "",
     var mediaList: List<MediaItem> = listOf(),
     var pointOfInterestList: List<PointOfInterest> = listOf(),

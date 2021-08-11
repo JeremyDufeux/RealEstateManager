@@ -86,14 +86,14 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
         mBinding.apply {
             fragmentDetailTypeTv.text = property.type.description
 
-            fragmentDetailPriceTv.text = property.price
+            fragmentDetailPriceTv.text = property.priceString
             fragmentDetailPriceTv.visibility = property.priceVisibility
 
             fragmentDetailDescriptionTv.text = property.description
             fragmentDetailDescriptionTv.visibility = property.descriptionVisibility
             fragmentDetailDescriptionTitleTv.visibility = property.descriptionVisibility
 
-            fragmentDetailSurfaceTv.text = property.surface
+            fragmentDetailSurfaceTv.text = property.surfaceString
             fragmentDetailSurfaceTv.visibility = property.surfaceVisibility
             fragmentDetailSurfaceTitleTv.visibility = property.surfaceVisibility
             fragmentDetailSurfaceIv.visibility = property.surfaceVisibility
