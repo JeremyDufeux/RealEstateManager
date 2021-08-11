@@ -17,6 +17,7 @@ fun propertyToPropertyUiListView(properties: List<Property>, currency: Currency)
         } else {
             ""
         }
+        val sold = property.soldDate != null
 
         propertiesUi.add(
             PropertyUiListView(
@@ -25,7 +26,8 @@ fun propertyToPropertyUiListView(properties: List<Property>, currency: Currency)
                 price = property.price,
                 priceString = priceString,
                 city = property.city,
-                pictureUrl = property.mediaList[0].url
+                pictureUrl = property.mediaList[0].url,
+                sold = sold
             )
         )
     }

@@ -58,6 +58,7 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mBinding.fragmentListItemIv)
 
+            mBinding.fragmentListItemSoldTv.visibility = property.soldVisibility
             mBinding.fragmentListItemCityTv.text = property.city
             mBinding.fragmentListItemPriceTv.text = property.priceString
             mBinding.fragmentListItemPriceTv.visibility = property.priceVisibility

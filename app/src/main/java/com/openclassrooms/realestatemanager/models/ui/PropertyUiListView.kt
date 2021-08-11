@@ -9,11 +9,17 @@ data class PropertyUiListView(
     val price: Double?,
     val priceString: String,
     val city: String? = null,
-    val pictureUrl: String
+    val pictureUrl: String,
+    val sold: Boolean
 ){
     val priceVisibility: Int = if (priceString.isBlank()){
         View.INVISIBLE
     } else {
         View.VISIBLE
+    }
+    val soldVisibility: Int = if (sold){
+        View.VISIBLE
+    } else {
+        View.INVISIBLE
     }
 }
