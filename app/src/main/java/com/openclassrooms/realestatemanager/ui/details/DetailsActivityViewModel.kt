@@ -20,7 +20,7 @@ class DetailsActivityViewModel @Inject constructor(
     private var _stateLiveData : MutableLiveData<State> = MutableLiveData()
     val stateLiveData: LiveData<State> = _stateLiveData
 
-    init {
+    fun startFlowObserver(){
         viewModelScope.launch(Dispatchers.IO) {
             mPropertyUseCase.stateFlow.collect { state ->
                 _stateLiveData.postValue(state)

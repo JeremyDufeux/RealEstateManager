@@ -50,6 +50,11 @@ class DetailsActivity : AppCompatActivity() {
         mViewModel.stateLiveData.observe(this, stateObserver)
     }
 
+    override fun onStart() {
+        mViewModel.startFlowObserver()
+        super.onStart()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.details_activity_toolbar_menu, menu)
         configureToolBar()
