@@ -13,6 +13,9 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityListBinding
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.ui.add.AddPropertyActivity
+import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
+import com.openclassrooms.realestatemanager.ui.details.DetailsActivity
+import com.openclassrooms.realestatemanager.ui.details.DetailsFragment
 import com.openclassrooms.realestatemanager.ui.settings.SettingsActivity
 import com.openclassrooms.realestatemanager.utils.showToast
 import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
@@ -39,6 +42,7 @@ class ListActivity : AppCompatActivity() {
 
     private fun configureViewModel(){
         mViewModel.stateLiveData.observe(this, stateObserver)
+        mViewModel.selectedPropertyLiveData.observe(this, selectedPropertyObserver)
     }
 
     private fun configureToolBar() {
@@ -112,6 +116,22 @@ class ListActivity : AppCompatActivity() {
             else -> {
                 mBinding.activityListProgressLine.visibility = View.GONE
             }
+        }
+    }
+
+    private val selectedPropertyObserver = Observer<String> { propertyId ->
+        if(mBinding.activityListDetailsFragment != null){
+            mBinding.apply {
+                activityListIconIv?.visibility = View.INVISIBLE
+                activityListMessageTv?.visibility = View.INVISIBLE
+                activityListDetailsFragment?.visibility = View.VISIBLE
+            }
+            val detailFragment : DetailsFragment = supportFragmentManager.findFragmentById(R.id.activity_list_details_fragment) as DetailsFragment
+            detailFragment.setPropertyId(propertyId)
+        } else {
+            val intent = Intent(this, DetailsActivity::class.java)
+            intent.putExtra(BUNDLE_KEY_PROPERTY_ID, propertyId)
+            startActivity(intent)
         }
     }
 }

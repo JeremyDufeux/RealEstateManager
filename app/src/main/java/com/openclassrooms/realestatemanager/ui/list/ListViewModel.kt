@@ -38,6 +38,9 @@ class ListViewModel @Inject constructor(
     private val _propertiesUiMapViewLiveData: MutableLiveData<List<PropertyUiMapView>> = MutableLiveData()
     val propertiesUiMapViewLiveData: LiveData<List<PropertyUiMapView>> = _propertiesUiMapViewLiveData
 
+    private var _selectedPropertyLiveData : MutableLiveData<String> = MutableLiveData()
+    val selectedPropertyLiveData: LiveData<String> = _selectedPropertyLiveData
+
     private val _location: MutableLiveData<Location> = MutableLiveData()
     val location: LiveData<Location> = _location
 
@@ -51,8 +54,6 @@ class ListViewModel @Inject constructor(
     fun fetchProperties(){
         viewModelScope.launch(Dispatchers.IO) {
             mPropertyUseCase.getOfflineProperties()
-        }
-        viewModelScope.launch(Dispatchers.IO) {
             mPropertyUseCase.fetchProperties()
         }
     }
@@ -88,5 +89,9 @@ class ListViewModel @Inject constructor(
 
     fun resetState() {
         mPropertyUseCase.resetState()
+    }
+
+    fun setSelectedPropertyId(propertyId: String){
+        _selectedPropertyLiveData.value = propertyId
     }
 }

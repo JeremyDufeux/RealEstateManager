@@ -2,7 +2,6 @@ package com.openclassrooms.realestatemanager.ui.list
 
 import android.Manifest.permission
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,8 +21,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentMapBinding
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
-import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
-import com.openclassrooms.realestatemanager.ui.details.DetailsActivity
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiMapView
 import com.openclassrooms.realestatemanager.utils.showToast
 import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
@@ -125,9 +122,7 @@ class MapFragment : Fragment(),
 
     override fun onMarkerClick(marker : Marker): Boolean {
         marker.tag?.let {
-            val intent = Intent(requireContext(), DetailsActivity::class.java)
-            intent.putExtra(BUNDLE_KEY_PROPERTY_ID, it as String)
-            startActivity(intent)
+            mViewModel.setSelectedPropertyId(it as String)
         }
         return true
     }

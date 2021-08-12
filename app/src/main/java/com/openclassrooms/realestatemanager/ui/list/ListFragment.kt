@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.ui.list
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +14,6 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiListView
-import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
-import com.openclassrooms.realestatemanager.ui.details.DetailsActivity
 import com.openclassrooms.realestatemanager.utils.showToast
 import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import dagger.hilt.android.AndroidEntryPoint
@@ -97,9 +94,7 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
     }
 
     override fun onPropertyClick(position: Int) {
-        val intent = Intent(requireContext(), DetailsActivity::class.java)
-        intent.putExtra(BUNDLE_KEY_PROPERTY_ID, mPropertyList[position].id)
-        startActivity(intent)
+        mViewModel.setSelectedPropertyId(mPropertyList[position].id)
     }
 
 }
