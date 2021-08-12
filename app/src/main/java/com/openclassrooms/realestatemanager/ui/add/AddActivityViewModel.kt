@@ -78,6 +78,7 @@ class AddActivityViewModel @Inject constructor(
                     }
                     .collect { property ->
                         postDate = property.postDate
+                        soldDate = property.soldDate
                         mMediaList = property.mediaList.toMutableList()
                         _mediaListLiveData.postValue(mMediaList)
                         _propertyLiveData.postValue(property)
