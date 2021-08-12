@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,7 +23,11 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/activity_add_property_sv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_add_property_toolbar"
+        app:layout_constraintBottom_toTopOf="@id/activity_add_property_save_btn">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -78,14 +82,14 @@
                 style="@style/editText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/fragment_add_property_spacing"
                 android:layout_marginStart="@dimen/fragment_add_property_spacing"
+                android:layout_marginTop="@dimen/fragment_add_property_spacing"
                 android:autofillHints="@string/price"
                 android:hint="@string/price"
-                app:suffixText="@string/dollar_symbol"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/activity_add_property_price_iv"
-                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_type_tv">
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_type_tv"
+                app:suffixText="@string/dollar_symbol">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_add_property_price_et_input"
@@ -122,7 +126,7 @@
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
                 app:constraint_referenced_ids="activity_add_property_add_media_ib,
-                activity_add_property_medias_rv"/>
+                activity_add_property_medias_rv" />
 
             <ImageView
                 android:id="@+id/activity_add_property_surface_iv"
@@ -144,10 +148,10 @@
                 android:layout_marginTop="@dimen/fragment_add_property_spacing"
                 android:autofillHints="@string/surface"
                 android:hint="@string/surface"
-                app:suffixText="@string/sq_ft"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/activity_add_property_surface_iv"
-                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_barrier">
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_barrier"
+                app:suffixText="@string/sq_ft">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_add_property_surface_et_input"
@@ -169,16 +173,16 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_add_property_rooms_et"
+                style="@style/editText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/fragment_add_property_spacing"
                 android:layout_marginTop="@dimen/fragment_add_property_spacing"
                 android:autofillHints="@string/number_of_rooms"
                 android:hint="@string/number_of_rooms"
-                style="@style/editText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/activity_add_property_rooms_iv"
-                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_surface_et" >
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_surface_et">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_add_property_rooms_et_input"
@@ -200,13 +204,13 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_add_property_bathrooms_et"
+                style="@style/editText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/fragment_add_property_spacing"
                 android:layout_marginTop="@dimen/fragment_add_property_spacing"
                 android:autofillHints="@string/number_of_bathrooms"
                 android:hint="@string/number_of_bathrooms"
-                style="@style/editText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/activity_add_property_bathrooms_iv"
                 app:layout_constraintTop_toBottomOf="@+id/activity_add_property_rooms_et">
@@ -231,13 +235,13 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_add_property_bedrooms_et"
+                style="@style/editText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/fragment_add_property_spacing"
                 android:layout_marginTop="@dimen/fragment_add_property_spacing"
                 android:autofillHints="@string/number_of_bedrooms"
                 android:hint="@string/number_of_bedrooms"
-                style="@style/editText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/activity_add_property_bedrooms_iv"
                 app:layout_constraintTop_toBottomOf="@+id/activity_add_property_bathrooms_et">
@@ -265,8 +269,8 @@
                 style="@style/editText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/fragment_add_property_spacing"
                 android:layout_marginStart="@dimen/fragment_add_property_spacing"
+                android:layout_marginTop="@dimen/fragment_add_property_spacing"
                 android:autofillHints="@string/number_of_bedrooms"
                 android:fontFamily="@font/roboto"
                 android:gravity="bottom"
@@ -274,13 +278,13 @@
                 android:singleLine="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/activity_add_property_description_iv"
-                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_bedrooms_et" >
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_bedrooms_et">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_add_property_description_et_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine|textAutoCorrect"/>
+                    android:inputType="textMultiLine|textAutoCorrect" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
@@ -296,34 +300,34 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_add_property_address_line1_et"
+                style="@style/editText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/fragment_add_property_spacing"
                 android:layout_marginStart="@dimen/fragment_add_property_spacing"
+                android:layout_marginTop="@dimen/fragment_add_property_spacing"
                 android:autofillHints="@string/address_line_1"
                 android:hint="@string/address_line_1"
-                style="@style/editText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/activity_add_property_address_iv"
-                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_description_et" >
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_description_et">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_add_property_address_line1_et_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"/>
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_add_property_address_line2_et"
+                style="@style/editText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/fragment_add_property_spacing"
                 android:layout_marginTop="@dimen/fragment_add_property_padding"
                 android:autofillHints="@string/address_line_2"
                 android:hint="@string/address_line_2_optional"
-                style="@style/editText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/activity_add_property_address_iv"
                 app:layout_constraintTop_toBottomOf="@+id/activity_add_property_address_line1_et">
@@ -337,6 +341,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_add_property_address_city_et"
+                style="@style/editText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/fragment_add_property_spacing"
@@ -344,10 +349,9 @@
                 android:layout_marginEnd="@dimen/fragment_add_property_padding"
                 android:autofillHints="@string/city"
                 android:hint="@string/city"
-                style="@style/editText"
                 app:layout_constraintEnd_toStartOf="@+id/activity_add_property_address_postal_code_et"
                 app:layout_constraintStart_toEndOf="@+id/activity_add_property_address_iv"
-                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_address_line2_et" >
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_address_line2_et">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_add_property_address_city_et_input"
@@ -358,14 +362,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_add_property_address_postal_code_et"
+                style="@style/editText"
                 android:layout_width="@dimen/fragment_add_property_postal_code_width"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/fragment_add_property_padding"
                 android:autofillHints="@string/postal_code"
                 android:hint="@string/postal_code"
-                style="@style/editText"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_address_line2_et" >
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_address_line2_et">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_add_property_address_postal_code_et_input"
@@ -409,19 +413,19 @@
                 android:id="@+id/activity_add_property_point_of_interest_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/fragment_add_property_spacing"
+                android:layout_marginTop="@dimen/fragment_add_property_spacing"
                 android:text="@string/point_of_interest"
                 android:textSize="@dimen/text_size"
-                android:layout_marginTop="@dimen/fragment_add_property_spacing"
-                android:layout_marginStart="@dimen/fragment_add_property_spacing"
                 app:layout_constraintStart_toEndOf="@+id/activity_add_property_point_of_interest_iv"
-                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_address_country_et"/>
+                app:layout_constraintTop_toBottomOf="@+id/activity_add_property_address_country_et" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/activity_add_property_point_of_interest_cg"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/fragment_add_property_padding"
                 android:layout_marginStart="@dimen/fragment_add_property_spacing"
+                android:layout_marginTop="@dimen/fragment_add_property_padding"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/activity_add_property_point_of_interest_iv"
                 app:layout_constraintTop_toBottomOf="@+id/activity_add_property_point_of_interest_tv" />
@@ -439,13 +443,13 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_add_property_agent_et"
+                style="@style/editText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/fragment_add_property_spacing"
                 android:layout_marginTop="@dimen/fragment_add_property_padding"
                 android:autofillHints="@string/real_estate_agent"
                 android:hint="@string/real_estate_agent"
-                style="@style/editText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/activity_add_property_agent_iv"
                 app:layout_constraintTop_toBottomOf="@+id/activity_add_property_point_of_interest_cg">
@@ -471,17 +475,17 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_add_property_sold_date_et"
+                style="@style/editText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/fragment_add_property_spacing"
                 android:layout_marginTop="@dimen/fragment_add_property_padding"
                 android:autofillHints="@string/real_estate_agent"
                 android:hint="@string/sold_date"
+                android:visibility="gone"
+                app:endIconContentDescription="Date picker"
                 app:endIconDrawable="@drawable/ic_calendar"
                 app:endIconMode="custom"
-                app:endIconContentDescription="Date picker"
-                android:visibility="gone"
-                style="@style/editText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/activity_add_property_sold_date_iv"
                 app:layout_constraintTop_toBottomOf="@+id/activity_add_property_agent_et">
@@ -490,20 +494,20 @@
                     android:id="@+id/activity_add_property_sold_date_et_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:clickable="false" />
+                    android:clickable="false"
+                    android:focusable="false" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/activity_add_property_save_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/fragment_add_property_spacing"
-                android:text="@string/save"
-                app:layout_constraintTop_toBottomOf="@id/activity_add_property_sold_date_et"
-                app:backgroundTint="@color/colorAccent"
-                />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
-</LinearLayout>
+
+    <Button
+        android:id="@+id/activity_add_property_save_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/fragment_add_property_padding"
+        android:text="@string/save"
+        app:backgroundTint="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
