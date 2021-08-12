@@ -156,7 +156,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
             activityAddPropertySoldDateEt.visibility = View.VISIBLE
             activityAddPropertySoldDateIv.visibility = View.VISIBLE
-            activityAddPropertySoldDateEt.setEndIconOnClickListener { openDatePicker() }
+            activityAddPropertySoldDateEt.setEndIconOnClickListener { clearDatePicker() }
             activityAddPropertySoldDateEtInput.setText(property.soldDate?.let { formatCalendarToString(it) })
             activityAddPropertySoldDateEtInput.setOnClickListener { openDatePicker() }
         }
@@ -164,6 +164,11 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         for(poi in property.pointOfInterestList){
             mChipList[poi]?.isChecked = true
         }
+    }
+
+    private fun clearDatePicker() {
+        mBinding.activityAddPropertySoldDateEtInput.setText("")
+        mViewModel.soldDate = null
     }
 
     private fun openDatePicker() {
