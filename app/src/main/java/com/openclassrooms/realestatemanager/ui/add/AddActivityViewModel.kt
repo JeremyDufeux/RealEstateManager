@@ -77,6 +77,7 @@ class AddActivityViewModel @Inject constructor(
                         propertyToPropertyUiAddView(property, userData)
                     }
                     .collect { property ->
+                        propertyType = property.type
                         postDate = property.postDate
                         soldDate = property.soldDate
                         mMediaList = property.mediaList.toMutableList()
