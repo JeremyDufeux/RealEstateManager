@@ -136,6 +136,8 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
             fragmentDetailAgentTv.visibility = property.agentVisibility
             fragmentDetailAgentIv.visibility = property.agentVisibility
             fragmentDetailAgentTitleTv.visibility = property.agentVisibility
+
+            fragmentDetailSoldTv.visibility = property.soldDateVisibility
         }
 
     }
