@@ -38,7 +38,7 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun configureViewModel(){
-        mViewModel.stateLiveData.observe(this, propertyRepositoryObserver)
+        mViewModel.stateLiveData.observe(this, stateObserver)
     }
 
     private fun configureToolBar() {
@@ -68,11 +68,6 @@ class ListActivity : AppCompatActivity() {
         mBinding.activityListAddBtn.setOnClickListener { openAddPropertyActivity() }
     }
 
-    override fun onStart() {
-        mViewModel.startFlowObserver()
-        super.onStart()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.list_activity_toolbar_menu, menu)
         return true
@@ -95,10 +90,14 @@ class ListActivity : AppCompatActivity() {
         startActivity(addPropertyActivityIntent)
     }
 
-    private val propertyRepositoryObserver = Observer<State> { state ->
+    private val stateObserver = Observer<State> { state ->
         when(state){
             is State.Upload.Uploading -> {
                 mBinding.activityListProgressLine.visibility = View.VISIBLE
+            }
+            is State.Upload.UploadSuccess.Empty -> {
+                mBinding.activityListProgressLine.visibility = View.GONE
+                showToast(this, R.string.all_properties_has_been_uploaded)
             }
             is State.Upload.Error -> {
                 mBinding.activityListProgressLine.visibility = View.GONE
@@ -107,7 +106,8 @@ class ListActivity : AppCompatActivity() {
                 } else {
                     showToast(this, R.string.an_error_append)
                 }
-                Timber.e("Error ListFragment.propertyListObserver: ${state.throwable.toString()}")
+                mViewModel.resetState()
+                Timber.e("Error ListActivity.stateObserver: ${state.throwable.toString()}")
             }
             else -> {
                 mBinding.activityListProgressLine.visibility = View.GONE

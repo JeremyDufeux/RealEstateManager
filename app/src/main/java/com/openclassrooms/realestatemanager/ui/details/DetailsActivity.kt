@@ -50,11 +50,6 @@ class DetailsActivity : AppCompatActivity() {
         mViewModel.stateLiveData.observe(this, stateObserver)
     }
 
-    override fun onStart() {
-        mViewModel.startFlowObserver()
-        super.onStart()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.details_activity_toolbar_menu, menu)
         configureToolBar()
@@ -86,6 +81,10 @@ class DetailsActivity : AppCompatActivity() {
             is State.Upload.Uploading -> {
                 mBinding.activityDetailsProgressLine.visibility = View.VISIBLE
             }
+            is State.Upload.UploadSuccess.Empty -> {
+                mBinding.activityDetailsProgressLine.visibility = View.GONE
+                showToast(this, R.string.all_properties_has_been_uploaded)
+            }
             is State.Upload.Error -> {
                 mBinding.activityDetailsProgressLine.visibility = View.GONE
                 if (state.throwable is OfflineError) {
@@ -93,6 +92,7 @@ class DetailsActivity : AppCompatActivity() {
                 } else {
                     showToast(this, R.string.an_error_append)
                 }
+                mViewModel.resetState()
                 Timber.e("Error DetailsActivity.stateObserver: ${state.throwable.toString()}")
             }
             else -> {

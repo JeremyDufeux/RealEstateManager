@@ -17,6 +17,7 @@ import com.openclassrooms.realestatemanager.services.VideoDownloadService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -81,9 +82,17 @@ class OfflinePropertyRepository @Inject constructor(
             }
         }
 
-        mVideoDownloadService.startDownloads()
+        startDownloadService()
 
         insertPointsOfInterestForProperty(property)
+    }
+
+    private fun startDownloadService() {
+        try {
+            mVideoDownloadService.startDownloads()
+        } catch (e: Exception){
+            Timber.e("Error OfflinePropertyRepository.startDownloadService : ${e.message}")
+        }
     }
 
     fun getPropertiesToUpload(): List<Property> {
@@ -119,7 +128,6 @@ class OfflinePropertyRepository @Inject constructor(
     }
 
     suspend fun updateProperty(property: Property) {
-
         val propertyEntity = propertyToPropertyEntityMapper(property)
         propertyEntity.serverState = ServerState.WAITING_UPLOAD
 

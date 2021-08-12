@@ -43,7 +43,7 @@ class PropertyRepository @Inject constructor(
 
     suspend fun uploadMedia(mediaItem: MediaItem) {
         when (val state = mPropertyApiService.uploadMedia(mediaItem)) {
-            is State.Upload.UploadSuccess.SuccessWithUrl -> {
+            is State.Upload.UploadSuccess.Url -> {
                 mediaItem.url = state.url
                 _stateFlow.value = State.Idle
             }

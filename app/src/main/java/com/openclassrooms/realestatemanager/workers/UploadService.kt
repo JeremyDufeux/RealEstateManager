@@ -6,7 +6,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-const val UPLOAD_WORKER_NAME = "UPLOAD_WORKER_TAG"
+const val UPLOAD_WORKER_NAME = "UPLOAD_WORKER_NAME"
 
 class UploadService @Inject constructor(
     @ApplicationContext private val mContext: Context) {
@@ -16,15 +16,18 @@ class UploadService @Inject constructor(
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val uploadWork = OneTimeWorkRequest.Builder(UploadWorker::class.java)
+        val uploadWork = PeriodicWorkRequestBuilder<UploadWorker>(15, TimeUnit.MINUTES)
             .setConstraints(constraints)
             .setBackoffCriteria(
                 BackoffPolicy.EXPONENTIAL,
                 OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
                 TimeUnit.MILLISECONDS)
-            .setInitialDelay(20000, TimeUnit.MILLISECONDS)
             .build()
 
-        WorkManager.getInstance(mContext).enqueueUniqueWork(UPLOAD_WORKER_NAME, ExistingWorkPolicy.REPLACE, uploadWork)
+        WorkManager.getInstance(mContext).enqueueUniquePeriodicWork(UPLOAD_WORKER_NAME, ExistingPeriodicWorkPolicy.REPLACE, uploadWork)
+    }
+
+    fun cancelUploadWorker(){
+        WorkManager.getInstance(mContext).cancelUniqueWork(UPLOAD_WORKER_NAME)
     }
 }

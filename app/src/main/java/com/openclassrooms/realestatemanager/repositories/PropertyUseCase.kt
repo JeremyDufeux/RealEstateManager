@@ -7,6 +7,7 @@ import com.openclassrooms.realestatemanager.models.enums.ServerState
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.modules.IoCoroutineScope
 import com.openclassrooms.realestatemanager.services.GeocoderClient
+import com.openclassrooms.realestatemanager.services.LifecycleService
 import com.openclassrooms.realestatemanager.services.NotificationService
 import com.openclassrooms.realestatemanager.utils.Utils
 import com.openclassrooms.realestatemanager.utils.getGeoApifyUrl
@@ -14,6 +15,7 @@ import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import com.openclassrooms.realestatemanager.workers.UploadService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,11 +32,13 @@ class PropertyUseCase @Inject constructor(
     private val mOfflinePropertyRepository: OfflinePropertyRepository,
     private val mUploadService: UploadService,
     private val mGeocoderClient: GeocoderClient,
-    private val mNotificationService: NotificationService
-) {
+    private val mNotificationService: NotificationService,
+    private val mLifecycleService: LifecycleService
+){
 
     private val _stateFlow = MutableStateFlow<State>(State.Idle)
     val stateFlow = _stateFlow.asStateFlow()
+
 
     init {
         mIoScope.launch {
@@ -43,9 +47,8 @@ class PropertyUseCase @Inject constructor(
                 if(result is State.Download.DownloadSuccess){
                     mOfflinePropertyRepository.updateDatabase(result.propertiesList)
                 }
-                else if(result is State.Upload.UploadSuccess.Success){
-                    mNotificationService.createNotification()
-                    mPropertyRepository.fetchProperties()
+                else if(result is State.Upload.UploadSuccess.Empty){
+                    onUploadSuccess()
                 }
             }
         }
@@ -71,30 +74,29 @@ class PropertyUseCase @Inject constructor(
     }
 
     suspend fun addProperty(property: Property) {
+        mOfflinePropertyRepository.addProperty(property, ServerState.WAITING_UPLOAD)
+
         if (Utils.isInternetAvailable(mContext)) {
             mPropertyRepository.addPropertyWithMedias(property)
         }
         else {
-            _stateFlow.value = State.Upload.Error(OfflineError())
-            mOfflinePropertyRepository.addProperty(property, ServerState.WAITING_UPLOAD)
-            mUploadService.enqueueUploadWorker()
             getOfflineProperties()
-            _stateFlow.value = State.Idle
+            mUploadService.enqueueUploadWorker()
+            _stateFlow.value = State.Upload.Error(OfflineError())
         }
     }
 
     suspend fun updateProperty(newProperty: Property) {
         val oldProperty = mOfflinePropertyRepository.getPropertyWithId(newProperty.id)
-
         updatePropertyOffline(oldProperty, newProperty)
+
         if (Utils.isInternetAvailable(mContext)) {
             updatePropertyOnline(oldProperty, newProperty)
         }
         else {
-            _stateFlow.value = State.Upload.Error(OfflineError())
-            mUploadService.enqueueUploadWorker()
             getOfflineProperties()
-            _stateFlow.value = State.Idle
+            mUploadService.enqueueUploadWorker()
+            _stateFlow.value = State.Upload.Error(OfflineError())
         }
     }
 
@@ -130,6 +132,8 @@ class PropertyUseCase @Inject constructor(
     }
 
     suspend fun uploadPendingProperties(): Result {
+        delay(10000) // Needed to initialize GeocoderClient properly
+
         _stateFlow.value = State.Upload.Uploading
 
         for (mediaItem in mOfflinePropertyRepository.getMediaItemsToUpload()) {
@@ -146,23 +150,37 @@ class PropertyUseCase @Inject constructor(
             mPropertyRepository.addProperty(property)
         }
 
+        _stateFlow.value = State.Upload.UploadSuccess.Empty
+
         return Result.success()
     }
 
+    private suspend fun onUploadSuccess(){
+        if(!mLifecycleService.isAppForeground()) {
+            mNotificationService.createNotification()
+        }
+        mUploadService.cancelUploadWorker()
+        mPropertyRepository.fetchProperties()
+    }
+
     private fun updatePropertyLocation(property: Property){
-            val latLng =
-                mGeocoderClient.getPropertyLocation(
-                    property.addressLine1,
-                    property.addressLine2,
-                    property.city,
-                    property.postalCode,
-                    property.country
-                )
+        val latLng =
+            mGeocoderClient.getPropertyLocation(
+                property.addressLine1,
+                property.addressLine2,
+                property.city,
+                property.postalCode,
+                property.country
+            )
 
         if (latLng != null) {
             property.latitude = latLng.latitude
             property.longitude = latLng.longitude
             property.mapPictureUrl = getGeoApifyUrl(property.latitude, property.longitude)
         }
+    }
+
+    fun resetState(){
+        _stateFlow.value = State.Idle
     }
 }

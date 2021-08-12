@@ -12,8 +12,8 @@ sealed class State {
     sealed class Upload {
         object Uploading : State()
         sealed class UploadSuccess {
-            object Success: State()
-            data class SuccessWithUrl(val url: String) : State()
+            object Empty: State()
+            data class Url(val url: String) : State()
         }
         data class Error(val throwable: Throwable?): State()
     }

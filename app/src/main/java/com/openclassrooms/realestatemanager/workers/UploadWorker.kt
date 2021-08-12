@@ -23,6 +23,5 @@ class UploadWorker @AssistedInject constructor(
         } catch (error: Throwable){
             Result.failure()
         }
-
     }
 }

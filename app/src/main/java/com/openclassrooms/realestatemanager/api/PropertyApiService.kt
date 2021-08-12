@@ -45,7 +45,7 @@ class PropertyApiService @Inject constructor() {
             for (media in property.mediaList) {
                 getPropertiesCollection().document(property.id).collection(COLLECTION_MEDIAS_NAME).document(media.id).set(media)
             }
-            State.Upload.UploadSuccess.Success
+            State.Upload.UploadSuccess.Empty
         }catch (e: Exception){
             State.Upload.Error(e)
         }
@@ -60,7 +60,7 @@ class PropertyApiService @Inject constructor() {
             mediaRef.putFile(file).await()
 
             val url = mediaRef.downloadUrl.await().toString()
-            State.Upload.UploadSuccess.SuccessWithUrl(url)
+            State.Upload.UploadSuccess.Url(url)
         } catch (e: java.lang.Exception){
             State.Upload.Error(e)
         }
@@ -74,7 +74,7 @@ class PropertyApiService @Inject constructor() {
             mediaRef.delete().await()
             getPropertiesCollection().document(mediaItem.propertyId).collection(COLLECTION_MEDIAS_NAME).document(mediaItem.id).delete().await()
 
-        State.Upload.UploadSuccess.Success
+            State.Upload.UploadSuccess.Empty
         } catch (e: java.lang.Exception){
             State.Upload.Error(e)
         }

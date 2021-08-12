@@ -44,6 +44,7 @@ class ListViewModel @Inject constructor(
     val locationStarted = mLocationService.locationStarted
 
     init {
+        startFlowObserver()
         fetchProperties()
     }
 
@@ -83,5 +84,9 @@ class ListViewModel @Inject constructor(
 
     fun stopLocationUpdates() {
         mLocationService.stopLocationUpdates()
+    }
+
+    fun resetState() {
+        mPropertyUseCase.resetState()
     }
 }
