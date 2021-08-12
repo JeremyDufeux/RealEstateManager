@@ -18,11 +18,11 @@ class UploadService @Inject constructor(
 
         val uploadWork = OneTimeWorkRequest.Builder(UploadWorker::class.java)
             .setConstraints(constraints)
-            .setInitialDelay(10000, TimeUnit.MILLISECONDS)
             .setBackoffCriteria(
                 BackoffPolicy.EXPONENTIAL,
                 OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
                 TimeUnit.MILLISECONDS)
+            .setInitialDelay(20000, TimeUnit.MILLISECONDS)
             .build()
 
         WorkManager.getInstance(mContext).enqueueUniqueWork(UPLOAD_WORKER_NAME, ExistingWorkPolicy.REPLACE, uploadWork)
