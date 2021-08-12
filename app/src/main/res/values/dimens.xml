@@ -2,6 +2,9 @@
 <resources>
     <dimen name="text_size">18sp</dimen>
 
+    <!-- fragment_details -->
+    <dimen name="fragment_details_padding">10dp</dimen>
+
     <!-- fragment_add_property -->
     <dimen name="fragment_add_property_padding">8dp</dimen>
     <dimen name="fragment_add_property_spacing">16dp</dimen>

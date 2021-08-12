@@ -5,13 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+    android:paddingTop="@dimen/fragment_details_padding"
     tools:context=".ui.details.DetailsFragment">
 
     <TextView
         android:id="@+id/fragment_detail_type_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/fragment_details_padding"
         android:fontFamily="@font/roboto_bold"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -23,6 +24,7 @@
         android:id="@+id/fragment_detail_price_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/fragment_details_padding"
         android:fontFamily="@font/roboto_bold"
         android:textColor="@color/colorAccent"
         android:textSize="20sp"
@@ -34,17 +36,19 @@
         android:id="@+id/fragment_detail_sv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/fragment_details_padding"
+        android:paddingHorizontal="@dimen/fragment_details_padding"
         android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_detail_sold_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_detail_type_tv">
+        app:layout_constraintTop_toBottomOf="@+id/fragment_detail_price_tv">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/fragment_detail_cl"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/fragment_details_padding">
 
             <TextView
                 android:id="@+id/fragment_detail_media_title_tv"
@@ -271,7 +275,7 @@
             fragment_detail_location_title_tv,
             fragment_detail_post_date_title_tv,
             fragment_detail_sold_date_title_tv,
-            fragment_detail_agent_title_tv"/>
+            fragment_detail_agent_title_tv" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/fragment_detail_map_cv"
@@ -416,4 +420,18 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <TextView
+        android:id="@+id/fragment_detail_sold_tv"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom"
+        android:background="@color/colorAccent"
+        android:fontFamily="@font/roboto_bold"
+        android:gravity="center"
+        android:text="@string/sold"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
