@@ -151,7 +151,8 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
 
     override fun onMediaClick(position: Int) {
         val intent = Intent(requireContext(), MediaViewerActivity::class.java)
-        intent.putParcelableArrayListExtra(BUNDLE_KEY_MEDIA_LIST, mViewModel.propertyLiveData.value?.mediaList as ArrayList)
+        val arrayList = mViewModel.propertyLiveData.value?.mediaList?.toList() as ArrayList
+        intent.putParcelableArrayListExtra(BUNDLE_KEY_MEDIA_LIST, arrayList )
         intent.putExtra(BUNDLE_KEY_SELECTED_MEDIA_INDEX, position)
         startActivity(intent)
     }
