@@ -36,10 +36,10 @@ class OfflinePropertyRepository @Inject constructor(
         return propertyList
     }
 
-    fun getPropertyWithId(propertyId: String): Property{
+    fun getPropertyWithId(propertyId: String): Property?{
         val propertyEntity = mPropertyDao.getPropertyWithId(propertyId)
 
-        return propertyEntityToPropertyMapper(propertyEntity)
+        return propertyEntity?.let { propertyEntityToPropertyMapper(it) }
     }
 
     fun getPropertyWithIdFlow(propertyId: String): Flow<Property> =
@@ -49,7 +49,22 @@ class OfflinePropertyRepository @Inject constructor(
 
     suspend fun updateDatabase(propertiesList: List<Property>) {
         for (property in propertiesList) {
-            addProperty(property, ServerState.SERVER)
+            val oldProperty = getPropertyWithId(property.id)
+            if(oldProperty == null) {
+                addProperty(property, ServerState.SERVER)
+            } else {
+                for(mediaItem in property.mediaList){
+                    if(oldProperty.mediaList.firstOrNull{ it.id == mediaItem.id} == null){ // Media as been added
+                        addMedia(mediaItem, ServerState.SERVER)
+                    }
+                }
+                for(mediaItem in oldProperty.mediaList){
+                    if(property.mediaList.firstOrNull{ it.id == mediaItem.id} == null){ // Media as been deleted
+                        deleteMedia(mediaItem)
+                    }
+                }
+
+            }
         }
     }
 
@@ -111,20 +126,24 @@ class OfflinePropertyRepository @Inject constructor(
         return mediaItemsEntityToMediaItemsMapper(mPropertyDao.getMediaItemsToDelete())
     }
 
-    suspend fun addMediaToUpload(mediaItem: MediaItem) {
+    suspend fun addMedia(mediaItem: MediaItem, serverState: ServerState) {
         val mediaItemEntity = mediaItemToMediaItemEntityMapper(mediaItem)
-        mediaItemEntity.serverState = ServerState.WAITING_UPLOAD
+        mediaItemEntity.serverState = serverState
         mPropertyDao.insertMediaItem(mediaItemEntity)
     }
 
-    suspend fun setMediaToDelete(mediaItem: MediaItem) {
+    suspend fun setMediaToDelete(mediaItem: MediaItem, serverState: ServerState) {
         val mediaItemEntity = mediaItemToMediaItemEntityMapper(mediaItem)
-        mediaItemEntity.serverState = ServerState.WAITING_DELETE
+        mediaItemEntity.serverState = serverState
         mPropertyDao.insertMediaItem(mediaItemEntity)
     }
 
-    fun deleteMedia(media: MediaItem) {
-        mPropertyDao.deleteMediaWithId(media.id)
+    fun deleteMedia(mediaItem: MediaItem) {
+        mPropertyDao.deleteMediaWithId(mediaItem.id)
+
+        if(mediaItem.fileType == FileType.VIDEO){
+            mVideoDownloadService.deleteVideo(mediaItem)
+        }
     }
 
     suspend fun updateProperty(property: Property) {

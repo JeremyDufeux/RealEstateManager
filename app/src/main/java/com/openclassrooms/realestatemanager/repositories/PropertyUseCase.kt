@@ -88,15 +88,16 @@ class PropertyUseCase @Inject constructor(
 
     suspend fun updateProperty(newProperty: Property) {
         val oldProperty = mOfflinePropertyRepository.getPropertyWithId(newProperty.id)
-        updatePropertyOffline(oldProperty, newProperty)
+        if (oldProperty != null) {
+            updatePropertyOffline(oldProperty, newProperty)
 
-        if (Utils.isInternetAvailable(mContext)) {
-            updatePropertyOnline(oldProperty, newProperty)
-        }
-        else {
-            getOfflineProperties()
-            mUploadService.enqueueUploadWorker()
-            _stateFlow.value = State.Upload.Error(OfflineError())
+            if (Utils.isInternetAvailable(mContext)) {
+                updatePropertyOnline(oldProperty, newProperty)
+            } else {
+                getOfflineProperties()
+                mUploadService.enqueueUploadWorker()
+                _stateFlow.value = State.Upload.Error(OfflineError())
+            }
         }
     }
 
@@ -120,12 +121,12 @@ class PropertyUseCase @Inject constructor(
     private suspend fun updatePropertyOffline(oldProperty: Property, newProperty: Property) {
         for(mediaItem in newProperty.mediaList){
             if(oldProperty.mediaList.firstOrNull{ it.id == mediaItem.id} == null){ // Media as been added
-                mOfflinePropertyRepository.addMediaToUpload(mediaItem)
+                mOfflinePropertyRepository.addMedia(mediaItem, ServerState.WAITING_UPLOAD)
             }
         }
         for(mediaItem in oldProperty.mediaList){
             if(newProperty.mediaList.firstOrNull{ it.id == mediaItem.id} == null){ // Media as been deleted
-                mOfflinePropertyRepository.setMediaToDelete(mediaItem)
+                mOfflinePropertyRepository.setMediaToDelete(mediaItem, ServerState.WAITING_DELETE)
             }
         }
         mOfflinePropertyRepository.updateProperty(newProperty)

@@ -3,9 +3,7 @@ package com.openclassrooms.realestatemanager.repositories
 import com.openclassrooms.realestatemanager.api.PropertyApiService
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.Property
-import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
-import com.openclassrooms.realestatemanager.services.VideoDownloadService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
@@ -13,8 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class PropertyRepository @Inject constructor(
-    private val mPropertyApiService: PropertyApiService,
-    private val mVideoDownloadService: VideoDownloadService
+    private val mPropertyApiService: PropertyApiService
 ){
 
     private val _stateFlow = MutableStateFlow<State>(State.Idle)
@@ -57,10 +54,6 @@ class PropertyRepository @Inject constructor(
         val state = mPropertyApiService.deleteMedia(mediaItem)
         if(state is State.Upload.Error){
             _stateFlow.value = state
-        }
-
-        if(mediaItem.fileType == FileType.VIDEO){
-            mVideoDownloadService.deleteVideo(mediaItem)
         }
     }
 }

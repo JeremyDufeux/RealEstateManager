@@ -13,7 +13,7 @@ interface PropertyDao {
 
     @Transaction
     @Query("SELECT * FROM properties WHERE propertyId=:propertyId")
-    fun getPropertyWithId(propertyId: String): PropertyWithMediaItemAndPointsOfInterestEntity
+    fun getPropertyWithId(propertyId: String): PropertyWithMediaItemAndPointsOfInterestEntity?
 
     @Transaction
     @Query("SELECT * FROM properties WHERE propertyId=:propertyId")
