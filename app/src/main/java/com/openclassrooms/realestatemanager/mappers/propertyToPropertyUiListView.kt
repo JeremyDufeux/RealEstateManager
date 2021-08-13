@@ -7,7 +7,7 @@ import com.openclassrooms.realestatemanager.utils.Utils.convertDollarsToEuros
 
 fun propertyToPropertyUiListView(properties: List<Property>, currency: Currency): List<PropertyUiListView>{
     val propertiesUi = mutableListOf<PropertyUiListView>()
-    for (property in properties){
+    for (property in properties.sortedByDescending { it.postDate }){
         val priceString =  if(property.price != null){
             if(currency == Currency.DOLLAR) {
                 String.format("%s%,d", Currency.DOLLAR.symbol, property.price?.toInt())
