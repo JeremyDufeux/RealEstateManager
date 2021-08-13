@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding
+import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiDetailsView
 import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_MEDIA_LIST
 import com.openclassrooms.realestatemanager.ui.mediaViewer.BUNDLE_KEY_SELECTED_MEDIA_INDEX
@@ -139,7 +140,6 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
 
             fragmentDetailSoldTv.visibility = property.soldDateVisibility
         }
-
     }
 
     private fun openGoogleMaps(latitude: Double?, longitude: Double?){
@@ -153,8 +153,18 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
 
     override fun onMediaClick(position: Int) {
         val intent = Intent(requireContext(), MediaViewerActivity::class.java)
-        val arrayList = mViewModel.propertyLiveData.value?.mediaList?.toList() as ArrayList
-        intent.putParcelableArrayListExtra(BUNDLE_KEY_MEDIA_LIST, arrayList )
+
+        val mediaList = mViewModel.propertyLiveData.value?.mediaList?.toList()
+
+        val arrayList: java.util.ArrayList<MediaItem> = if(mediaList?.size == 1) {
+            arrayListOf(mediaList[0])
+        } else {
+            mediaList as ArrayList<MediaItem>
+        }
+
+        intent.putParcelableArrayListExtra(BUNDLE_KEY_MEDIA_LIST, arrayList)
+
+        intent.putExtra(BUNDLE_KEY_PROPERTY_ID, mViewModel.propertyLiveData.value?.id)
         intent.putExtra(BUNDLE_KEY_SELECTED_MEDIA_INDEX, position)
         startActivity(intent)
     }
