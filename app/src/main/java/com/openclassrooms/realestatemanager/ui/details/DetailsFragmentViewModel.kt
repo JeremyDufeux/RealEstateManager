@@ -10,6 +10,7 @@ import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
 import com.openclassrooms.realestatemanager.repositories.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -24,8 +25,14 @@ class DetailsFragmentViewModel @Inject constructor(
     private var mPropertyMutableLiveData : MutableLiveData<PropertyUiDetailsView> = MutableLiveData()
     var propertyLiveData: LiveData<PropertyUiDetailsView> = mPropertyMutableLiveData
 
+    private lateinit var job: Job
+
     fun setPropertyId(propertyId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        if(this::job.isInitialized){
+            job.cancel()
+        }
+
+        job = viewModelScope.launch(Dispatchers.IO) {
             combine(mPropertyUseCase.getPropertyWithIdFlow(propertyId), mUserDataRepository.userDataFlow){ property, userData ->
                 propertyToPropertyUiDetailsView(property, userData)
             }.collect { property ->
