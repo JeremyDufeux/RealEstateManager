@@ -3,8 +3,8 @@ package com.openclassrooms.realestatemanager.models.databaseEntites
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.openclassrooms.realestatemanager.models.enums.DataState
 import com.openclassrooms.realestatemanager.models.enums.FileType
-import com.openclassrooms.realestatemanager.models.enums.ServerState
 import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "media_items")
@@ -16,5 +16,5 @@ data class MediaItemEntity(
     var url: String,
     var description: String,
     val fileType: FileType,
-    var serverState: ServerState
+    var dataState: DataState
 ) : Parcelable

@@ -20,15 +20,15 @@ interface PropertyDao {
     fun getPropertyWithIdFlow(propertyId: String): Flow<PropertyWithMediaItemAndPointsOfInterestEntity>
 
     @Transaction
-    @Query("SELECT * FROM properties WHERE serverState='WAITING_UPLOAD'")
+    @Query("SELECT * FROM properties WHERE dataState='WAITING_UPLOAD'")
     fun getPropertiesToUpload(): List<PropertyWithMediaItemAndPointsOfInterestEntity>
 
     @Transaction
-    @Query("SELECT * FROM media_items WHERE serverState='WAITING_UPLOAD'")
+    @Query("SELECT * FROM media_items WHERE dataState='WAITING_UPLOAD'")
     fun getMediaItemsToUpload(): List<MediaItemEntity>
 
     @Transaction
-    @Query("SELECT * FROM media_items WHERE serverState='WAITING_DELETE'")
+    @Query("SELECT * FROM media_items WHERE dataState='WAITING_DELETE'")
     fun getMediaItemsToDelete(): List<MediaItemEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -46,6 +46,21 @@ interface PropertyDao {
     @Query("DELETE FROM properties_point_of_interest_cross_ref WHERE propertyId=:id")
     fun deletePointsOfInterestForProperty(id: String)
 
+    @Query("DELETE FROM properties_point_of_interest_cross_ref ")
+    fun deletePointsOfInterestForAllProperties()
+
     @Query("DELETE FROM media_items WHERE mediaId=:id")
     fun deleteMediaWithId(id: String)
+
+    @Query("DELETE FROM properties WHERE dataState='OLD'")
+    fun deleteOldProperties()
+
+    @Query("DELETE FROM media_items WHERE dataState='OLD'")
+    fun deleteOldMedias()
+    
+    @Query("UPDATE properties SET dataState='OLD'")
+    fun updatePropertiesToOld()
+
+    @Query("UPDATE media_items SET dataState='OLD'")
+    fun updateMediasToOld()
 }

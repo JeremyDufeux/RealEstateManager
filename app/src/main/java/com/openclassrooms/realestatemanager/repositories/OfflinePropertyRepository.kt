@@ -11,8 +11,8 @@ import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.databaseEntites.PointOfInterestEntity
 import com.openclassrooms.realestatemanager.models.databaseEntites.PropertyPointOfInterestCrossRef
+import com.openclassrooms.realestatemanager.models.enums.DataState
 import com.openclassrooms.realestatemanager.models.enums.FileType
-import com.openclassrooms.realestatemanager.models.enums.ServerState
 import com.openclassrooms.realestatemanager.services.VideoDownloadService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -48,24 +48,22 @@ class OfflinePropertyRepository @Inject constructor(
         }
 
     suspend fun updateDatabase(propertiesList: List<Property>) {
+        prepareDatabaseBeforeUpdate()
         for (property in propertiesList) {
-            val oldProperty = getPropertyWithId(property.id)
-            if(oldProperty == null) {
-                addProperty(property, ServerState.SERVER)
-            } else {
-                for(mediaItem in property.mediaList){
-                    if(oldProperty.mediaList.firstOrNull{ it.id == mediaItem.id} == null){ // Media as been added
-                        addMedia(mediaItem, ServerState.SERVER)
-                    }
-                }
-                for(mediaItem in oldProperty.mediaList){
-                    if(property.mediaList.firstOrNull{ it.id == mediaItem.id} == null){ // Media as been deleted
-                        deleteMedia(mediaItem)
-                    }
-                }
-
-            }
+            addProperty(property, DataState.SERVER)
         }
+        deleteOldData()
+    }
+
+    private fun prepareDatabaseBeforeUpdate() {
+        mPropertyDao.updatePropertiesToOld()
+        mPropertyDao.updateMediasToOld()
+        mPropertyDao.deletePointsOfInterestForAllProperties()
+    }
+
+    private fun deleteOldData() {
+        mPropertyDao.deleteOldProperties()
+        mPropertyDao.deleteOldMedias()
     }
 
     private fun cachePicture(url: String?) {
@@ -76,19 +74,19 @@ class OfflinePropertyRepository @Inject constructor(
         mVideoDownloadService.cacheVideo(mediaItem)
     }
 
-    suspend fun addProperty(property: Property, serverState: ServerState) {
+    suspend fun addProperty(property: Property, dataState: DataState) {
         val propertyEntity = propertyToPropertyEntityMapper(property)
-        propertyEntity.serverState = serverState
+        propertyEntity.dataState = dataState
         mPropertyDao.insertProperty(propertyEntity)
 
         cachePicture(property.mapPictureUrl)
 
         for (media in property.mediaList) {
             val mediaItemEntity = mediaItemToMediaItemEntityMapper(media)
-            mediaItemEntity.serverState = serverState
+            mediaItemEntity.dataState = dataState
             mPropertyDao.insertMediaItem(mediaItemEntity)
 
-            if(serverState == ServerState.SERVER) {
+            if(dataState == DataState.SERVER) {
                 cachePicture(media.url)
 
                 if (media.fileType == FileType.VIDEO) {
@@ -126,15 +124,15 @@ class OfflinePropertyRepository @Inject constructor(
         return mediaItemsEntityToMediaItemsMapper(mPropertyDao.getMediaItemsToDelete())
     }
 
-    suspend fun addMedia(mediaItem: MediaItem, serverState: ServerState) {
+    suspend fun addMediaToUpload(mediaItem: MediaItem) {
         val mediaItemEntity = mediaItemToMediaItemEntityMapper(mediaItem)
-        mediaItemEntity.serverState = serverState
+        mediaItemEntity.dataState = DataState.WAITING_UPLOAD
         mPropertyDao.insertMediaItem(mediaItemEntity)
     }
 
-    suspend fun setMediaToDelete(mediaItem: MediaItem, serverState: ServerState) {
+    suspend fun setMediaToDelete(mediaItem: MediaItem) {
         val mediaItemEntity = mediaItemToMediaItemEntityMapper(mediaItem)
-        mediaItemEntity.serverState = serverState
+        mediaItemEntity.dataState = DataState.WAITING_DELETE
         mPropertyDao.insertMediaItem(mediaItemEntity)
     }
 
@@ -148,7 +146,7 @@ class OfflinePropertyRepository @Inject constructor(
 
     suspend fun updateProperty(property: Property) {
         val propertyEntity = propertyToPropertyEntityMapper(property)
-        propertyEntity.serverState = ServerState.WAITING_UPLOAD
+        propertyEntity.dataState = DataState.WAITING_UPLOAD
 
         mPropertyDao.insertProperty(propertyEntity)
 

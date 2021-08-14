@@ -1,7 +1,8 @@
 package com.openclassrooms.realestatemanager.models.enums
 
-enum class ServerState {
+enum class DataState {
     SERVER,
     WAITING_UPLOAD,
-    WAITING_DELETE
+    WAITING_DELETE,
+    OLD
 }

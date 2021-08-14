@@ -3,7 +3,7 @@ package com.openclassrooms.realestatemanager.repositories
 import android.content.Context
 import androidx.work.ListenableWorker.Result
 import com.openclassrooms.realestatemanager.models.Property
-import com.openclassrooms.realestatemanager.models.enums.ServerState
+import com.openclassrooms.realestatemanager.models.enums.DataState
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.modules.IoCoroutineScope
 import com.openclassrooms.realestatemanager.services.GeocoderClient
@@ -74,7 +74,7 @@ class PropertyUseCase @Inject constructor(
     }
 
     suspend fun addProperty(property: Property) {
-        mOfflinePropertyRepository.addProperty(property, ServerState.WAITING_UPLOAD)
+        mOfflinePropertyRepository.addProperty(property, DataState.WAITING_UPLOAD)
 
         if (Utils.isInternetAvailable(mContext)) {
             mPropertyRepository.addPropertyWithMedias(property)
@@ -121,12 +121,12 @@ class PropertyUseCase @Inject constructor(
     private suspend fun updatePropertyOffline(oldProperty: Property, newProperty: Property) {
         for(mediaItem in newProperty.mediaList){
             if(oldProperty.mediaList.firstOrNull{ it.id == mediaItem.id} == null){ // Media as been added
-                mOfflinePropertyRepository.addMedia(mediaItem, ServerState.WAITING_UPLOAD)
+                mOfflinePropertyRepository.addMediaToUpload(mediaItem)
             }
         }
         for(mediaItem in oldProperty.mediaList){
             if(newProperty.mediaList.firstOrNull{ it.id == mediaItem.id} == null){ // Media as been deleted
-                mOfflinePropertyRepository.setMediaToDelete(mediaItem, ServerState.WAITING_DELETE)
+                mOfflinePropertyRepository.setMediaToDelete(mediaItem)
             }
         }
         mOfflinePropertyRepository.updateProperty(newProperty)
