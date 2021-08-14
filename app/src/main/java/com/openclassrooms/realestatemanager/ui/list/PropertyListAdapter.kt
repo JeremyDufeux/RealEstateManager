@@ -69,12 +69,11 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
 
             mBinding.root.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
             mBinding.fragmentListItemPriceTv.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
-            if(mSelectedItem == position){
+
+            if(mSelectedItem == position && context.resources.getBoolean(R.bool.isTablet)){
                 mBinding.root.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent))
                 mBinding.fragmentListItemPriceTv.setTextColor(ContextCompat.getColor(context, R.color.white))
             }
-
-
 
             mBinding.root.setOnClickListener {
                 mPropertyListener.onPropertyClick(adapterPosition)
