@@ -10,5 +10,5 @@ enum class PointOfInterest(val description : Int,
     PUBLIC_TRANSPORT(R.string.poi_public_transport, R.drawable.ic_bus),
     SWIMMING_POOL(R.string.poi_swimming_pool, R.drawable.ic_pool),
     FITNESS_CLUB(R.string.poi_fitness_club, R.drawable.ic_fitness),
-    PARKING(R.string.poi_parking, R.drawable.ic_fitness)
+    PARKING(R.string.poi_parking, R.drawable.ic_parking)
 }
