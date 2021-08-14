@@ -7,8 +7,8 @@ import com.openclassrooms.realestatemanager.models.enums.Currency
 import com.openclassrooms.realestatemanager.models.enums.Unit
 import com.openclassrooms.realestatemanager.utils.find
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,8 +22,8 @@ class UserDataRepository @Inject constructor(
 ) {
     private var mPreferences: SharedPreferences = mContext.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
 
-    private val _userDataFlow = MutableStateFlow(UserData(Unit.IMPERIAL, Currency.DOLLAR))
-    val userDataFlow = _userDataFlow.asStateFlow()
+    private val _userDataFlow = MutableSharedFlow<UserData>(replay = 1)
+    val userDataFlow = _userDataFlow.asSharedFlow()
 
     init {
         readUserData()
@@ -36,13 +36,13 @@ class UserDataRepository @Inject constructor(
         val currencyString = mPreferences.getString(PREF_KEY_CURRENCY, Currency.DOLLAR.currencyName)!!
         val currency = Currency::currencyName.find(currencyString)!!
 
-        _userDataFlow.value = UserData(unit, currency)
+        _userDataFlow.tryEmit(UserData(unit, currency))
     }
 
     fun saveUserData(unit: Unit, currency: Currency){
         mPreferences.edit().putString(PREF_KEY_UNIT, unit.unitName).apply()
         mPreferences.edit().putString(PREF_KEY_CURRENCY, currency.currencyName).apply()
 
-        _userDataFlow.value = UserData(unit, currency)
+        _userDataFlow.tryEmit(UserData(unit, currency))
     }
 }

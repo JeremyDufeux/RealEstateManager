@@ -1,10 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.list
 
 import android.location.Location
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiListView
 import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiMapView
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
@@ -15,7 +12,7 @@ import com.openclassrooms.realestatemanager.repositories.UserDataRepository
 import com.openclassrooms.realestatemanager.services.LocationService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
@@ -26,28 +23,30 @@ import javax.inject.Inject
 class ListViewModel @Inject constructor(
     private val mPropertyUseCase: PropertyUseCase,
     private val mLocationService: LocationService,
-    private val mUserDataRepository: UserDataRepository
+    mUserDataRepository: UserDataRepository
     ) : ViewModel(){
 
-    private var _stateLiveData : MutableLiveData<State> = MutableLiveData()
-    val stateLiveData: LiveData<State> = _stateLiveData
+    val stateLiveData: LiveData<State> = mPropertyUseCase.stateFlow.asLiveData(Dispatchers.IO)
 
-    private val _propertiesUiListViewLiveData: MutableLiveData<List<PropertyUiListView>> = MutableLiveData()
-    val propertiesUiListViewLiveData: LiveData<List<PropertyUiListView>> = _propertiesUiListViewLiveData
-    
-    private val _propertiesUiMapViewLiveData: MutableLiveData<List<PropertyUiMapView>> = MutableLiveData()
-    val propertiesUiMapViewLiveData: LiveData<List<PropertyUiMapView>> = _propertiesUiMapViewLiveData
+    val stateFlowSuccess: Flow<State.Download.DownloadSuccess> = mPropertyUseCase.stateFlow.filterIsInstance()
+
+    val propertiesUiListViewLiveData: LiveData<List<PropertyUiListView>> =
+        combine(stateFlowSuccess, mUserDataRepository.userDataFlow){ state, userData ->
+            propertyToPropertyUiListView(state.propertiesList, userData.currency)
+        }.asLiveData(Dispatchers.IO)
+
+    val propertiesUiMapViewLiveData: LiveData<List<PropertyUiMapView>> = stateFlowSuccess
+        .map { propertyToPropertyUiMapView(it.propertiesList) }
+        .asLiveData(Dispatchers.IO)
 
     private var _selectedPropertyLiveData : MutableLiveData<String> = MutableLiveData()
     val selectedPropertyLiveData: LiveData<String> = _selectedPropertyLiveData
 
-    private val _location: MutableLiveData<Location> = MutableLiveData()
-    val location: LiveData<Location> = _location
+    val location: LiveData<Location> = mLocationService.locationFlow.asLiveData(Dispatchers.IO)
 
     val locationStarted = mLocationService.locationStarted
 
     init {
-        startFlowObserver()
         fetchProperties()
     }
 
@@ -58,29 +57,8 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    fun startFlowObserver(){
-        viewModelScope.launch(Dispatchers.IO) {
-            mPropertyUseCase.stateFlow
-                .map {
-                    _stateLiveData.postValue(it)
-                    it
-                }
-                .filterIsInstance<State.Download.DownloadSuccess>()
-                .combine(mUserDataRepository.userDataFlow) { state, userData ->
-                    _propertiesUiMapViewLiveData.postValue(propertyToPropertyUiMapView(state.propertiesList))
-                    _propertiesUiListViewLiveData.postValue(propertyToPropertyUiListView(state.propertiesList, userData.currency))
-                }
-                .collect { }
-        }
-    }
-
     fun startLocationUpdates(){
-        viewModelScope.launch(Dispatchers.IO) {
-            mLocationService.startLocationUpdates()
-            mLocationService.locationFlow.collect { location ->
-                _location.postValue(location)
-            }
-        }
+        mLocationService.startLocationUpdates()
     }
 
     fun stopLocationUpdates() {

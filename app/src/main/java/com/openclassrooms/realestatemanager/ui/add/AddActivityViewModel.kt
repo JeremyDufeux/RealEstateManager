@@ -43,8 +43,7 @@ class AddActivityViewModel @Inject constructor(
     private val _mediaListLiveData = MutableLiveData<List<MediaItem>>()
     val mediaListLiveData : LiveData<List<MediaItem>> = _mediaListLiveData
 
-    private var _userDataLiveData : MutableLiveData<UserData> = MutableLiveData()
-    var userDataLiveData: LiveData<UserData> = _userDataLiveData
+    var userDataLiveData: LiveData<UserData> = mUserDataRepository.userDataFlow.asLiveData(Dispatchers.IO)
 
     private var propertyId = savedStateHandle.get<String>(BUNDLE_KEY_PROPERTY_ID)
     private var editMode = false
@@ -71,9 +70,7 @@ class AddActivityViewModel @Inject constructor(
         if (propertyId != null) {
             editMode = true
             viewModelScope.launch(Dispatchers.IO) {
-                mPropertyUseCase.getPropertyWithIdFlow(propertyId!!)
-                    .combine(mUserDataRepository.userDataFlow){ property, userData ->
-                        _userDataLiveData.postValue(userData)
+                combine(mPropertyUseCase.getPropertyWithIdFlow(propertyId!!), mUserDataRepository.userDataFlow){ property, userData ->
                         propertyToPropertyUiAddView(property, userData)
                     }
                     .collect { property ->
@@ -86,11 +83,6 @@ class AddActivityViewModel @Inject constructor(
                     }
             }
         } else {
-            viewModelScope.launch(Dispatchers.IO) {
-                mUserDataRepository.userDataFlow.collect {
-                    _userDataLiveData.postValue(it)
-                }
-            }
             propertyId = UUID.randomUUID().toString()
         }
     }
