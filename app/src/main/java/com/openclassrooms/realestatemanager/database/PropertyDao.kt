@@ -46,9 +46,6 @@ interface PropertyDao {
     @Query("DELETE FROM properties_point_of_interest_cross_ref WHERE propertyId=:id")
     fun deletePointsOfInterestForProperty(id: String)
 
-    @Query("DELETE FROM properties_point_of_interest_cross_ref ")
-    fun deletePointsOfInterestForAllProperties()
-
     @Query("DELETE FROM media_items WHERE mediaId=:id")
     fun deleteMediaWithId(id: String)
 
@@ -57,10 +54,16 @@ interface PropertyDao {
 
     @Query("DELETE FROM media_items WHERE dataState='OLD'")
     fun deleteOldMedias()
-    
+
+    @Query("DELETE FROM properties_point_of_interest_cross_ref WHERE dataState='OLD'")
+    fun deleteOldPointsOfInterest()
+
     @Query("UPDATE properties SET dataState='OLD'")
     fun updatePropertiesToOld()
 
     @Query("UPDATE media_items SET dataState='OLD'")
     fun updateMediasToOld()
+
+    @Query("UPDATE properties_point_of_interest_cross_ref SET dataState='OLD'")
+    fun updatePointsOfInterestToOld()
 }

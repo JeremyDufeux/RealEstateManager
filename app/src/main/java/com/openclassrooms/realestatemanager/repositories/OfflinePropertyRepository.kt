@@ -58,12 +58,13 @@ class OfflinePropertyRepository @Inject constructor(
     private fun prepareDatabaseBeforeUpdate() {
         mPropertyDao.updatePropertiesToOld()
         mPropertyDao.updateMediasToOld()
-        mPropertyDao.deletePointsOfInterestForAllProperties()
+        mPropertyDao.updatePointsOfInterestToOld()
     }
 
     private fun deleteOldData() {
         mPropertyDao.deleteOldProperties()
         mPropertyDao.deleteOldMedias()
+        mPropertyDao.deleteOldPointsOfInterest()
     }
 
     private fun cachePicture(url: String?) {
@@ -97,7 +98,7 @@ class OfflinePropertyRepository @Inject constructor(
 
         startDownloadService()
 
-        insertPointsOfInterestForProperty(property)
+        insertPointsOfInterestForProperty(property, DataState.SERVER)
     }
 
     private fun startDownloadService() {
@@ -151,16 +152,16 @@ class OfflinePropertyRepository @Inject constructor(
         mPropertyDao.insertProperty(propertyEntity)
 
         mPropertyDao.deletePointsOfInterestForProperty(property.id)
-        insertPointsOfInterestForProperty(property)
+        insertPointsOfInterestForProperty(property, DataState.NONE)
     }
 
-    private suspend fun insertPointsOfInterestForProperty(property: Property){
+    private suspend fun insertPointsOfInterestForProperty(property: Property, dataState: DataState){
         for (pointOfInterest in property.pointOfInterestList) {
             val pointOfInterestEntity = PointOfInterestEntity(pointOfInterest.toString())
             mPropertyDao.insertPointOfInterest(pointOfInterestEntity)
 
             val crossRef =
-                PropertyPointOfInterestCrossRef(property.id, pointOfInterest.toString())
+                PropertyPointOfInterestCrossRef(property.id, pointOfInterest.toString(), dataState)
             mPropertyDao.insertPropertyPointOfInterestCrossRef(crossRef)
         }
     }
