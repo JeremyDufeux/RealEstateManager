@@ -1,9 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.details
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiDetailsView
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiDetailsView
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
@@ -16,8 +13,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+const val DETAILS_FRAGMENT_SAVED_STATE_PROPERTY = "DETAILS_FRAGMENT_SAVED_STATE_PROPERTY"
+
 @HiltViewModel
 class DetailsFragmentViewModel @Inject constructor(
+    private val mSavedStateHandle: SavedStateHandle,
     private val mPropertyUseCase: PropertyUseCase,
     private val mUserDataRepository: UserDataRepository
     ) : ViewModel(){
@@ -27,7 +27,15 @@ class DetailsFragmentViewModel @Inject constructor(
 
     private lateinit var job: Job
 
+    init {
+        if(mSavedStateHandle.contains(DETAILS_FRAGMENT_SAVED_STATE_PROPERTY)){
+            setPropertyId(mSavedStateHandle.get<String>(DETAILS_FRAGMENT_SAVED_STATE_PROPERTY)!!)
+        }
+    }
+
     fun setPropertyId(propertyId: String) {
+        mSavedStateHandle.set(DETAILS_FRAGMENT_SAVED_STATE_PROPERTY, propertyId)
+
         if(this::job.isInitialized){
             job.cancel()
         }
