@@ -6,12 +6,12 @@
     <dimen name="fragment_details_padding">10dp</dimen>
 
     <!-- fragment_add_property -->
-    <dimen name="fragment_add_property_padding">8dp</dimen>
-    <dimen name="fragment_add_property_spacing">16dp</dimen>
-    <dimen name="fragment_add_property_image_size">30dp</dimen>
-    <dimen name="fragment_add_property_media_container_size">104dp</dimen>
-    <dimen name="fragment_add_property_media_size">100dp</dimen>
-    <dimen name="fragment_add_property_media_padding">2dp</dimen>
-    <dimen name="fragment_add_property_postal_code_width">150dp</dimen>
+    <dimen name="activity_add_property_padding">8dp</dimen>
+    <dimen name="activity_add_property_spacing">16dp</dimen>
+    <dimen name="activity_add_property_image_size">30dp</dimen>
+    <dimen name="activity_add_property_media_container_size">104dp</dimen>
+    <dimen name="activity_add_property_media_size">100dp</dimen>
+    <dimen name="activity_add_property_media_padding">2dp</dimen>
+    <dimen name="activity_add_property_postal_code_width">150dp</dimen>
 
 </resources>

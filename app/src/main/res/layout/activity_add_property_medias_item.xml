@@ -2,8 +2,8 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/fragment_add_property_media_size"
-    android:layout_height="@dimen/fragment_add_property_media_size"
+    android:layout_width="@dimen/activity_add_property_media_size"
+    android:layout_height="@dimen/activity_add_property_media_size"
     android:layout_margin="2dp"
     app:cardUseCompatPadding="true">
 
