@@ -285,23 +285,6 @@
                         app:layout_constraintTop_toTopOf="@+id/fragment_detail_bedrooms_title_tv"
                         tools:text="@sample/properties.json/details/bedrooms/value" />
 
-                    <androidx.constraintlayout.widget.Barrier
-                        android:id="@+id/fragment_detail_barrier1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:barrierDirection="end"
-                        app:constraint_referenced_ids="fragment_detail_surface_title_tv,
-                            fragment_detail_rooms_title_tv,
-                            fragment_detail_bathrooms_title_tv,
-                            fragment_detail_bedrooms_title_tv"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingHorizontal="15dp">
 
                     <ImageView
                         android:id="@+id/fragment_detail_date_iv"
@@ -309,10 +292,11 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_marginEnd="10dp"
+                        android:layout_marginTop="18dp"
                         android:contentDescription="@string/post_date"
                         android:src="@drawable/ic_calendar"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/fragment_detail_bedrooms_iv" />
 
                     <TextView
                         android:id="@+id/fragment_detail_post_date_title_tv"
@@ -332,7 +316,7 @@
                         android:layout_marginStart="15dp"
                         app:layout_constraintBottom_toBottomOf="@+id/fragment_detail_date_iv"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/fragment_detail_barrier2"
+                        app:layout_constraintStart_toStartOf="@+id/fragment_detail_barrier1"
                         app:layout_constraintTop_toTopOf="@+id/fragment_detail_date_iv"
                         tools:text="@sample/properties.json/details/availability_date/value" />
 
@@ -354,7 +338,7 @@
                         android:layout_marginStart="15dp"
                         app:layout_constraintBottom_toBottomOf="@+id/fragment_detail_sold_date_title_tv"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/fragment_detail_barrier2"
+                        app:layout_constraintStart_toStartOf="@+id/fragment_detail_barrier1"
                         app:layout_constraintTop_toTopOf="@+id/fragment_detail_sold_date_title_tv"
                         tools:text="@sample/properties.json/details/availability_date/value" />
 
@@ -388,19 +372,23 @@
                         android:layout_marginStart="15dp"
                         app:layout_constraintBottom_toBottomOf="@+id/fragment_detail_agent_iv"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/fragment_detail_barrier2"
+                        app:layout_constraintStart_toStartOf="@+id/fragment_detail_barrier1"
                         app:layout_constraintTop_toTopOf="@+id/fragment_detail_agent_iv"
                         tools:text="@sample/properties.json/details/agent/value" />
 
+
                     <androidx.constraintlayout.widget.Barrier
-                        android:id="@+id/fragment_detail_barrier2"
+                        android:id="@+id/fragment_detail_barrier1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:barrierDirection="end"
-                        app:constraint_referenced_ids="
+                        app:constraint_referenced_ids="fragment_detail_surface_title_tv,
+                            fragment_detail_rooms_title_tv,
+                            fragment_detail_bathrooms_title_tv,
+                            fragment_detail_bedrooms_title_tv,
                             fragment_detail_post_date_title_tv,
                             fragment_detail_sold_date_title_tv,
-                            fragment_detail_agent_title_tv" />
+                            fragment_detail_agent_title_tv"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -444,7 +432,7 @@
                     <androidx.cardview.widget.CardView
                         android:id="@+id/fragment_detail_map_cv"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="300dp"
                         android:layout_marginTop="18dp"
                         app:cardUseCompatPadding="true"
                         app:layout_constraintEnd_toEndOf="parent"
