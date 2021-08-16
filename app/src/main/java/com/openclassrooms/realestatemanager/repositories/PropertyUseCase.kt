@@ -10,7 +10,7 @@ import com.openclassrooms.realestatemanager.services.GeocoderClient
 import com.openclassrooms.realestatemanager.services.LifecycleService
 import com.openclassrooms.realestatemanager.services.NotificationService
 import com.openclassrooms.realestatemanager.utils.Utils
-import com.openclassrooms.realestatemanager.utils.getGeoApifyUrl
+import com.openclassrooms.realestatemanager.utils.getStaticMapUrl
 import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import com.openclassrooms.realestatemanager.workers.UploadService
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -177,7 +177,7 @@ class PropertyUseCase @Inject constructor(
         if (latLng != null) {
             property.latitude = latLng.latitude
             property.longitude = latLng.longitude
-            property.mapPictureUrl = getGeoApifyUrl(property.latitude, property.longitude)
+            property.mapPictureUrl = getStaticMapUrl(property.latitude, property.longitude)
         }
     }
 

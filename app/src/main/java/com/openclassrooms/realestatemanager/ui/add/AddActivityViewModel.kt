@@ -16,7 +16,7 @@ import com.openclassrooms.realestatemanager.repositories.UserDataRepository
 import com.openclassrooms.realestatemanager.services.GeocoderClient
 import com.openclassrooms.realestatemanager.utils.Utils.convertEurosToDollars
 import com.openclassrooms.realestatemanager.utils.Utils.convertSquareMetersToSquareFoot
-import com.openclassrooms.realestatemanager.utils.getGeoApifyUrl
+import com.openclassrooms.realestatemanager.utils.getStaticMapUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -110,7 +110,7 @@ class AddActivityViewModel @Inject constructor(
                 country = country,
                 latitude = latLng?.latitude,
                 longitude = latLng?.longitude,
-                mapPictureUrl = getGeoApifyUrl(latLng?.latitude, latLng?.longitude),
+                mapPictureUrl = getStaticMapUrl(latLng?.latitude, latLng?.longitude),
                 pointOfInterestList = mPointOfInterestList,
                 postDate = postDate ?: Calendar.getInstance().timeInMillis,
                 soldDate = soldDate,
