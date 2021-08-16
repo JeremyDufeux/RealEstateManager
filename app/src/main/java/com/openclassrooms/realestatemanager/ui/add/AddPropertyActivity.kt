@@ -303,7 +303,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.save_property -> saveProperty()
+            R.id.add_activity_save_menu -> saveProperty()
         }
         return super.onOptionsItemSelected(item)
     }

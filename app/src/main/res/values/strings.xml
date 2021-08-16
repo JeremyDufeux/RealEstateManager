@@ -85,5 +85,4 @@
     <string name="sold">SOLD!</string>
     <string name="open_date_picker">Open date picker</string>
     <string name="clear_date_picker">Clear date picker</string>
-    <string name="select_a_property">Select a property in the list</string>
 </resources>

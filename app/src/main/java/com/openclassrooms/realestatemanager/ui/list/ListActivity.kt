@@ -13,6 +13,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityListBinding
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.ui.add.AddPropertyActivity
+import com.openclassrooms.realestatemanager.ui.add.BUNDLE_KEY_ADD_ACTIVITY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.ui.details.DetailsActivity
 import com.openclassrooms.realestatemanager.ui.details.DetailsFragment
@@ -27,6 +28,8 @@ class ListActivity : AppCompatActivity() {
     private val mViewModel: ListViewModel by viewModels()
 
     private lateinit var mBinding : ActivityListBinding
+
+    private var editMenuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,18 +77,30 @@ class ListActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.list_activity_toolbar_menu, menu)
+        editMenuItem = menu?.findItem(R.id.list_activity_edit_menu)
+
+        if(mViewModel.selectedPropertyLiveData.value != null){
+            editMenuItem?.isVisible = true
+        }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.settings -> openSettingsActivity()
+            R.id.list_activity_settings_menu -> openSettingsActivity()
+            R.id.list_activity_edit_menu -> openEditPropertyActivity()
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun openAddPropertyActivity() {
         val addPropertyActivityIntent = Intent(this, AddPropertyActivity::class.java)
+        startActivity(addPropertyActivityIntent)
+    }
+
+    private fun openEditPropertyActivity() {
+        val addPropertyActivityIntent = Intent(this, AddPropertyActivity::class.java)
+        addPropertyActivityIntent.putExtra(BUNDLE_KEY_ADD_ACTIVITY_PROPERTY_ID, mViewModel.selectedPropertyLiveData.value)
         startActivity(addPropertyActivityIntent)
     }
 
@@ -119,19 +134,31 @@ class ListActivity : AppCompatActivity() {
         }
     }
 
-    private val selectedPropertyObserver = Observer<String> { propertyId ->
-        if(mBinding.activityListDetailsFragment != null){
-            mBinding.apply {
-                activityListIconIv?.visibility = View.INVISIBLE
-                activityListMessageTv?.visibility = View.INVISIBLE
-                activityListDetailsFragment?.visibility = View.VISIBLE
+    private val selectedPropertyObserver = Observer<String?> { propertyId ->
+        if(propertyId != null) {
+            if (resources.getBoolean(R.bool.isTabletLand)) {
+                showDetailsFragmentForTablet(propertyId)
+                mViewModel.selectedPropertyIdForTabletLan = propertyId
+            } else {
+                val detailsActivityIntent = Intent(this, DetailsActivity::class.java)
+                detailsActivityIntent.putExtra(BUNDLE_KEY_PROPERTY_ID, propertyId)
+                startActivity(detailsActivityIntent)
+                mViewModel.setSelectedPropertyId(null)
             }
-            val detailFragment : DetailsFragment = supportFragmentManager.findFragmentById(R.id.activity_list_details_fragment) as DetailsFragment
-            detailFragment.setPropertyId(propertyId)
-        } else {
-            val intent = Intent(this, DetailsActivity::class.java)
-            intent.putExtra(BUNDLE_KEY_PROPERTY_ID, propertyId)
-            startActivity(intent)
+        } else if(mViewModel.selectedPropertyIdForTabletLan != null){
+            showDetailsFragmentForTablet(mViewModel.selectedPropertyIdForTabletLan!!)
         }
+    }
+
+    private fun showDetailsFragmentForTablet(propertyId: String){
+        editMenuItem?.isVisible = true
+
+        mBinding.apply {
+            activityListIconIv?.visibility = View.INVISIBLE
+            activityListDetailsFragment?.visibility = View.VISIBLE
+        }
+        val detailFragment: DetailsFragment =
+            supportFragmentManager.findFragmentById(R.id.activity_list_details_fragment) as DetailsFragment
+        detailFragment.setPropertyId(propertyId)
     }
 }

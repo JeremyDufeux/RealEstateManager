@@ -63,6 +63,16 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
     private val propertiesObserver = Observer<List<PropertyUiListView>> { properties ->
         mPropertyList = properties
         mAdapter.updateList(properties)
+
+        if(resources.getBoolean(R.bool.isTabletLand)) {
+                if(mViewModel.selectedPropertyIdForTabletLan == null){
+                    mViewModel.selectedPropertyIdForTabletLan = properties[0].id
+                    mViewModel.setSelectedPropertyId(properties[0].id)
+                } else {
+                    val index = mPropertyList.indexOfFirst { it.id == mViewModel.selectedPropertyIdForTabletLan }
+                    mAdapter.selectProperty(index)
+                }
+            }
     }
 
     private val stateObserver = Observer<State> { state ->

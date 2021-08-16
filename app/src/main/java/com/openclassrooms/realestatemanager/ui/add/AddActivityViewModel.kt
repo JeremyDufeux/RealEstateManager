@@ -14,7 +14,6 @@ import com.openclassrooms.realestatemanager.modules.IoCoroutineScope
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
 import com.openclassrooms.realestatemanager.repositories.UserDataRepository
 import com.openclassrooms.realestatemanager.services.GeocoderClient
-import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.utils.Utils.convertEurosToDollars
 import com.openclassrooms.realestatemanager.utils.Utils.convertSquareMetersToSquareFoot
 import com.openclassrooms.realestatemanager.utils.getGeoApifyUrl
@@ -27,6 +26,8 @@ import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
+
+const val BUNDLE_KEY_ADD_ACTIVITY_PROPERTY_ID = "BUNDLE_KEY_ADD_ACTIVITY_PROPERTY_ID"
 
 @HiltViewModel
 class AddActivityViewModel @Inject constructor(
@@ -45,7 +46,7 @@ class AddActivityViewModel @Inject constructor(
 
     var userDataLiveData: LiveData<UserData> = mUserDataRepository.userDataFlow.asLiveData(Dispatchers.IO)
 
-    private var propertyId = savedStateHandle.get<String>(BUNDLE_KEY_PROPERTY_ID)
+    private var propertyId = savedStateHandle.get<String>(BUNDLE_KEY_ADD_ACTIVITY_PROPERTY_ID)
     private var editMode = false
 
     var propertyType : PropertyType = PropertyType.FLAT

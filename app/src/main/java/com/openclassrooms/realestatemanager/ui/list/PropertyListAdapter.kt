@@ -15,7 +15,7 @@ import com.openclassrooms.realestatemanager.models.ui.PropertyUiListView
 
 class PropertyListAdapter(private var mPropertyListener: PropertyListener) : RecyclerView.Adapter<PropertyListAdapter.PropertyViewHolder>() {
 
-    private var mSelectedItem = -1
+    private var mSelectedItem = 0
 
     private val differCallback = object : DiffUtil.ItemCallback<PropertyUiListView>() {
         override fun areItemsTheSame(oldItem: PropertyUiListView, newItem: PropertyUiListView): Boolean {
@@ -40,6 +40,11 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
 
     override fun getItemCount(): Int {
         return mPropertyList.currentList.size
+    }
+
+    fun selectProperty(position: Int) {
+        notifyItemChanged(position)
+        mSelectedItem = position
     }
 
     fun updateList(list : List<PropertyUiListView>){
@@ -70,7 +75,7 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
             mBinding.root.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
             mBinding.fragmentListItemPriceTv.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
 
-            if(mSelectedItem == position && context.resources.getBoolean(R.bool.isTablet)){
+            if(mSelectedItem == position && context.resources.getBoolean(R.bool.isTabletLand)){
                 mBinding.root.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent))
                 mBinding.fragmentListItemPriceTv.setTextColor(ContextCompat.getColor(context, R.color.white))
             }

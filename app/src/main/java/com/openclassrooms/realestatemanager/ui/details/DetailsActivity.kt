@@ -13,6 +13,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityDetailsBinding
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.ui.add.AddPropertyActivity
+import com.openclassrooms.realestatemanager.ui.add.BUNDLE_KEY_ADD_ACTIVITY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.utils.showToast
 import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +31,10 @@ class DetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if(resources.getBoolean(R.bool.isTabletLand)){
+            finish()
+        }
 
         mBinding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
@@ -71,9 +76,9 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun openAddPropertyActivity() {
-        val intent = Intent(this, AddPropertyActivity::class.java)
-        intent.putExtra(BUNDLE_KEY_PROPERTY_ID, propertyId)
-        startActivity(intent)
+        val addPropertyIntent = Intent(this, AddPropertyActivity::class.java)
+        addPropertyIntent.putExtra(BUNDLE_KEY_ADD_ACTIVITY_PROPERTY_ID, propertyId)
+        startActivity(addPropertyIntent)
     }
 
     private val stateObserver = Observer<State> { state ->

@@ -39,12 +39,14 @@ class ListViewModel @Inject constructor(
         .map { propertyToPropertyUiMapView(it.propertiesList) }
         .asLiveData(Dispatchers.IO)
 
-    private var _selectedPropertyLiveData : MutableLiveData<String> = MutableLiveData()
-    val selectedPropertyLiveData: LiveData<String> = _selectedPropertyLiveData
+    private var _selectedPropertyLiveData : MutableLiveData<String?> = MutableLiveData()
+    val selectedPropertyLiveData: LiveData<String?> = _selectedPropertyLiveData
 
     val location: LiveData<Location> = mLocationService.locationFlow.asLiveData(Dispatchers.IO)
 
     val locationStarted = mLocationService.locationStarted
+
+    var selectedPropertyIdForTabletLan: String? = null
 
     init {
         fetchProperties()
@@ -69,7 +71,7 @@ class ListViewModel @Inject constructor(
         mPropertyUseCase.resetState()
     }
 
-    fun setSelectedPropertyId(propertyId: String){
+    fun setSelectedPropertyId(propertyId: String?){
         _selectedPropertyLiveData.value = propertyId
     }
 }

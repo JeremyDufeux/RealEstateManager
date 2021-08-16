@@ -106,7 +106,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.save_settings -> saveSettings()
+            R.id.add_activity_save_settings_menu -> saveSettings()
         }
         return super.onOptionsItemSelected(item)
     }

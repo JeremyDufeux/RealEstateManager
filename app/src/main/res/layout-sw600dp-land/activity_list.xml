@@ -94,16 +94,6 @@
         app:layout_constraintStart_toEndOf="@+id/divider"
         app:layout_constraintTop_toBottomOf="@+id/activity_list_toolbar" />
 
-    <TextView
-        android:id="@+id/activity_list_message_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/select_a_property"
-        android:textSize="30sp"
-        app:layout_constraintTop_toBottomOf="@id/activity_list_icon_iv"
-        app:layout_constraintEnd_toEndOf="@+id/activity_list_icon_iv"
-        app:layout_constraintStart_toStartOf="@+id/activity_list_icon_iv" />
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/activity_list_details_fragment"
         android:name="com.openclassrooms.realestatemanager.ui.details.DetailsFragment"
