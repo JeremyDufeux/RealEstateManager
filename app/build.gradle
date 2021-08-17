@@ -17,7 +17,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunner 'com.openclassrooms.realestatemanager.HiltTestRunner'
         multiDexEnabled true
 
         kapt {
@@ -69,8 +69,15 @@ dependencies {
     // Dagger Hilt
     implementation("com.google.dagger:hilt-android:$hilt_version")
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
+    // Dagger Hilt - For Work Manager
     implementation("androidx.hilt:hilt-work:1.0.0")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
+    // Dagger Hilt - For instrumentation tests
+    androidTestImplementation  ("com.google.dagger:hilt-android-testing:$hilt_version")
+    kaptAndroidTest ("com.google.dagger:hilt-compiler:$hilt_version")
+    // Dagger Hilt - For local unit tests
+    testImplementation ("com.google.dagger:hilt-android-testing:$hilt_version")
+    kaptTest ("com.google.dagger:hilt-compiler:$hilt_version")
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'

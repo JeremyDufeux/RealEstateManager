@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.openclassrooms.realestatemanager.database.AppDatabase
 import com.openclassrooms.realestatemanager.database.PropertyDao
+import com.openclassrooms.realestatemanager.database.PropertyProviderDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,5 +30,10 @@ class HiltDatabaseModule {
     @Provides
     fun providePropertyDao(database: AppDatabase): PropertyDao {
         return database.propertyDao()
+    }
+
+    @Provides
+    fun providePropertyProviderDao(database: AppDatabase): PropertyProviderDao {
+        return database.propertyProviderDao()
     }
 }

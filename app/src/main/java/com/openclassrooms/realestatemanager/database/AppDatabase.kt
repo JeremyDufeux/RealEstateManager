@@ -15,4 +15,5 @@ import com.openclassrooms.realestatemanager.models.databaseEntites.PropertyPoint
     version = 13, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun propertyDao(): PropertyDao
+    abstract fun propertyProviderDao(): PropertyProviderDao
 }

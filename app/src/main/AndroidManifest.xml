@@ -82,6 +82,12 @@
             android:name="androidx.work.impl.WorkManagerInitializer"
             android:authorities="${applicationId}.workmanager-init"
             tools:node="remove" />
+        <provider
+            android:authorities="com.openclassrooms.realestatemanager.propeties"
+            android:name=".services.PropertyContentProvider"
+            android:readPermission="true"
+            android:writePermission="false"
+            android:exported="true"/>
 
         <service
             android:name=".services.VideoDownloadService"
