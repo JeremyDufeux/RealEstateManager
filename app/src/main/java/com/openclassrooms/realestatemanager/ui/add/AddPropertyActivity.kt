@@ -41,7 +41,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
     private val mAdapter = AddPropertyMediaListAdapter(this)
 
-    private lateinit var mTypeAdapter: ArrayAdapter<PropertyType>
+    private lateinit var mTypeAdapter: ArrayAdapter<String>
 
     private val mChipList = mutableMapOf<PointOfInterest, Chip>()
 
@@ -65,10 +65,15 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
     }
 
     private fun configureUi() {
-        mTypeAdapter= ArrayAdapter<PropertyType>(
+        val typeList = mutableListOf<String>()
+        for(poi in PropertyType.values()) {
+            typeList.add(poi.description)
+        }
+
+        mTypeAdapter= ArrayAdapter<String>(
             this,
             R.layout.list_item,
-            PropertyType.values()
+            typeList
         )
 
         // Property type dropdown list
@@ -138,7 +143,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
     private val propertyObserver = Observer<PropertyUiAddView> { property ->
         mBinding.apply {
-            val typeIndex = mTypeAdapter.getPosition(property.type)
+            val typeIndex = mTypeAdapter.getPosition(property.type.description)
             mBinding.activityAddPropertyTypeTvInput.setText(mTypeAdapter.getItem(typeIndex).toString(), false)
 
             activityAddPropertyPriceEtInput.setText(property.priceString)
