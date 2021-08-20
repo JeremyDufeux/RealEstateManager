@@ -67,7 +67,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
     private fun configureUi() {
         val typeList = mutableListOf<String>()
         for(poi in PropertyType.values()) {
-            typeList.add(poi.description)
+            typeList.add(getString(poi.description))
         }
 
         mTypeAdapter= ArrayAdapter<String>(
@@ -143,7 +143,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
     private val propertyObserver = Observer<PropertyUiAddView> { property ->
         mBinding.apply {
-            val typeIndex = mTypeAdapter.getPosition(property.type.description)
+            val typeIndex = mTypeAdapter.getPosition(getString(property.type.description))
             mBinding.activityAddPropertyTypeTvInput.setText(mTypeAdapter.getItem(typeIndex).toString(), false)
 
             activityAddPropertyPriceEtInput.setText(property.priceString)
@@ -161,9 +161,11 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
             activityAddPropertySoldDateEt.visibility = View.VISIBLE
             activityAddPropertySoldDateIv.visibility = View.VISIBLE
-            activityAddPropertySoldDateEt.setEndIconOnClickListener { clearDatePicker() }
+
             activityAddPropertySoldDateEtInput.setText(property.soldDate?.let { formatCalendarToString(it) })
             activityAddPropertySoldDateEtInput.setOnClickListener { openDatePicker() }
+            activityAddPropertySoldDateEt.isEndIconVisible = (property.soldDate != null)
+            activityAddPropertySoldDateEt.setEndIconOnClickListener { clearDatePicker() }
         }
 
         for(poi in property.pointOfInterestList){
@@ -174,6 +176,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
     private fun clearDatePicker() {
         mBinding.activityAddPropertySoldDateEtInput.setText("")
         mViewModel.soldDate = null
+        mBinding.activityAddPropertySoldDateEt.isEndIconVisible = false
     }
 
     private fun openDatePicker() {
@@ -188,6 +191,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         datePicker.addOnPositiveButtonClickListener {
             mViewModel.soldDate = it
             mBinding.activityAddPropertySoldDateEtInput.setText(formatCalendarToString(it))
+            mBinding.activityAddPropertySoldDateEt.isEndIconVisible = true
         }
     }
 

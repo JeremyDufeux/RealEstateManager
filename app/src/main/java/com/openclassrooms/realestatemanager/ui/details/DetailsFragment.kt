@@ -85,7 +85,7 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
             .into(mBinding.fragmentDetailMapIv)
 
         mBinding.apply {
-            fragmentDetailTypeTv.text = property.type.description
+            fragmentDetailTypeTv.text = getString(property.type.description)
 
             fragmentDetailPriceTv.text = property.priceString
             fragmentDetailPriceTv.visibility = property.priceVisibility

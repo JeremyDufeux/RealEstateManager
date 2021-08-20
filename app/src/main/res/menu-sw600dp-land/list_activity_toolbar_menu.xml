@@ -7,6 +7,11 @@
         android:visible="false"
         app:showAsAction="collapseActionView|ifRoom">
     </item>
+    <item android:id="@+id/list_activity_filter_menu"
+        android:title="@string/filters"
+        android:icon="@drawable/ic_filter"
+        app:showAsAction="collapseActionView|ifRoom">
+    </item>
     <item android:id="@+id/list_activity_settings_menu"
         android:title="@string/settings"
         android:icon="@drawable/ic_settings"

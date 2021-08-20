@@ -70,7 +70,7 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
             mBinding.fragmentListItemCityTv.text = property.city
             mBinding.fragmentListItemPriceTv.text = property.priceString
             mBinding.fragmentListItemPriceTv.visibility = property.priceVisibility
-            mBinding.fragmentListItemTypeTv.text = property.type.description
+            mBinding.fragmentListItemTypeTv.text = context.getString(property.type.description)
 
             mBinding.root.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
             mBinding.fragmentListItemPriceTv.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))

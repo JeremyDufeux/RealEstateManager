@@ -1,14 +1,38 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
+
     <!-- tab layout -->
     <string name="list_tab">List</string>
     <string name="map_tab">Map</string>
+
     <!-- Toolbar menu -->
     <string name="menu_add">Add</string>
     <string name="menu_save">Save</string>
     <string name="toolbar_title_add_property">Add property</string>
     <string name="toolbar_title_settings">Settings</string>
     <string name="toolbar_title_property_details">Property details</string>
+
+    <!-- Points of interest-->
+    <string name="poi_school">School</string>
+    <string name="poi_grocery">Grocery</string>
+    <string name="poi_park">Park</string>
+    <string name="poi_public_transport">Public transport</string>
+    <string name="poi_swimming_pool">Swimming pool</string>
+    <string name="poi_fitness_club">Fitness club</string>
+    <string name="poi_parking">Parking</string>
+
+    <!-- Property Types -->
+    <string name="pt_flat">Flat</string>
+    <string name="pt_house">House</string>
+    <string name="pt_duplex">Duplex</string>
+    <string name="pt_triplex">Triplex</string>
+    <string name="pt_penthouse">Penthouse</string>
+    <string name="pt_manor">Manor</string>
+    <string name="pt_land">Land</string>
+    <string name="pt_ranch">Ranch</string>
+    <string name="pt_private_island">Private Island</string>
+
+    <!-- To sort -->
     <string name="property_picture">Property picture</string>
     <string name="media">Media</string>
     <string name="property_location">Property location</string>
@@ -71,13 +95,8 @@
     <string name="notification_title">Uploads done!</string>
     <string name="all_properties_has_been_uploaded">All properties has been uploaded!</string>
     <string name="select_sold_date">Select sold date</string>
-    <string name="poi_school">School</string>
-    <string name="poi_grocery">Grocery</string>
-    <string name="poi_park">Park</string>
-    <string name="poi_public_transport">Public transport</string>
-    <string name="poi_swimming_pool">Swimming pool</string>
-    <string name="poi_fitness_club">Fitness club</string>
-    <string name="poi_parking">Parking</string>
+    <string name="select_estates_posted_since">Select estates posted since</string>
+    <string name="select_estates_sold_since">Select estates sold since</string>
     <string name="add_property">Add a property</string>
     <string name="settings">Settings</string>
     <string name="currency">Currency</string>
@@ -85,4 +104,27 @@
     <string name="sold">SOLD!</string>
     <string name="open_date_picker">Open date picker</string>
     <string name="clear_date_picker">Clear date picker</string>
+    <string name="filter">Filter</string>
+    <string name="increase_room_amount">Increase room amount</string>
+    <string name="decrease_room_amount">Decrease room amount</string>
+    <string name="filters">Filters</string>
+    <string name="types_title">Types :</string>
+    <string name="price_range_title">Price range :</string>
+    <string name="surface_range_title">Surface range :</string>
+    <string name="rooms_title">Minimum rooms :</string>
+    <string name="bathrooms_title">Minimum bathrooms :</string>
+    <string name="bedrooms_title">Minimum bedrooms :</string>
+    <string name="_0">0</string>
+    <string name="point_of_interest_title">Points of interest :</string>
+    <string name="post_date_title">Post date :</string>
+    <string name="available_since">Available since</string>
+    <string name="sold_since">Sold since</string>
+    <string name="medias_title">Minimum medias amount :</string>
+    <string name="_1">1</string>
+    <string name="apply_filters">Apply filters</string>
+    <string name="clear_filters">Clear filters</string>
+    <string name="clear_text_field">Clear text field</string>
+    <string name="sold_title">Sold :</string>
+    <string name="available_title">Available :</string>
+
 </resources>

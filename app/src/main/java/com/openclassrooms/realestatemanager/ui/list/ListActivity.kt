@@ -23,12 +23,14 @@ import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
+
 @AndroidEntryPoint
 class ListActivity : AppCompatActivity() {
     private val mViewModel: ListViewModel by viewModels()
 
     private lateinit var mBinding : ActivityListBinding
 
+    private val mBottomSheetDialog = FilterBottomSheetDialog()
     private var editMenuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,8 +91,13 @@ class ListActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.list_activity_settings_menu -> openSettingsActivity()
             R.id.list_activity_edit_menu -> openEditPropertyActivity()
+            R.id.list_activity_filter_menu -> showBottomSheetDialog()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showBottomSheetDialog() {
+        mBottomSheetDialog.show(supportFragmentManager, "FilterBottomSheetDialog")
     }
 
     private fun openAddPropertyActivity() {

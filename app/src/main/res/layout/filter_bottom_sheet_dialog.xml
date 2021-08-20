@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/default_padding">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/filter_bottom_sheet_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/filters"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="22sp"/>
+
+        <ImageButton
+            android:id="@+id/filter_bottom_sheet_apply_ib"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_check"
+            android:scaleType="fitCenter"
+            android:background="@color/white"
+            android:contentDescription="@string/apply_filters"
+            app:tint="@color/colorAccent" />
+
+    </FrameLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/filter_bottom_sheet_type_iv"
+                android:layout_width="@dimen/activity_add_property_icon_size"
+                android:layout_height="@dimen/activity_add_property_icon_size"
+                android:contentDescription="@string/property_type"
+                android:src="@drawable/ic_apartment"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                style="@style/detailIcon" />
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_type_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:text="@string/types_title"
+                app:layout_constraintStart_toEndOf="@+id/filter_bottom_sheet_type_iv"
+                app:layout_constraintBottom_toBottomOf="@id/filter_bottom_sheet_type_iv"
+                style="@style/detailTitle"/>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/filter_bottom_sheet_type_cg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/filter_bottom_sheet_type_iv" />
+
+            <ImageView
+                android:id="@+id/filter_bottom_sheet_city_iv"
+                android:layout_width="@dimen/activity_add_property_icon_size"
+                android:layout_height="@dimen/activity_add_property_icon_size"
+                android:contentDescription="@string/city"
+                android:src="@drawable/ic_pin"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_city_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_city_et"
+                style="@style/detailIcon"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/filter_bottom_sheet_city_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginTop="@dimen/activity_add_property_margin_top"
+                android:autofillHints="@string/address_line_1"
+                android:hint="@string/city"
+                app:endIconContentDescription="@string/clear_text_field"
+                app:endIconDrawable="@drawable/ic_clear"
+                app:endIconMode="custom"
+                app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_city_iv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/filter_bottom_sheet_type_cg"
+                style="@style/editText">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/filter_bottom_sheet_city_et_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/filter_bottom_sheet_price_iv"
+                android:layout_width="@dimen/activity_add_property_icon_size"
+                android:layout_height="@dimen/activity_add_property_icon_size"
+                android:layout_marginTop="@dimen/activity_add_property_margin_top"
+                android:contentDescription="@string/city"
+                android:src="@drawable/ic_money"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_city_et"
+                style="@style/detailIcon"/>
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_price_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:text="@string/price_range_title"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_price_iv"
+                app:layout_constraintStart_toEndOf="@+id/filter_bottom_sheet_price_iv"
+                style="@style/detailTitle" />
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_price_min_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_add_property_slider_text_margin"
+                android:layout_marginStart="@dimen/activity_add_property_slider_text_margin"
+                android:text="@string/_0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_title_tv" />
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_price_max_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_add_property_slider_text_margin"
+                android:layout_marginEnd="@dimen/activity_add_property_slider_text_margin"
+                android:text="@string/_0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_title_tv" />
+
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/filter_bottom_sheet_price_rs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_add_property_slider_text_margin_minus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_min_tv"
+                style="@style/Widget.App.Slider" />
+
+            <ImageView
+                android:id="@+id/filter_bottom_sheet_money_iv"
+                android:layout_width="@dimen/activity_add_property_icon_size"
+                android:layout_height="@dimen/activity_add_property_icon_size"
+                android:layout_marginTop="@dimen/activity_add_property_margin_top"
+                android:contentDescription="@string/city"
+                android:src="@drawable/ic_surface"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_rs"
+                style="@style/detailIcon" />
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_surface_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:text="@string/surface_range_title"
+                app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_money_iv"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_money_iv"
+                style="@style/detailTitle" />
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_surface_min_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_add_property_slider_text_margin"
+                android:layout_marginStart="@dimen/activity_add_property_slider_text_margin"
+                android:text="@string/_0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_title_tv" />
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_surface_max_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_add_property_slider_text_margin"
+                android:layout_marginEnd="@dimen/activity_add_property_slider_text_margin"
+                android:text="@string/_0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_title_tv" />
+
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/filter_bottom_sheet_surface_rs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_add_property_slider_text_margin_minus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_min_tv"
+                style="@style/Widget.App.Slider" />
+
+            <ImageView
+                android:id="@+id/filter_bottom_sheet_room_iv"
+                android:layout_width="@dimen/activity_add_property_icon_size"
+                android:layout_height="@dimen/activity_add_property_icon_size"
+                android:layout_marginTop="@dimen/activity_add_property_margin_top"
+                android:contentDescription="@string/city"
+                android:src="@drawable/ic_home"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_rs"
+                style="@style/detailIcon" />
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_rooms_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rooms_title"
+                android:layout_marginStart="@dimen/default_margin"
+                app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_room_iv"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_room_iv"
+                style="@style/detailTitle" />
+
+            <ImageButton
+                android:id="@+id/filter_bottom_sheet_decrease_room_ib"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginHorizontal="16dp"
+                android:background="@color/white"
+                android:contentDescription="@string/decrease_room_amount"
+                android:scaleType="fitCenter"
+                android:src="@drawable/minus_button"
+                app:tint="@color/amount_image_button_selector"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_rooms_title_tv"
+                app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_room_tv"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_rooms_title_tv"/>
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_room_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="@string/_0"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_decrease_room_ib"
+                app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_increase_room_ib"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_decrease_room_ib"
+                style="@style/detailTitle" />
+
+            <ImageButton
+                android:id="@+id/filter_bottom_sheet_increase_room_ib"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@color/white"
+                android:contentDescription="@string/increase_room_amount"
+                android:scaleType="fitCenter"
+                android:src="@drawable/plus_button"
+                app:tint="@color/amount_image_button_selector"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_room_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_room_tv"/>
+
+            <ImageView
+                android:id="@+id/filter_bottom_sheet_bathroom_iv"
+                android:layout_width="@dimen/activity_add_property_icon_size"
+                android:layout_height="@dimen/activity_add_property_icon_size"
+                android:layout_marginTop="@dimen/activity_add_property_margin_top"
+                android:contentDescription="@string/city"
+                android:src="@drawable/ic_bathroom"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_rooms_title_tv"
+                style="@style/detailIcon"/>
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_bathrooms_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bathrooms_title"
+                android:layout_marginStart="@dimen/default_margin"
+                app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_bathroom_iv"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_bathroom_iv"
+                style="@style/detailTitle" />
+
+            <ImageButton
+                android:id="@+id/filter_bottom_sheet_decrease_bathroom_ib"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginHorizontal="16dp"
+                android:background="@color/white"
+                android:contentDescription="@string/decrease_room_amount"
+                android:scaleType="fitCenter"
+                android:src="@drawable/minus_button"
+                app:tint="@color/amount_image_button_selector"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_bathrooms_title_tv"
+                app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_bathroom_tv"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_bathrooms_title_tv" />
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_bathroom_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="@string/_0"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_decrease_bathroom_ib"
+                app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_increase_bathroom_ib"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_decrease_bathroom_ib"
+                style="@style/detailTitle"/>
+
+            <ImageButton
+                android:id="@+id/filter_bottom_sheet_increase_bathroom_ib"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@color/white"
+                android:contentDescription="@string/increase_room_amount"
+                android:scaleType="fitCenter"
+                android:src="@drawable/plus_button"
+                app:tint="@color/amount_image_button_selector"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_bathroom_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_bathroom_tv"/>
+
+            <ImageView
+                android:id="@+id/filter_bottom_sheet_bedroom_iv"
+                android:layout_width="@dimen/activity_add_property_icon_size"
+                android:layout_height="@dimen/activity_add_property_icon_size"
+                android:layout_marginTop="@dimen/activity_add_property_margin_top"
+                android:contentDescription="@string/city"
+                android:src="@drawable/ic_bedroom"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_bathrooms_title_tv"
+                style="@style/detailIcon" />
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_bedrooms_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bedrooms_title"
+                android:layout_marginStart="@dimen/default_margin"
+                app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_bedroom_iv"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_bedroom_iv"
+                style="@style/detailTitle"/>
+
+            <ImageButton
+                android:id="@+id/filter_bottom_sheet_decrease_bedroom_ib"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginHorizontal="16dp"
+                android:background="@color/white"
+                android:contentDescription="@string/decrease_room_amount"
+                android:scaleType="fitCenter"
+                android:src="@drawable/minus_button"
+                app:tint="@color/amount_image_button_selector"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_bedrooms_title_tv"
+                app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_bedroom_tv"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_bedrooms_title_tv" />
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_bedroom_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="@string/_0"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_decrease_bedroom_ib"
+                app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_increase_bedroom_ib"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_decrease_bedroom_ib"
+                style="@style/detailTitle"/>
+
+            <ImageButton
+                android:id="@+id/filter_bottom_sheet_increase_bedroom_ib"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@color/white"
+                android:contentDescription="@string/increase_room_amount"
+                android:scaleType="fitCenter"
+                android:src="@drawable/plus_button"
+                app:tint="@color/amount_image_button_selector"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_bedroom_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_bedroom_tv" />
+
+            <ImageView
+                android:id="@+id/filter_bottom_sheet_medias_iv"
+                android:layout_width="@dimen/activity_add_property_icon_size"
+                android:layout_height="@dimen/activity_add_property_icon_size"
+                android:layout_marginTop="@dimen/activity_add_property_margin_top"
+                android:contentDescription="@string/city"
+                android:src="@drawable/ic_picture"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_bedrooms_title_tv"
+                style="@style/detailIcon" />
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_medias_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:text="@string/medias_title"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_medias_iv"
+                app:layout_constraintStart_toEndOf="@+id/filter_bottom_sheet_medias_iv"
+                style="@style/detailTitle"/>
+
+            <ImageButton
+                android:id="@+id/filter_bottom_sheet_decrease_medias_ib"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginHorizontal="16dp"
+                android:background="@color/white"
+                android:contentDescription="@string/decrease_room_amount"
+                android:scaleType="fitCenter"
+                android:src="@drawable/minus_button"
+                app:tint="@color/amount_image_button_selector"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_medias_title_tv"
+                app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_medias_tv"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_medias_title_tv"/>
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_medias_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="@string/_0"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_decrease_medias_ib"
+                app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_increase_medias_ib"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_decrease_medias_ib"
+                style="@style/detailTitle" />
+
+            <ImageButton
+                android:id="@+id/filter_bottom_sheet_increase_medias_ib"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@color/white"
+                android:contentDescription="@string/increase_room_amount"
+                android:scaleType="fitCenter"
+                android:src="@drawable/plus_button"
+                app:tint="@color/amount_image_button_selector"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_medias_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_medias_tv" />
+
+            <ImageView
+                android:id="@+id/filter_bottom_sheet_poi_iv"
+                android:layout_width="@dimen/activity_add_property_icon_size"
+                android:layout_height="@dimen/activity_add_property_icon_size"
+                android:layout_marginTop="@dimen/activity_add_property_margin_top"
+                android:contentDescription="@string/city"
+                android:src="@drawable/ic_near"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_medias_title_tv"
+                style="@style/detailIcon"/>
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_poi_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/point_of_interest_title"
+                android:layout_marginStart="@dimen/default_margin"
+                app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_poi_iv"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_poi_iv"
+                style="@style/detailTitle" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/filter_bottom_sheet_poi_cg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/filter_bottom_sheet_poi_title_tv" />
+
+            <ImageView
+                android:id="@+id/filter_bottom_sheet_post_iv"
+                android:layout_width="@dimen/activity_add_property_icon_size"
+                android:layout_height="@dimen/activity_add_property_icon_size"
+                android:contentDescription="@string/city"
+                android:src="@drawable/ic_calendar"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_available_title_tv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_available_title_tv"
+                style="@style/detailIcon"/>
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_available_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:text="@string/available_title"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_available_cb"
+                app:layout_constraintStart_toEndOf="@+id/filter_bottom_sheet_post_iv"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_available_cb"
+                style="@style/detailTitle" />
+
+            <CheckBox
+                android:id="@+id/filter_bottom_sheet_available_cb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_add_property_margin_checkbox"
+                app:buttonTint="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_poi_cg" />
+            
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/filter_bottom_sheet_post_date_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginTop="@dimen/activity_add_property_margin_checkbox"
+                android:autofillHints="@string/real_estate_agent"
+                android:hint="@string/available_since"
+                android:visibility="gone"
+                app:endIconContentDescription="@string/clear_date_picker"
+                app:endIconDrawable="@drawable/ic_clear"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_available_cb"
+                style="@style/editText">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/filter_bottom_sheet_post_date_et_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/filter_bottom_sheet_sold_iv"
+                android:layout_width="@dimen/activity_add_property_icon_size"
+                android:layout_height="@dimen/activity_add_property_icon_size"
+                android:contentDescription="@string/city"
+                android:src="@drawable/ic_sold_date"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_sold_title_tv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_sold_title_tv"
+                style="@style/detailIcon"/>
+
+            <TextView
+                android:id="@+id/filter_bottom_sheet_sold_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:text="@string/sold_title"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_sold_cb"
+                app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_sold_iv"
+                app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_sold_cb"
+                style="@style/detailTitle" />
+
+            <CheckBox
+                android:id="@+id/filter_bottom_sheet_sold_cb"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/activity_add_property_margin_checkbox"
+                android:layout_height="wrap_content"
+                app:buttonTint="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_post_date_et" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/filter_bottom_sheet_sold_date_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:autofillHints="@string/real_estate_agent"
+                android:hint="@string/sold_since"
+                android:visibility="gone"
+                app:endIconContentDescription="@string/clear_date_picker"
+                app:endIconDrawable="@drawable/ic_clear"
+                app:endIconMode="custom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_sold_cb"
+                style="@style/editText">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/filter_bottom_sheet_sold_date_et_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/filter_bottom_sheet_clear_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_add_property_margin_top"
+                android:text="@string/clear_filters"
+                app:backgroundTint="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/filter_bottom_sheet_sold_date_et"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

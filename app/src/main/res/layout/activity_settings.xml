@@ -31,13 +31,13 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:padding="@dimen/activity_add_property_padding">
+                android:padding="@dimen/default_padding">
 
                 <ImageView
                     android:id="@+id/activity_settings_unit_iv"
                     style="@style/detailIcon"
-                    android:layout_width="@dimen/activity_add_property_image_size"
-                    android:layout_height="@dimen/activity_add_property_image_size"
+                    android:layout_width="@dimen/default_icon_size"
+                    android:layout_height="@dimen/default_icon_size"
                     android:contentDescription="@string/unit"
                     android:src="@drawable/ic_unit"
                     app:layout_constraintBottom_toBottomOf="@+id/activity_settings_unit_tv"
@@ -49,8 +49,8 @@
                     style="@style/dropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/activity_add_property_spacing"
-                    android:layout_marginTop="@dimen/activity_add_property_spacing"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginTop="@dimen/default_margin"
                     android:autofillHints="@string/unit"
                     android:hint="@string/unit"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -69,8 +69,8 @@
                 <ImageView
                     android:id="@+id/activity_settings_currency_iv"
                     style="@style/detailIcon"
-                    android:layout_width="@dimen/activity_add_property_image_size"
-                    android:layout_height="@dimen/activity_add_property_image_size"
+                    android:layout_width="@dimen/default_icon_size"
+                    android:layout_height="@dimen/default_icon_size"
                     android:contentDescription="@string/property_type"
                     android:src="@drawable/ic_money"
                     app:layout_constraintBottom_toBottomOf="@+id/activity_settings_currency_tv"
@@ -82,8 +82,8 @@
                     style="@style/dropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/activity_add_property_spacing"
-                    android:layout_marginTop="@dimen/activity_add_property_spacing"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginTop="@dimen/default_margin"
                     android:autofillHints="@string/currency"
                     android:hint="@string/currency"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -107,7 +107,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/save"
-        android:layout_margin="@dimen/activity_add_property_padding"
+        android:layout_margin="@dimen/default_margin"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
