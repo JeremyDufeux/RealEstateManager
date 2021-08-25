@@ -30,7 +30,6 @@ class ListActivity : AppCompatActivity() {
 
     private lateinit var mBinding : ActivityListBinding
 
-    private val mBottomSheetDialog = FilterBottomSheetDialog()
     private var editMenuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,7 +96,8 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun showBottomSheetDialog() {
-        mBottomSheetDialog.show(supportFragmentManager, "FilterBottomSheetDialog")
+        val bottomSheetDialog = FilterBottomSheetDialog()
+        bottomSheetDialog.show(supportFragmentManager, "FilterBottomSheetDialog")
     }
 
     private fun openAddPropertyActivity() {

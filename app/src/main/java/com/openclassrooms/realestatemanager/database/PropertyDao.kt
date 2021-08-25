@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.database
 
 import androidx.room.*
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.openclassrooms.realestatemanager.models.databaseEntites.*
 import kotlinx.coroutines.flow.Flow
 
@@ -66,4 +67,7 @@ interface PropertyDao {
 
     @Query("UPDATE properties_point_of_interest_cross_ref SET dataState='OLD'")
     fun updatePointsOfInterestToOld()
+
+    @RawQuery
+    fun getPropertyWithFilters(query: SimpleSQLiteQuery): List<PropertyWithMediaItemAndPointsOfInterestEntity>
 }

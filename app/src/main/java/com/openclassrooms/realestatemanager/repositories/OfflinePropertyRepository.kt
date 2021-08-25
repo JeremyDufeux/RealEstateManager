@@ -1,14 +1,17 @@
 package com.openclassrooms.realestatemanager.repositories
 
 import android.content.Context
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.database.PropertyDao
+import com.openclassrooms.realestatemanager.database.constructSqlQuery
 import com.openclassrooms.realestatemanager.mappers.mediaItemToMediaItemEntityMapper
 import com.openclassrooms.realestatemanager.mappers.mediaItemsEntityToMediaItemsMapper
 import com.openclassrooms.realestatemanager.mappers.propertyEntityToPropertyMapper
 import com.openclassrooms.realestatemanager.mappers.propertyToPropertyEntityMapper
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.models.PropertyFilter
 import com.openclassrooms.realestatemanager.models.databaseEntites.PointOfInterestEntity
 import com.openclassrooms.realestatemanager.models.databaseEntites.PropertyPointOfInterestCrossRef
 import com.openclassrooms.realestatemanager.models.enums.DataState
@@ -163,6 +166,20 @@ class OfflinePropertyRepository @Inject constructor(
             val crossRef =
                 PropertyPointOfInterestCrossRef(property.id, pointOfInterest.toString(), dataState)
             mPropertyDao.insertPropertyPointOfInterestCrossRef(crossRef)
+        }
+    }
+
+    fun getPropertyWithFilters(propertyFilter: PropertyFilter) : List<Property> {
+        val queryString = constructSqlQuery(propertyFilter)
+
+        val query = SimpleSQLiteQuery(queryString)
+
+        mPropertyDao.getPropertyWithFilters(query).let{ list ->
+            val propertyList = mutableListOf<Property>()
+            for (property in list) {
+                propertyList.add(propertyEntityToPropertyMapper(property))
+            }
+            return propertyList
         }
     }
 }

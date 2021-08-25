@@ -4,6 +4,7 @@ import android.location.Location
 import androidx.lifecycle.*
 import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiListView
 import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiMapView
+import com.openclassrooms.realestatemanager.models.PropertyFilter
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiListView
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiMapView
@@ -48,6 +49,12 @@ class ListViewModel @Inject constructor(
 
     var selectedPropertyIdForTabletLan: String? = null
 
+    var propertyFilter = PropertyFilter(
+        minPrice = 0.0,
+        maxPrice = 1000000.0,
+        minSurface = 0.0,
+        maxSurface = 1000.0)
+
     init {
         fetchProperties()
     }
@@ -73,5 +80,15 @@ class ListViewModel @Inject constructor(
 
     fun setSelectedPropertyId(propertyId: String?){
         _selectedPropertyLiveData.value = propertyId
+    }
+
+    fun resetValues() {
+        propertyFilter.resetFilters()
+    }
+
+    fun applyFilter() {
+        viewModelScope.launch(Dispatchers.IO) {
+            mPropertyUseCase.getPropertyWithFilters(propertyFilter)
+        }
     }
 }

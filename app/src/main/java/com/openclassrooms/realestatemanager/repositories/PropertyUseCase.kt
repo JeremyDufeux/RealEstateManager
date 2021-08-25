@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.repositories
 import android.content.Context
 import androidx.work.ListenableWorker.Result
 import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.models.PropertyFilter
 import com.openclassrooms.realestatemanager.models.enums.DataState
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.modules.IoCoroutineScope
@@ -183,5 +184,11 @@ class PropertyUseCase @Inject constructor(
 
     fun resetState(){
         _stateFlow.value = State.Idle
+    }
+
+    fun getPropertyWithFilters(propertyFilter: PropertyFilter) {
+        mOfflinePropertyRepository.getPropertyWithFilters(propertyFilter).let {
+            _stateFlow.value = State.Download.DownloadSuccess(it)
+        }
     }
 }
