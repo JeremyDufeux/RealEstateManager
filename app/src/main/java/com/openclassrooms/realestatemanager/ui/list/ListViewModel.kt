@@ -42,7 +42,7 @@ class ListViewModel @Inject constructor(
 
     val propertiesUiListViewLiveData: LiveData<List<PropertyUiListView>> =
         combine(merge(propertyListSuccessFlow, propertyListFilterFlow), mUserDataRepository.userDataFlow){ propertiesList, userData ->
-        propertyToPropertyUiListView(propertiesList, userData.currency)
+            propertyToPropertyUiListView(propertiesList, userData.currency)
         }.asLiveData(Dispatchers.IO)
 
     val filteredPropertiesUiListViewLiveData: LiveData<List<PropertyUiListView>> =

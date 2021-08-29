@@ -5,10 +5,10 @@ import com.openclassrooms.realestatemanager.models.enums.PropertyType
 
 data class PropertyFilter(
     var isActive: Boolean = false,
-    val minPrice: Double,
-    val maxPrice: Double,
-    val minSurface: Double,
-    val maxSurface: Double,
+    val minPrice: Long,
+    val maxPrice: Long,
+    val minSurface: Long,
+    val maxSurface: Long,
     var mediasAmount: Int = 0,
     var roomsAmount: Int = 0,
     var bathroomsAmount: Int = 0,

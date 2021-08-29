@@ -127,5 +127,7 @@
     <string name="sold_title">Sold :</string>
     <string name="available_title">Available :</string>
     <string name="remove_filters">Remove filters</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
 
 </resources>

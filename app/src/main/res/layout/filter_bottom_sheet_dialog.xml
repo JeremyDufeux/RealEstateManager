@@ -126,35 +126,45 @@
                 app:layout_constraintStart_toEndOf="@+id/filter_bottom_sheet_price_iv"
                 style="@style/detailTitle" />
 
-            <TextView
-                android:id="@+id/filter_bottom_sheet_price_min_tv"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/filter_bottom_sheet_price_min_et"
+                style="@style/editText"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_add_property_slider_text_margin"
-                android:layout_marginStart="@dimen/activity_add_property_slider_text_margin"
-                android:text="@string/_0"
+                android:layout_marginHorizontal="@dimen/default_margin"
+                android:layout_marginTop="@dimen/default_margin"
+                android:autofillHints="@string/address_line_1"
+                android:hint="@string/from"
+                app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_price_max_et"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_title_tv" />
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_title_tv">
 
-            <TextView
-                android:id="@+id/filter_bottom_sheet_price_max_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_add_property_slider_text_margin"
-                android:layout_marginEnd="@dimen/activity_add_property_slider_text_margin"
-                android:text="@string/_0"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_title_tv" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/filter_bottom_sheet_price_min_et_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.slider.RangeSlider
-                android:id="@+id/filter_bottom_sheet_price_rs"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/filter_bottom_sheet_price_max_et"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_add_property_slider_text_margin_minus"
+                android:layout_marginHorizontal="@dimen/default_margin"
+                android:layout_marginTop="@dimen/default_margin"
+                android:autofillHints="@string/address_line_1"
+                android:hint="@string/to"
+                app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_price_min_et"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_min_tv"
-                style="@style/Widget.App.Slider" />
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_title_tv"
+                style="@style/editText">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/filter_bottom_sheet_price_max_et_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                 android:id="@+id/filter_bottom_sheet_money_iv"
@@ -164,7 +174,7 @@
                 android:contentDescription="@string/city"
                 android:src="@drawable/ic_surface"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_rs"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_min_et"
                 style="@style/detailIcon" />
 
             <TextView
@@ -177,35 +187,45 @@
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_money_iv"
                 style="@style/detailTitle" />
 
-            <TextView
-                android:id="@+id/filter_bottom_sheet_surface_min_tv"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/filter_bottom_sheet_surface_min_et"
+                style="@style/editText"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_add_property_slider_text_margin"
-                android:layout_marginStart="@dimen/activity_add_property_slider_text_margin"
-                android:text="@string/_0"
+                android:layout_marginHorizontal="@dimen/default_margin"
+                android:layout_marginTop="@dimen/default_margin"
+                android:autofillHints="@string/address_line_1"
+                android:hint="@string/from"
+                app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_surface_max_et"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_title_tv" />
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_title_tv">
 
-            <TextView
-                android:id="@+id/filter_bottom_sheet_surface_max_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_add_property_slider_text_margin"
-                android:layout_marginEnd="@dimen/activity_add_property_slider_text_margin"
-                android:text="@string/_0"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_title_tv" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/filter_bottom_sheet_surface_min_et_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.slider.RangeSlider
-                android:id="@+id/filter_bottom_sheet_surface_rs"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/filter_bottom_sheet_surface_max_et"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_add_property_slider_text_margin_minus"
+                android:layout_marginHorizontal="@dimen/default_margin"
+                android:layout_marginTop="@dimen/default_margin"
+                android:autofillHints="@string/address_line_1"
+                android:hint="@string/to"
+                app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_surface_min_et"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_min_tv"
-                style="@style/Widget.App.Slider" />
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_title_tv"
+                style="@style/editText">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/filter_bottom_sheet_surface_max_et_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                 android:id="@+id/filter_bottom_sheet_room_iv"
@@ -215,7 +235,7 @@
                 android:contentDescription="@string/city"
                 android:src="@drawable/ic_home"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_rs"
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_min_et"
                 style="@style/detailIcon" />
 
             <TextView

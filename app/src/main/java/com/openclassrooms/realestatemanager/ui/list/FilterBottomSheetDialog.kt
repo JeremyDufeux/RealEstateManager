@@ -3,6 +3,8 @@ package com.openclassrooms.realestatemanager.ui.list
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +13,6 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.slider.LabelFormatter
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FilterBottomSheetDialogBinding
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
@@ -73,40 +74,85 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
             filterBottomSheetCityEtInput.setText(mViewModel.propertyFilter.city)
             filterBottomSheetCityEt.isEndIconVisible = (mViewModel.propertyFilter.city.isNotEmpty())
             filterBottomSheetCityEtInput.addTextChangedListener {
-               mViewModel.propertyFilter.city = it.toString()
+                mViewModel.propertyFilter.city = it.toString()
+                filterBottomSheetCityEt.isEndIconVisible = (mViewModel.propertyFilter.city.isNotEmpty())
+            }
+            filterBottomSheetCityEt.setEndIconOnClickListener {
+                mViewModel.propertyFilter.city = ""
+                filterBottomSheetCityEtInput.setText("")
+                filterBottomSheetCityEt.isEndIconVisible = false
+
             }
 
             // Price
-            filterBottomSheetPriceRs.labelBehavior = LabelFormatter.LABEL_GONE
-            filterBottomSheetPriceRs.valueFrom = mViewModel.propertyFilter.minPrice.toFloat()
-            filterBottomSheetPriceRs.valueTo = mViewModel.propertyFilter.maxPrice.toFloat()
-            filterBottomSheetPriceRs.setValues(mViewModel.propertyFilter.selectedMinPrice.toFloat(), mViewModel.propertyFilter.selectedMaxPrice.toFloat())
+            filterBottomSheetPriceMinEtInput.setText(mViewModel.propertyFilter.selectedMinPrice.toBigDecimal().toPlainString())
+            filterBottomSheetPriceMinEtInput.addTextChangedListener( object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+                override fun afterTextChanged(s: Editable?) {
+                    if(s.toString().isNotEmpty()) {
+                        try {
+                            mViewModel.propertyFilter.selectedMinPrice = s.toString().toLong()
+                        } catch (e: Exception){
+                            mViewModel.propertyFilter.selectedMinPrice = mViewModel.propertyFilter.minPrice
+                        }
+                    } else {
+                        mViewModel.propertyFilter.selectedMinPrice = mViewModel.propertyFilter.minPrice
+                    }
+                }
+            })
 
-            filterBottomSheetPriceRs.addOnChangeListener { slider, _, _ ->
-               mViewModel.propertyFilter.selectedMinPrice = slider.values[0].toDouble()
-               mViewModel.propertyFilter.selectedMaxPrice = slider.values[1].toDouble()
-                filterBottomSheetPriceMinTv.text =mViewModel.propertyFilter.selectedMinPrice.toInt().toString()
-                filterBottomSheetPriceMaxTv.text =mViewModel.propertyFilter.selectedMaxPrice.toInt().toString()
-            }
-
-            filterBottomSheetPriceMinTv.text =mViewModel.propertyFilter.selectedMinPrice.toInt().toString()
-            filterBottomSheetPriceMaxTv.text =mViewModel.propertyFilter.selectedMaxPrice.toInt().toString()
+            filterBottomSheetPriceMaxEtInput.setText(mViewModel.propertyFilter.selectedMaxPrice.toBigDecimal().toPlainString())
+            filterBottomSheetPriceMaxEtInput.addTextChangedListener( object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+                override fun afterTextChanged(s: Editable?) {
+                    if(s.toString().isNotEmpty()) {
+                        try {
+                            mViewModel.propertyFilter.selectedMaxPrice = s.toString().toLong()
+                        } catch (e: Exception){
+                            mViewModel.propertyFilter.selectedMaxPrice = mViewModel.propertyFilter.maxPrice
+                        }
+                    } else {
+                        mViewModel.propertyFilter.selectedMaxPrice = mViewModel.propertyFilter.maxPrice
+                    }
+                }
+            })
 
             // Surface
-            filterBottomSheetSurfaceRs.labelBehavior = LabelFormatter.LABEL_GONE
-            filterBottomSheetSurfaceRs.valueFrom =mViewModel.propertyFilter.selectedMinSurface.toFloat()
-            filterBottomSheetSurfaceRs.valueTo =mViewModel.propertyFilter.selectedMaxSurface.toFloat()
-            filterBottomSheetSurfaceRs.setValues(mViewModel.propertyFilter.selectedMinSurface.toFloat(), mViewModel.propertyFilter.selectedMaxSurface.toFloat())
+            filterBottomSheetSurfaceMinEtInput.setText(mViewModel.propertyFilter.selectedMinSurface.toBigDecimal().toPlainString())
+            filterBottomSheetSurfaceMinEtInput.addTextChangedListener( object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+                override fun afterTextChanged(s: Editable?) {
+                    if(s.toString().isNotEmpty()) {
+                        try {
+                            mViewModel.propertyFilter.selectedMinSurface = s.toString().toLong()
+                        } catch (e: Exception){
+                            mViewModel.propertyFilter.selectedMinSurface = mViewModel.propertyFilter.minSurface
+                        }
+                    } else {
+                        mViewModel.propertyFilter.selectedMinSurface = mViewModel.propertyFilter.minSurface
+                    }
+                }
+            })
 
-            filterBottomSheetSurfaceRs.addOnChangeListener { slider, _, _ ->
-               mViewModel.propertyFilter.selectedMinSurface = slider.values[0].toDouble()
-               mViewModel.propertyFilter.selectedMaxSurface = slider.values[1].toDouble()
-                filterBottomSheetSurfaceMinTv.text =mViewModel.propertyFilter.selectedMinSurface.toInt().toString()
-                filterBottomSheetSurfaceMaxTv.text =mViewModel.propertyFilter.selectedMaxSurface.toInt().toString()
-            }
-
-            filterBottomSheetSurfaceMinTv.text =mViewModel.propertyFilter.selectedMinSurface.toInt().toString()
-            filterBottomSheetSurfaceMaxTv.text =mViewModel.propertyFilter.selectedMaxSurface.toInt().toString()
+            filterBottomSheetSurfaceMaxEtInput.setText(mViewModel.propertyFilter.selectedMaxSurface.toBigDecimal().toPlainString())
+            filterBottomSheetSurfaceMaxEtInput.addTextChangedListener( object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+                override fun afterTextChanged(s: Editable?) {
+                    if(s.toString().isNotEmpty()) {
+                        try {
+                            mViewModel.propertyFilter.selectedMaxSurface = s.toString().toLong()
+                        } catch (e: Exception){
+                            mViewModel.propertyFilter.selectedMaxSurface = mViewModel.propertyFilter.maxSurface
+                        }
+                    } else {
+                        mViewModel.propertyFilter.selectedMaxSurface = mViewModel.propertyFilter.maxSurface
+                    }
+                }
+            })
 
             // Rooms
             filterBottomSheetRoomTv.text =mViewModel.propertyFilter.roomsAmount.toString()
@@ -306,8 +352,10 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
             for (id in filterBottomSheetTypeCg.checkedChipIds){
                 filterBottomSheetTypeCg.findViewById<Chip>(id).isChecked = false
             }
-            filterBottomSheetPriceRs.setValues(mViewModel.propertyFilter.selectedMinPrice.toFloat(), mViewModel.propertyFilter.selectedMaxPrice.toFloat())
-            filterBottomSheetSurfaceRs.setValues(mViewModel.propertyFilter.selectedMinSurface.toFloat(), mViewModel.propertyFilter.selectedMaxSurface.toFloat())
+            filterBottomSheetPriceMinEtInput.setText(mViewModel.propertyFilter.selectedMinPrice.toBigDecimal().toPlainString())
+            filterBottomSheetPriceMaxEtInput.setText(mViewModel.propertyFilter.selectedMaxPrice.toBigDecimal().toPlainString())
+            filterBottomSheetSurfaceMinEtInput.setText(mViewModel.propertyFilter.selectedMinSurface.toBigDecimal().toPlainString())
+            filterBottomSheetSurfaceMaxEtInput.setText(mViewModel.propertyFilter.selectedMaxSurface.toBigDecimal().toPlainString())
 
             filterBottomSheetMediasTv.text =mViewModel.propertyFilter.roomsAmount.toString()
             filterBottomSheetRoomTv.text =mViewModel.propertyFilter.roomsAmount.toString()
