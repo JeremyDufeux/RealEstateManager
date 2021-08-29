@@ -40,17 +40,14 @@ class ListViewModel @Inject constructor(
         .filterIsInstance<State.Filter.Result>()
         .map { it.propertiesList }
 
+    private val propertyMergedListFlow: Flow<List<Property>> = merge(propertyListSuccessFlow, propertyListFilterFlow)
+
     val propertiesUiListViewLiveData: LiveData<List<PropertyUiListView>> =
-        combine(merge(propertyListSuccessFlow, propertyListFilterFlow), mUserDataRepository.userDataFlow){ propertiesList, userData ->
+        combine(propertyMergedListFlow, mUserDataRepository.userDataFlow){ propertiesList, userData ->
             propertyToPropertyUiListView(propertiesList, userData.currency)
         }.asLiveData(Dispatchers.IO)
 
-    val filteredPropertiesUiListViewLiveData: LiveData<List<PropertyUiListView>> =
-        combine(propertyListFilterFlow, mUserDataRepository.userDataFlow){ propertiesList, userData ->
-            propertyToPropertyUiListView(propertiesList, userData.currency)
-        }.asLiveData(Dispatchers.IO)
-
-    val propertiesUiMapViewLiveData: LiveData<List<PropertyUiMapView>> = propertyListSuccessFlow
+    val propertiesUiMapViewLiveData: LiveData<List<PropertyUiMapView>> = propertyMergedListFlow
         .map { propertyToPropertyUiMapView(it) }
         .asLiveData(Dispatchers.IO)
 
@@ -76,6 +73,7 @@ class ListViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             propertiesFilterFlow.collect {
                 propertyFilter = it
+                cancel()
             }
         }
     }
