@@ -49,6 +49,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/activity_list_tabLayout" />
 
+        <Button
+            android:id="@+id/activity_list_remove_filter_btn"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom"
+            android:background="@color/colorAccent"
+            android:fontFamily="@font/roboto_bold"
+            android:gravity="center"
+            android:text="@string/remove_filters"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/activity_list_progressLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/activity_list_viewPager"
             android:name="com.openclassrooms.realestatemanager.ui.ListFragment"
@@ -57,7 +72,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/activity_list_progressLine" />
+            app:layout_constraintTop_toBottomOf="@+id/activity_list_remove_filter_btn" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/activity_list_add_btn"

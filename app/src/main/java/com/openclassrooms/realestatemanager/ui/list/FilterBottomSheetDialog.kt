@@ -56,7 +56,7 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
                 chip.tag = it
                 chip.setChipIconTintResource( R.color.colorAccent)
                 chip.isCheckable = true
-                chip.isChecked =mViewModel.propertyFilter.propertyTypeList.contains(it)
+                chip.isChecked = mViewModel.propertyFilter.propertyTypeList.contains(it)
 
                 filterBottomSheetTypeCg.addView(chip)
 
@@ -80,33 +80,33 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
             filterBottomSheetPriceRs.labelBehavior = LabelFormatter.LABEL_GONE
             filterBottomSheetPriceRs.valueFrom = mViewModel.propertyFilter.minPrice.toFloat()
             filterBottomSheetPriceRs.valueTo = mViewModel.propertyFilter.maxPrice.toFloat()
-            filterBottomSheetPriceRs.setValues(mViewModel.propertyFilter.minPrice.toFloat(), mViewModel.propertyFilter.maxPrice.toFloat())
+            filterBottomSheetPriceRs.setValues(mViewModel.propertyFilter.selectedMinPrice.toFloat(), mViewModel.propertyFilter.selectedMaxPrice.toFloat())
 
             filterBottomSheetPriceRs.addOnChangeListener { slider, _, _ ->
-               mViewModel.propertyFilter.minPrice = slider.values[0].toDouble()
-               mViewModel.propertyFilter.maxPrice = slider.values[1].toDouble()
-                filterBottomSheetPriceMinTv.text =mViewModel.propertyFilter.minPrice.toInt().toString()
-                filterBottomSheetPriceMaxTv.text =mViewModel.propertyFilter.maxPrice.toInt().toString()
+               mViewModel.propertyFilter.selectedMinPrice = slider.values[0].toDouble()
+               mViewModel.propertyFilter.selectedMaxPrice = slider.values[1].toDouble()
+                filterBottomSheetPriceMinTv.text =mViewModel.propertyFilter.selectedMinPrice.toInt().toString()
+                filterBottomSheetPriceMaxTv.text =mViewModel.propertyFilter.selectedMaxPrice.toInt().toString()
             }
 
-            filterBottomSheetPriceMinTv.text =mViewModel.propertyFilter.minPrice.toInt().toString()
-            filterBottomSheetPriceMaxTv.text =mViewModel.propertyFilter.maxPrice.toInt().toString()
+            filterBottomSheetPriceMinTv.text =mViewModel.propertyFilter.selectedMinPrice.toInt().toString()
+            filterBottomSheetPriceMaxTv.text =mViewModel.propertyFilter.selectedMaxPrice.toInt().toString()
 
             // Surface
             filterBottomSheetSurfaceRs.labelBehavior = LabelFormatter.LABEL_GONE
-            filterBottomSheetSurfaceRs.valueFrom =mViewModel.propertyFilter.minSurface.toFloat()
-            filterBottomSheetSurfaceRs.valueTo =mViewModel.propertyFilter.maxSurface.toFloat()
-            filterBottomSheetSurfaceRs.setValues(mViewModel.propertyFilter.minSurface.toFloat(), mViewModel.propertyFilter.maxSurface.toFloat())
+            filterBottomSheetSurfaceRs.valueFrom =mViewModel.propertyFilter.selectedMinSurface.toFloat()
+            filterBottomSheetSurfaceRs.valueTo =mViewModel.propertyFilter.selectedMaxSurface.toFloat()
+            filterBottomSheetSurfaceRs.setValues(mViewModel.propertyFilter.selectedMinSurface.toFloat(), mViewModel.propertyFilter.selectedMaxSurface.toFloat())
 
             filterBottomSheetSurfaceRs.addOnChangeListener { slider, _, _ ->
-               mViewModel.propertyFilter.minSurface = slider.values[0].toDouble()
-               mViewModel.propertyFilter.maxSurface = slider.values[1].toDouble()
-                filterBottomSheetSurfaceMinTv.text =mViewModel.propertyFilter.minSurface.toInt().toString()
-                filterBottomSheetSurfaceMaxTv.text =mViewModel.propertyFilter.maxSurface.toInt().toString()
+               mViewModel.propertyFilter.selectedMinSurface = slider.values[0].toDouble()
+               mViewModel.propertyFilter.selectedMaxSurface = slider.values[1].toDouble()
+                filterBottomSheetSurfaceMinTv.text =mViewModel.propertyFilter.selectedMinSurface.toInt().toString()
+                filterBottomSheetSurfaceMaxTv.text =mViewModel.propertyFilter.selectedMaxSurface.toInt().toString()
             }
 
-            filterBottomSheetSurfaceMinTv.text =mViewModel.propertyFilter.minSurface.toInt().toString()
-            filterBottomSheetSurfaceMaxTv.text =mViewModel.propertyFilter.maxSurface.toInt().toString()
+            filterBottomSheetSurfaceMinTv.text =mViewModel.propertyFilter.selectedMinSurface.toInt().toString()
+            filterBottomSheetSurfaceMaxTv.text =mViewModel.propertyFilter.selectedMaxSurface.toInt().toString()
 
             // Rooms
             filterBottomSheetRoomTv.text =mViewModel.propertyFilter.roomsAmount.toString()
@@ -234,7 +234,7 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
             filterBottomSheetSoldDateEt.isEndIconVisible = (mViewModel.propertyFilter.soldDate != 0L)
 
             // Clear filter
-            filterBottomSheetClearBtn.setOnClickListener { clearFilters() }
+            filterBottomSheetClearBtn.setOnClickListener { resetFilters() }
         }
     }
 
@@ -291,7 +291,7 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
             .build()
         datePicker.show(parentFragmentManager, "SoldDatePicker")
         datePicker.addOnPositiveButtonClickListener {
-           mViewModel.propertyFilter.soldDate = it
+            mViewModel.propertyFilter.soldDate = it
             mBinding?.apply {
                 filterBottomSheetSoldDateEtInput.setText(formatCalendarToString(it))
                 filterBottomSheetSoldDateEt.isEndIconVisible = true
@@ -299,15 +299,15 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
         }
     }
 
-    private fun clearFilters() {
-        mViewModel.resetValues()
+    private fun resetFilters() {
+        mViewModel.resetFilters()
 
         mBinding?.apply {
             for (id in filterBottomSheetTypeCg.checkedChipIds){
                 filterBottomSheetTypeCg.findViewById<Chip>(id).isChecked = false
             }
-            filterBottomSheetPriceRs.setValues(mViewModel.propertyFilter.minPrice.toFloat(), mViewModel.propertyFilter.maxPrice.toFloat())
-            filterBottomSheetSurfaceRs.setValues(mViewModel.propertyFilter.minSurface.toFloat(), mViewModel.propertyFilter.maxSurface.toFloat())
+            filterBottomSheetPriceRs.setValues(mViewModel.propertyFilter.selectedMinPrice.toFloat(), mViewModel.propertyFilter.selectedMaxPrice.toFloat())
+            filterBottomSheetSurfaceRs.setValues(mViewModel.propertyFilter.selectedMinSurface.toFloat(), mViewModel.propertyFilter.selectedMaxSurface.toFloat())
 
             filterBottomSheetMediasTv.text =mViewModel.propertyFilter.roomsAmount.toString()
             filterBottomSheetRoomTv.text =mViewModel.propertyFilter.roomsAmount.toString()

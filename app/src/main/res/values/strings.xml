@@ -122,9 +122,10 @@
     <string name="medias_title">Minimum medias amount :</string>
     <string name="_1">1</string>
     <string name="apply_filters">Apply filters</string>
-    <string name="clear_filters">Clear filters</string>
+    <string name="reset_filters">Reset filters</string>
     <string name="clear_text_field">Clear text field</string>
     <string name="sold_title">Sold :</string>
     <string name="available_title">Available :</string>
+    <string name="remove_filters">Remove filters</string>
 
 </resources>

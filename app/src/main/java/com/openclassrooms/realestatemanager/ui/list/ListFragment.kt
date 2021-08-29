@@ -65,14 +65,15 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
         mAdapter.updateList(properties)
 
         if(resources.getBoolean(R.bool.isTabletLand)) {
-                if(mViewModel.selectedPropertyIdForTabletLan == null){
-                    mViewModel.selectedPropertyIdForTabletLan = properties[0].id
-                    mViewModel.setSelectedPropertyId(properties[0].id)
-                } else {
-                    val index = mPropertyList.indexOfFirst { it.id == mViewModel.selectedPropertyIdForTabletLan }
-                    mAdapter.selectProperty(index)
-                }
+            if(mViewModel.selectedPropertyIdForTabletLan == null
+                || mPropertyList.firstOrNull{ it.id == mViewModel.selectedPropertyIdForTabletLan} == null){
+                mViewModel.selectedPropertyIdForTabletLan = properties[0].id
+                mViewModel.setSelectedPropertyId(properties[0].id)
+            } else {
+                val index = mPropertyList.indexOfFirst { it.id == mViewModel.selectedPropertyIdForTabletLan }
+                mAdapter.selectProperty(index)
             }
+        }
     }
 
     private val stateObserver = Observer<State> { state ->
@@ -92,6 +93,12 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
                 }
                 Timber.e("Error ListFragment.stateObserver: ${state.throwable.toString()}")
             }
+            is State.Filter.Result -> {
+                mBinding.fragmentListSrl.isEnabled = false
+            }
+            is State.Filter.Clear -> {
+                mBinding.fragmentListSrl.isEnabled = true
+            }
             else -> {
                 hideProgress()
             }
@@ -100,7 +107,6 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
 
     private fun hideProgress(){
         mBinding.fragmentListSrl.isRefreshing = false
-        mBinding.fragmentListPb.visibility = View.GONE
     }
 
     override fun onPropertyClick(position: Int) {

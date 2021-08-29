@@ -74,6 +74,7 @@ class ListActivity : AppCompatActivity() {
 
     private fun configureUi(){
         mBinding.activityListAddBtn.setOnClickListener { openAddPropertyActivity() }
+        mBinding.activityListRemoveFilterBtn.setOnClickListener { mViewModel.removeFilters() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -134,6 +135,12 @@ class ListActivity : AppCompatActivity() {
                 }
                 mViewModel.resetState()
                 Timber.e("Error ListActivity.stateObserver: ${state.throwable.toString()}")
+            }
+            is State.Filter.Result -> {
+                mBinding.activityListRemoveFilterBtn.visibility = View.VISIBLE
+            }
+            is State.Filter.Clear -> {
+                mBinding.activityListRemoveFilterBtn.visibility = View.GONE
             }
             else -> {
                 mBinding.activityListProgressLine.visibility = View.GONE

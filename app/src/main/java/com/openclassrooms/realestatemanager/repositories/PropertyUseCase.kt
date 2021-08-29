@@ -188,6 +188,13 @@ class PropertyUseCase @Inject constructor(
 
     fun getPropertyWithFilters(propertyFilter: PropertyFilter) {
         mOfflinePropertyRepository.getPropertyWithFilters(propertyFilter).let {
+            _stateFlow.value = State.Filter.Result(it)
+        }
+    }
+
+    fun removeFilters() {
+        _stateFlow.value = State.Filter.Clear
+        mOfflinePropertyRepository.getProperties().let {
             _stateFlow.value = State.Download.DownloadSuccess(it)
         }
     }

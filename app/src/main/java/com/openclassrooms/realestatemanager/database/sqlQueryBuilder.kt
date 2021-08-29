@@ -22,9 +22,9 @@ fun constructSqlQuery(propertyFilter: PropertyFilter): String{
         "WHERE "
     }
 
-    query += "price >= '${propertyFilter.minPrice.toBigDecimal().toPlainString()}' AND price <= '${propertyFilter.maxPrice.toBigDecimal().toPlainString()}' "
+    query += "price >= '${propertyFilter.selectedMinPrice.toBigDecimal().toPlainString()}' AND price <= '${propertyFilter.selectedMaxPrice.toBigDecimal().toPlainString()}' "
 
-    query += "AND surface >= '${propertyFilter.minSurface.toBigDecimal().toPlainString()}' AND surface <= '${propertyFilter.maxSurface.toBigDecimal().toPlainString()}' "
+    query += "AND surface >= '${propertyFilter.selectedMinSurface.toBigDecimal().toPlainString()}' AND surface <= '${propertyFilter.selectedMaxSurface.toBigDecimal().toPlainString()}' "
 
     if(propertyFilter.propertyTypeList.isNotEmpty()) {
         query += "AND ("

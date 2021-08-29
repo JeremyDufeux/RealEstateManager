@@ -2,8 +2,10 @@ package com.openclassrooms.realestatemanager.ui.list
 
 import android.location.Location
 import androidx.lifecycle.*
+import com.openclassrooms.realestatemanager.mappers.propertiesToFilterMapper
 import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiListView
 import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiMapView
+import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.PropertyFilter
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiListView
@@ -13,10 +15,8 @@ import com.openclassrooms.realestatemanager.repositories.UserDataRepository
 import com.openclassrooms.realestatemanager.services.LocationService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,15 +30,34 @@ class ListViewModel @Inject constructor(
     val stateLiveData: LiveData<State> = mPropertyUseCase.stateFlow.asLiveData(Dispatchers.IO)
 
     val stateFlowSuccess: Flow<State.Download.DownloadSuccess> = mPropertyUseCase.stateFlow.filterIsInstance()
+    val stateFlowFilterResult: Flow<State.Filter.Result> = mPropertyUseCase.stateFlow.filterIsInstance()
+
+    private val propertyListSuccessFlow: Flow<List<Property>> = mPropertyUseCase.stateFlow
+        .filterIsInstance<State.Download.DownloadSuccess>()
+        .map { it.propertiesList }
+
+    private val propertyListFilterFlow: Flow<List<Property>> = mPropertyUseCase.stateFlow
+        .filterIsInstance<State.Filter.Result>()
+        .map { it.propertiesList }
 
     val propertiesUiListViewLiveData: LiveData<List<PropertyUiListView>> =
-        combine(stateFlowSuccess, mUserDataRepository.userDataFlow){ state, userData ->
-            propertyToPropertyUiListView(state.propertiesList, userData.currency)
+        combine(merge(propertyListSuccessFlow, propertyListFilterFlow), mUserDataRepository.userDataFlow){ propertiesList, userData ->
+        propertyToPropertyUiListView(propertiesList, userData.currency)
         }.asLiveData(Dispatchers.IO)
 
-    val propertiesUiMapViewLiveData: LiveData<List<PropertyUiMapView>> = stateFlowSuccess
-        .map { propertyToPropertyUiMapView(it.propertiesList) }
+    val filteredPropertiesUiListViewLiveData: LiveData<List<PropertyUiListView>> =
+        combine(propertyListFilterFlow, mUserDataRepository.userDataFlow){ propertiesList, userData ->
+            propertyToPropertyUiListView(propertiesList, userData.currency)
+        }.asLiveData(Dispatchers.IO)
+
+    val propertiesUiMapViewLiveData: LiveData<List<PropertyUiMapView>> = propertyListSuccessFlow
+        .map { propertyToPropertyUiMapView(it) }
         .asLiveData(Dispatchers.IO)
+
+    private val propertiesFilterFlow: Flow<PropertyFilter> =
+        combine(propertyListSuccessFlow, mUserDataRepository.userDataFlow){ propertiesList, userData ->
+            propertiesToFilterMapper(propertiesList, userData)
+        }
 
     private var _selectedPropertyLiveData : MutableLiveData<String?> = MutableLiveData()
     val selectedPropertyLiveData: LiveData<String?> = _selectedPropertyLiveData
@@ -49,14 +68,16 @@ class ListViewModel @Inject constructor(
 
     var selectedPropertyIdForTabletLan: String? = null
 
-    var propertyFilter = PropertyFilter(
-        minPrice = 0.0,
-        maxPrice = 1000000.0,
-        minSurface = 0.0,
-        maxSurface = 1000.0)
+    lateinit var propertyFilter: PropertyFilter
 
     init {
         fetchProperties()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            propertiesFilterFlow.collect {
+                propertyFilter = it
+            }
+        }
     }
 
     fun fetchProperties(){
@@ -82,13 +103,22 @@ class ListViewModel @Inject constructor(
         _selectedPropertyLiveData.value = propertyId
     }
 
-    fun resetValues() {
-        propertyFilter.resetFilters()
-    }
-
     fun applyFilter() {
         viewModelScope.launch(Dispatchers.IO) {
             mPropertyUseCase.getPropertyWithFilters(propertyFilter)
+            cancel()
         }
+    }
+
+    fun removeFilters() {
+        propertyFilter.clearFilters()
+        viewModelScope.launch(Dispatchers.IO) {
+            mPropertyUseCase.removeFilters()
+            cancel()
+        }
+    }
+
+    fun resetFilters() {
+        propertyFilter.clearFilters()
     }
 }
