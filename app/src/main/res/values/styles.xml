@@ -55,6 +55,10 @@
         <item name="hintTextColor">@color/colorAccent</item>
     </style>
 
+    <style name="ThemeOverlay.AppTheme.TextInputEditText.Outlined" parent="">
+        <item name="colorControlActivated">@color/colorAccent</item>
+    </style>
+
     <style name="dropdownMenu" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
         <item name="fontFamily">@font/roboto</item>
         <item name="boxStrokeColor">@color/colorAccent</item>

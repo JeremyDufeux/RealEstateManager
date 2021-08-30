@@ -97,6 +97,7 @@
                 app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_city_iv"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/filter_bottom_sheet_type_cg"
+                android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
                 style="@style/editText">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -129,7 +130,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/filter_bottom_sheet_price_min_et"
-                style="@style/editText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/default_quarter_margin"
@@ -138,7 +138,9 @@
                 android:hint="@string/from"
                 app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_price_max_et"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_title_tv">
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_title_tv"
+                android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+                style="@style/editText">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/filter_bottom_sheet_price_min_et_input"
@@ -158,6 +160,7 @@
                 app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_price_min_et"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_title_tv"
+                android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
                 style="@style/editText">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -190,7 +193,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/filter_bottom_sheet_surface_min_et"
-                style="@style/editText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/default_quarter_margin"
@@ -199,7 +201,9 @@
                 android:hint="@string/from"
                 app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_surface_max_et"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_title_tv">
+                app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_title_tv"
+                android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+                style="@style/editText">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/filter_bottom_sheet_surface_min_et_input"
@@ -219,6 +223,7 @@
                 app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_surface_min_et"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_title_tv"
+                android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
                 style="@style/editText">
 
                 <com.google.android.material.textfield.TextInputEditText
