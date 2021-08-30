@@ -15,6 +15,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
@@ -30,6 +31,7 @@ import com.openclassrooms.realestatemanager.ui.camera.CAMERA_RESULT_MEDIA_KEY
 import com.openclassrooms.realestatemanager.ui.camera.CameraActivity
 import com.openclassrooms.realestatemanager.ui.mediaViewer.*
 import com.openclassrooms.realestatemanager.utils.Utils.*
+import com.openclassrooms.realestatemanager.utils.extensions.setFormattedNumber
 import com.openclassrooms.realestatemanager.utils.formatCalendarToString
 import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -80,6 +82,16 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         mBinding.activityAddPropertyTypeTvInput.apply {
             setAdapter(mTypeAdapter)
             setText(adapter.getItem(0).toString(), false)
+        }
+
+        // Price
+        mBinding.activityAddPropertyPriceEtInput.doAfterTextChanged { text ->
+            mBinding.activityAddPropertyPriceEtInput.setFormattedNumber(text.toString())
+        }
+
+        // Surface
+        mBinding.activityAddPropertySurfaceEtInput.doAfterTextChanged { text ->
+            mBinding.activityAddPropertySurfaceEtInput.setFormattedNumber(text.toString())
         }
 
         // Points of interest chips
@@ -146,8 +158,8 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
             val typeIndex = mTypeAdapter.getPosition(getString(property.type.description))
             mBinding.activityAddPropertyTypeTvInput.setText(mTypeAdapter.getItem(typeIndex).toString(), false)
 
-            activityAddPropertyPriceEtInput.setText(property.priceString)
-            activityAddPropertySurfaceEtInput.setText(property.surfaceString)
+            activityAddPropertyPriceEtInput.setFormattedNumber(property.priceString)
+            activityAddPropertySurfaceEtInput.setFormattedNumber(property.surfaceString)
             activityAddPropertyRoomsEtInput.setText(property.roomsAmount)
             activityAddPropertyBathroomsEtInput.setText(property.bathroomsAmount)
             activityAddPropertyBedroomsEtInput.setText(property.bedroomsAmount)
@@ -209,7 +221,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         mBinding.apply {
             if (!activityAddPropertyPriceEtInput.text.isNullOrEmpty()) {
                 try {
-                    mViewModel.setPrice(activityAddPropertyPriceEtInput.text.toString())
+                    mViewModel.setPrice(activityAddPropertyPriceEtInput.text.toString().replace(" ", ""))
                 } catch (e: Exception) {
                     showToast(
                         this@AddPropertyActivity,
@@ -225,7 +237,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
 
             if (!activityAddPropertySurfaceEtInput.text.isNullOrEmpty()) {
                 try {
-                    mViewModel.setSurface(activityAddPropertySurfaceEtInput.text.toString())
+                    mViewModel.setSurface(activityAddPropertySurfaceEtInput.text.toString().replace(" ", ""))
                 } catch (e: Exception) {
                     showToast(
                         this@AddPropertyActivity,
