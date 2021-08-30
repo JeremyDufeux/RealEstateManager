@@ -14,6 +14,8 @@ import com.openclassrooms.realestatemanager.databinding.ActivitySettingsBinding
 import com.openclassrooms.realestatemanager.models.UserData
 import com.openclassrooms.realestatemanager.models.enums.Currency
 import com.openclassrooms.realestatemanager.models.enums.Unit
+import com.openclassrooms.realestatemanager.utils.find
+import com.openclassrooms.realestatemanager.utils.getStringResourceId
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,8 +24,8 @@ class SettingsActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivitySettingsBinding
 
-    private lateinit var mUnitAdapter: ArrayAdapter<Unit>
-    private lateinit var mCurrencyAdapter: ArrayAdapter<Currency>
+    private lateinit var mUnitAdapter: ArrayAdapter<String>
+    private lateinit var mCurrencyAdapter: ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,20 +44,32 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private val userDataObserver = Observer<UserData> { userData ->
-        var index = mUnitAdapter.getPosition(userData.unit)
+        var index = mUnitAdapter.getPosition(getString(userData.unit.unitNameResId))
         mBinding.activitySettingsUnitTvInput.setText(mUnitAdapter.getItem(index).toString(), false)
 
-        index = mCurrencyAdapter.getPosition(userData.currency)
+        index = mCurrencyAdapter.getPosition(getString(userData.currency.currencyNameResId))
         mBinding.activitySettingsCurrencyTvInput.setText(mCurrencyAdapter.getItem(index).toString(), false)
     }
 
 
     private fun configureUi() {
-        mUnitAdapter = ArrayAdapter<Unit>(
+        val unitArray = mutableListOf<String>()
+
+        for (unit in Unit.values()){
+            unitArray.add(getString(unit.unitNameResId))
+        }
+
+        mUnitAdapter = ArrayAdapter<String>(
             this,
             R.layout.list_item,
-            Unit.values()
+            unitArray
         )
+
+        val currencyArray = mutableListOf<String>()
+
+        for (currency in Currency.values()){
+            currencyArray.add(getString(currency.currencyNameResId))
+        }
 
         mBinding.activitySettingsUnitTvInput.apply {
             setAdapter(mUnitAdapter)
@@ -63,10 +77,10 @@ class SettingsActivity : AppCompatActivity() {
             onItemClickListener = unitListener()
         }
 
-        mCurrencyAdapter= ArrayAdapter<Currency>(
+        mCurrencyAdapter= ArrayAdapter<String>(
             this,
             R.layout.list_item,
-            Currency.values()
+            currencyArray
         )
 
         mBinding.activitySettingsCurrencyTvInput.apply {
@@ -81,14 +95,16 @@ class SettingsActivity : AppCompatActivity() {
     private fun unitListener() =
         AdapterView.OnItemClickListener { parent, _, position, _ ->
             if (parent != null) {
-                mViewModel.userData.unit = parent.getItemAtPosition(position) as Unit
+                val unit = Unit::unitNameResId.find(getStringResourceId(this, parent.getItemAtPosition(position) as String))!!
+                mViewModel.userData.unit = unit
             }
         }
 
     private fun currencyListener() =
         AdapterView.OnItemClickListener { parent, _, position, _ ->
             if (parent != null) {
-                mViewModel.userData.currency = parent.getItemAtPosition(position) as Currency
+                val currency = Currency::currencyNameResId.find(getStringResourceId(this, parent.getItemAtPosition(position) as String))!!
+                mViewModel.userData.currency = currency
             }
         }
 

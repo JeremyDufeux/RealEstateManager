@@ -1,10 +1,8 @@
 package com.openclassrooms.realestatemanager.models.enums
 
-enum class Unit(val unitName: String, val abbreviation: String) {
-    IMPERIAL("Imperial", "sq ft"),
-    METRIC("Metric","m²");
+import com.openclassrooms.realestatemanager.R
 
-    override fun toString(): String {
-        return unitName
-    }
+enum class Unit(val unitNameResId: Int, val abbreviationRsId: Int) {
+    IMPERIAL(R.string.imperial, R.string.sq_ft),
+    METRIC(R.string.metric, R.string.m2);
 }

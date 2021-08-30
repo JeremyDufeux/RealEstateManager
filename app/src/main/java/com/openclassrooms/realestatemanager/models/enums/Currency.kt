@@ -1,10 +1,9 @@
 package com.openclassrooms.realestatemanager.models.enums
 
-enum class Currency(val currencyName : String, val symbol : String) {
-    DOLLAR("Dollar","$"),
-    EURO("Euro", "€");
+import com.openclassrooms.realestatemanager.R
 
-    override fun toString(): String {
-        return currencyName
-    }
+enum class Currency(val currencyNameResId : Int, val symbolResId : Int) {
+    DOLLAR(R.string.dollar,R.string.dollar_symbol),
+    EURO(R.string.euro, R.string.euro_symbol);
+
 }

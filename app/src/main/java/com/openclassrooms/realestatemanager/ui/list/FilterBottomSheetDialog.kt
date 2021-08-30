@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
@@ -17,6 +18,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FilterBottomSheetDialogBinding
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
+import com.openclassrooms.realestatemanager.utils.extensions.setFormattedNumber
 import com.openclassrooms.realestatemanager.utils.formatCalendarToString
 
 class FilterBottomSheetDialog: BottomSheetDialogFragment() {
@@ -81,132 +83,163 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
                 mViewModel.propertyFilter.city = ""
                 filterBottomSheetCityEtInput.setText("")
                 filterBottomSheetCityEt.isEndIconVisible = false
-
             }
 
             // Price
-            filterBottomSheetPriceMinEtInput.setText(mViewModel.propertyFilter.selectedMinPrice.toBigDecimal().toPlainString())
+            filterBottomSheetPriceMinEt.suffixText = getString(mViewModel.propertyFilter.userData.currency.symbolResId)
+            if(mViewModel.propertyFilter.minPrice != 0L) {
+                filterBottomSheetPriceMinEtInput.setFormattedNumber(
+                    mViewModel.propertyFilter.minPrice.toBigDecimal().toPlainString()
+                )
+            }
             filterBottomSheetPriceMinEtInput.addTextChangedListener( object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
                 override fun afterTextChanged(s: Editable?) {
                     if(s.toString().isNotEmpty()) {
                         try {
-                            mViewModel.propertyFilter.selectedMinPrice = s.toString().toLong()
+                            mViewModel.propertyFilter.minPrice = s.toString().replace(" ", "").toLong()
                         } catch (e: Exception){
-                            mViewModel.propertyFilter.selectedMinPrice = mViewModel.propertyFilter.minPrice
+                            mViewModel.propertyFilter.minPrice = 0
                         }
                     } else {
-                        mViewModel.propertyFilter.selectedMinPrice = mViewModel.propertyFilter.minPrice
+                        mViewModel.propertyFilter.minPrice = 0
                     }
                 }
             })
+            filterBottomSheetPriceMinEtInput.doAfterTextChanged { text ->
+                filterBottomSheetPriceMinEtInput.setFormattedNumber(text.toString())
+            }
 
-            filterBottomSheetPriceMaxEtInput.setText(mViewModel.propertyFilter.selectedMaxPrice.toBigDecimal().toPlainString())
+            filterBottomSheetPriceMaxEt.suffixText = getString(mViewModel.propertyFilter.userData.currency.symbolResId)
+            if(mViewModel.propertyFilter.maxPrice != 0L) {
+                filterBottomSheetPriceMaxEtInput.setFormattedNumber(
+                    mViewModel.propertyFilter.maxPrice.toBigDecimal().toPlainString()
+                )
+            }
             filterBottomSheetPriceMaxEtInput.addTextChangedListener( object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
                 override fun afterTextChanged(s: Editable?) {
                     if(s.toString().isNotEmpty()) {
                         try {
-                            mViewModel.propertyFilter.selectedMaxPrice = s.toString().toLong()
+                            mViewModel.propertyFilter.maxPrice = s.toString().replace(" ", "").toLong()
                         } catch (e: Exception){
-                            mViewModel.propertyFilter.selectedMaxPrice = mViewModel.propertyFilter.maxPrice
+                            mViewModel.propertyFilter.maxPrice = 0
                         }
                     } else {
-                        mViewModel.propertyFilter.selectedMaxPrice = mViewModel.propertyFilter.maxPrice
+                        mViewModel.propertyFilter.maxPrice = 0
                     }
                 }
             })
+            filterBottomSheetPriceMaxEtInput.doAfterTextChanged { text ->
+                filterBottomSheetPriceMaxEtInput.setFormattedNumber(text.toString())
+            }
 
             // Surface
-            filterBottomSheetSurfaceMinEtInput.setText(mViewModel.propertyFilter.selectedMinSurface.toBigDecimal().toPlainString())
+            filterBottomSheetSurfaceMinEt.suffixText = getString(mViewModel.propertyFilter.userData.unit.abbreviationRsId)
+            if(mViewModel.propertyFilter.minSurface != 0L) {
+                filterBottomSheetSurfaceMinEtInput.setFormattedNumber(
+                    mViewModel.propertyFilter.minSurface.toBigDecimal().toPlainString()
+                )
+            }
             filterBottomSheetSurfaceMinEtInput.addTextChangedListener( object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
                 override fun afterTextChanged(s: Editable?) {
                     if(s.toString().isNotEmpty()) {
                         try {
-                            mViewModel.propertyFilter.selectedMinSurface = s.toString().toLong()
+                            mViewModel.propertyFilter.minSurface = s.toString().replace(" ", "").toLong()
                         } catch (e: Exception){
-                            mViewModel.propertyFilter.selectedMinSurface = mViewModel.propertyFilter.minSurface
+                            mViewModel.propertyFilter.minSurface = 0
                         }
                     } else {
-                        mViewModel.propertyFilter.selectedMinSurface = mViewModel.propertyFilter.minSurface
+                        mViewModel.propertyFilter.minSurface = 0
                     }
                 }
             })
+            filterBottomSheetSurfaceMinEtInput.doAfterTextChanged { text ->
+                filterBottomSheetSurfaceMinEtInput.setFormattedNumber(text.toString())
+            }
 
-            filterBottomSheetSurfaceMaxEtInput.setText(mViewModel.propertyFilter.selectedMaxSurface.toBigDecimal().toPlainString())
+            filterBottomSheetSurfaceMaxEt.suffixText = getString(mViewModel.propertyFilter.userData.unit.abbreviationRsId)
+            if(mViewModel.propertyFilter.maxSurface != 0L) {
+                filterBottomSheetSurfaceMaxEtInput.setFormattedNumber(
+                    mViewModel.propertyFilter.maxSurface.toBigDecimal().toPlainString()
+                )
+            }
             filterBottomSheetSurfaceMaxEtInput.addTextChangedListener( object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
                 override fun afterTextChanged(s: Editable?) {
                     if(s.toString().isNotEmpty()) {
                         try {
-                            mViewModel.propertyFilter.selectedMaxSurface = s.toString().toLong()
+                            mViewModel.propertyFilter.maxSurface = s.toString().replace(" ", "").toLong()
                         } catch (e: Exception){
-                            mViewModel.propertyFilter.selectedMaxSurface = mViewModel.propertyFilter.maxSurface
+                            mViewModel.propertyFilter.maxSurface = 0
                         }
                     } else {
-                        mViewModel.propertyFilter.selectedMaxSurface = mViewModel.propertyFilter.maxSurface
+                        mViewModel.propertyFilter.maxSurface = 0
                     }
                 }
             })
+            filterBottomSheetSurfaceMaxEtInput.doAfterTextChanged { text ->
+                filterBottomSheetSurfaceMaxEtInput.setFormattedNumber(text.toString())
+            }
 
             // Rooms
-            filterBottomSheetRoomTv.text =mViewModel.propertyFilter.roomsAmount.toString()
+            filterBottomSheetRoomTv.text = mViewModel.propertyFilter.roomsAmount.toString()
             filterBottomSheetDecreaseRoomIb.isEnabled = (mViewModel.propertyFilter.roomsAmount != 0)
             filterBottomSheetDecreaseRoomIb.setOnClickListener {
                mViewModel.propertyFilter.roomsAmount--
-                filterBottomSheetRoomTv.text =mViewModel.propertyFilter.roomsAmount.toString()
+                filterBottomSheetRoomTv.text = mViewModel.propertyFilter.roomsAmount.toString()
                 filterBottomSheetDecreaseRoomIb.isEnabled = (mViewModel.propertyFilter.roomsAmount != 0)
             }
             filterBottomSheetIncreaseRoomIb.setOnClickListener {
                mViewModel.propertyFilter.roomsAmount++
-                filterBottomSheetRoomTv.text =mViewModel.propertyFilter.roomsAmount.toString()
+                filterBottomSheetRoomTv.text = mViewModel.propertyFilter.roomsAmount.toString()
                 filterBottomSheetDecreaseRoomIb.isEnabled = true
             }
 
             // Bathrooms
-            filterBottomSheetBathroomTv.text =mViewModel.propertyFilter.bathroomsAmount.toString()
+            filterBottomSheetBathroomTv.text = mViewModel.propertyFilter.bathroomsAmount.toString()
             filterBottomSheetDecreaseBathroomIb.isEnabled = (mViewModel.propertyFilter.bathroomsAmount != 0)
             filterBottomSheetDecreaseBathroomIb.setOnClickListener {
                mViewModel.propertyFilter.bathroomsAmount--
-                filterBottomSheetBathroomTv.text =mViewModel.propertyFilter.bathroomsAmount.toString()
+                filterBottomSheetBathroomTv.text = mViewModel.propertyFilter.bathroomsAmount.toString()
                 filterBottomSheetDecreaseBathroomIb.isEnabled = (mViewModel.propertyFilter.bathroomsAmount != 0)
             }
             filterBottomSheetIncreaseBathroomIb.setOnClickListener {
                mViewModel.propertyFilter.bathroomsAmount++
-                filterBottomSheetBathroomTv.text =mViewModel.propertyFilter.bathroomsAmount.toString()
+                filterBottomSheetBathroomTv.text = mViewModel.propertyFilter.bathroomsAmount.toString()
                 filterBottomSheetDecreaseBathroomIb.isEnabled = true
             }
 
             // Bedrooms
-            filterBottomSheetBedroomTv.text =mViewModel.propertyFilter.bedroomsAmount.toString()
+            filterBottomSheetBedroomTv.text = mViewModel.propertyFilter.bedroomsAmount.toString()
             filterBottomSheetDecreaseBedroomIb.isEnabled = (mViewModel.propertyFilter.bedroomsAmount != 0)
             filterBottomSheetDecreaseBedroomIb.setOnClickListener {
                mViewModel.propertyFilter.bedroomsAmount--
-                filterBottomSheetBedroomTv.text =mViewModel.propertyFilter.bedroomsAmount.toString()
+                filterBottomSheetBedroomTv.text = mViewModel.propertyFilter.bedroomsAmount.toString()
                 filterBottomSheetDecreaseBedroomIb.isEnabled = (mViewModel.propertyFilter.bedroomsAmount != 0)
             }
             filterBottomSheetIncreaseBedroomIb.setOnClickListener {
                mViewModel.propertyFilter.bedroomsAmount++
-                filterBottomSheetBedroomTv.text =mViewModel.propertyFilter.bedroomsAmount.toString()
+                filterBottomSheetBedroomTv.text = mViewModel.propertyFilter.bedroomsAmount.toString()
                 filterBottomSheetDecreaseBedroomIb.isEnabled = true
             }
 
             // Medias
-            filterBottomSheetMediasTv.text =mViewModel.propertyFilter.mediasAmount.toString()
+            filterBottomSheetMediasTv.text = mViewModel.propertyFilter.mediasAmount.toString()
             filterBottomSheetDecreaseMediasIb.isEnabled = (mViewModel.propertyFilter.mediasAmount != 0)
             filterBottomSheetDecreaseMediasIb.setOnClickListener {
                mViewModel.propertyFilter.mediasAmount--
-                filterBottomSheetMediasTv.text =mViewModel.propertyFilter.mediasAmount.toString()
+                filterBottomSheetMediasTv.text = mViewModel.propertyFilter.mediasAmount.toString()
                 filterBottomSheetDecreaseMediasIb.isEnabled = (mViewModel.propertyFilter.mediasAmount != 0)
             }
             filterBottomSheetIncreaseMediasIb.setOnClickListener {
                mViewModel.propertyFilter.mediasAmount++
-                filterBottomSheetMediasTv.text =mViewModel.propertyFilter.mediasAmount.toString()
+                filterBottomSheetMediasTv.text = mViewModel.propertyFilter.mediasAmount.toString()
                 filterBottomSheetDecreaseMediasIb.isEnabled = true
             }
 
@@ -222,7 +255,7 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
                 chip.tag = it
                 chip.setChipIconTintResource( R.color.colorAccent)
                 chip.isCheckable = true
-                chip.isChecked =mViewModel.propertyFilter.pointOfInterestList.contains(it)
+                chip.isChecked = mViewModel.propertyFilter.pointOfInterestList.contains(it)
 
                 filterBottomSheetPoiCg.addView(chip)
 
@@ -244,6 +277,7 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
                 if(isChecked && mViewModel.propertyFilter.sold){
                     mViewModel.propertyFilter.sold = false
                     filterBottomSheetSoldCb.isChecked = false
+                    mViewModel.propertyFilter.soldDate = 0L
                 }
             }
 
@@ -253,19 +287,23 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
             } else {
                 filterBottomSheetPostDateEtInput.setText("")
             }
+            if(mViewModel.propertyFilter.available){
+                filterBottomSheetPostDateEt.visibility = View.VISIBLE
+            }
             filterBottomSheetPostDateEtInput.setOnClickListener { openPostDatePicker() }
             filterBottomSheetPostDateEt.setEndIconOnClickListener { clearPostDatePicker() }
             filterBottomSheetPostDateEt.isEndIconVisible = (mViewModel.propertyFilter.soldDate != 0L)
 
             // Sold check box
-            filterBottomSheetSoldCb.isChecked =mViewModel.propertyFilter.sold
+            filterBottomSheetSoldCb.isChecked = mViewModel.propertyFilter.sold
             filterBottomSheetSoldCb.setOnCheckedChangeListener { _, isChecked ->
                mViewModel.propertyFilter.sold = isChecked
                 toggleView(filterBottomSheetSoldDateEt, isChecked)
 
-                if(isChecked &&mViewModel.propertyFilter.available){
+                if(isChecked && mViewModel.propertyFilter.available){
                    mViewModel.propertyFilter.available = false
                     filterBottomSheetAvailableCb.isChecked = false
+                    mViewModel.propertyFilter.postDate = 0L
                 }
             }
 
@@ -274,6 +312,9 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
                 filterBottomSheetSoldDateEtInput.setText(formatCalendarToString(mViewModel.propertyFilter.soldDate))
             } else {
                 filterBottomSheetSoldDateEtInput.setText("")
+            }
+            if(mViewModel.propertyFilter.sold){
+                filterBottomSheetSoldDateEt.visibility = View.VISIBLE
             }
             filterBottomSheetSoldDateEtInput.setOnClickListener { openSoldDatePicker() }
             filterBottomSheetSoldDateEt.setEndIconOnClickListener { clearSoldDatePicker() }
@@ -352,15 +393,15 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
             for (id in filterBottomSheetTypeCg.checkedChipIds){
                 filterBottomSheetTypeCg.findViewById<Chip>(id).isChecked = false
             }
-            filterBottomSheetPriceMinEtInput.setText(mViewModel.propertyFilter.selectedMinPrice.toBigDecimal().toPlainString())
-            filterBottomSheetPriceMaxEtInput.setText(mViewModel.propertyFilter.selectedMaxPrice.toBigDecimal().toPlainString())
-            filterBottomSheetSurfaceMinEtInput.setText(mViewModel.propertyFilter.selectedMinSurface.toBigDecimal().toPlainString())
-            filterBottomSheetSurfaceMaxEtInput.setText(mViewModel.propertyFilter.selectedMaxSurface.toBigDecimal().toPlainString())
+            filterBottomSheetPriceMinEtInput.setText("")
+            filterBottomSheetPriceMaxEtInput.setText("")
+            filterBottomSheetSurfaceMinEtInput.setText("")
+            filterBottomSheetSurfaceMaxEtInput.setText("")
 
-            filterBottomSheetMediasTv.text =mViewModel.propertyFilter.roomsAmount.toString()
-            filterBottomSheetRoomTv.text =mViewModel.propertyFilter.roomsAmount.toString()
-            filterBottomSheetBathroomTv.text =mViewModel.propertyFilter.bathroomsAmount.toString()
-            filterBottomSheetBedroomTv.text =mViewModel.propertyFilter.bedroomsAmount.toString()
+            filterBottomSheetMediasTv.text = mViewModel.propertyFilter.roomsAmount.toString()
+            filterBottomSheetRoomTv.text = mViewModel.propertyFilter.roomsAmount.toString()
+            filterBottomSheetBathroomTv.text = mViewModel.propertyFilter.bathroomsAmount.toString()
+            filterBottomSheetBedroomTv.text = mViewModel.propertyFilter.bedroomsAmount.toString()
 
             filterBottomSheetDecreaseMediasIb.isEnabled = false
             filterBottomSheetDecreaseRoomIb.isEnabled = false

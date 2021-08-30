@@ -4,6 +4,6 @@ import com.openclassrooms.realestatemanager.models.enums.Currency
 import com.openclassrooms.realestatemanager.models.enums.Unit
 
 data class UserData(
-    var unit: Unit,
-    var currency: Currency
+    var unit: Unit = Unit.IMPERIAL,
+    var currency: Currency = Currency.DOLLAR
 )

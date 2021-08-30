@@ -130,8 +130,8 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
     }
 
     private val userDataObserver = Observer<UserData> { userData ->
-        mBinding.activityAddPropertyPriceEt.suffixText = userData.currency.symbol
-        mBinding.activityAddPropertySurfaceEt.suffixText = userData.unit.abbreviation
+        mBinding.activityAddPropertyPriceEt.suffixText = getString(userData.currency.symbolResId)
+        mBinding.activityAddPropertySurfaceEt.suffixText = getString(userData.unit.abbreviationRsId)
     }
 
     private fun dropdownListener() =

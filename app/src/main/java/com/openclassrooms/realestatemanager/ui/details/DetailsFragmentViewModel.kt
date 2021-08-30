@@ -1,7 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.details
 
 import androidx.lifecycle.*
-import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiDetailsView
+import com.openclassrooms.realestatemanager.mappers.PropertyToPropertyUiDetailsViewMapper
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiDetailsView
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
 import com.openclassrooms.realestatemanager.repositories.UserDataRepository
@@ -19,7 +19,8 @@ const val DETAILS_FRAGMENT_SAVED_STATE_PROPERTY = "DETAILS_FRAGMENT_SAVED_STATE_
 class DetailsFragmentViewModel @Inject constructor(
     private val mSavedStateHandle: SavedStateHandle,
     private val mPropertyUseCase: PropertyUseCase,
-    private val mUserDataRepository: UserDataRepository
+    private val mUserDataRepository: UserDataRepository,
+    private val mDetailsViewMapper: PropertyToPropertyUiDetailsViewMapper
     ) : ViewModel(){
 
     private var mPropertyMutableLiveData : MutableLiveData<PropertyUiDetailsView> = MutableLiveData()
@@ -42,7 +43,7 @@ class DetailsFragmentViewModel @Inject constructor(
 
         job = viewModelScope.launch(Dispatchers.IO) {
             combine(mPropertyUseCase.getPropertyWithIdFlow(propertyId), mUserDataRepository.userDataFlow){ property, userData ->
-                propertyToPropertyUiDetailsView(property, userData)
+                mDetailsViewMapper.map(property, userData)
             }.collect { property ->
                 mPropertyMutableLiveData.postValue(property)
             }

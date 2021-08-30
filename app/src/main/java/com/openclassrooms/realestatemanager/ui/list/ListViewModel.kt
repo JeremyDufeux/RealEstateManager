@@ -2,17 +2,20 @@ package com.openclassrooms.realestatemanager.ui.list
 
 import android.location.Location
 import androidx.lifecycle.*
-import com.openclassrooms.realestatemanager.mappers.propertiesToFilterMapper
-import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiListView
+import com.openclassrooms.realestatemanager.mappers.PropertyToPropertyUiListViewMapper
 import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiMapView
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.PropertyFilter
+import com.openclassrooms.realestatemanager.models.enums.Currency
+import com.openclassrooms.realestatemanager.models.enums.Unit
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiListView
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiMapView
 import com.openclassrooms.realestatemanager.repositories.PropertyUseCase
 import com.openclassrooms.realestatemanager.repositories.UserDataRepository
 import com.openclassrooms.realestatemanager.services.LocationService
+import com.openclassrooms.realestatemanager.utils.Utils.convertEurosToDollars
+import com.openclassrooms.realestatemanager.utils.Utils.convertSquareMetersToSquareFoot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -24,6 +27,7 @@ import javax.inject.Inject
 class ListViewModel @Inject constructor(
     private val mPropertyUseCase: PropertyUseCase,
     private val mLocationService: LocationService,
+    private val mListViewMapper : PropertyToPropertyUiListViewMapper,
     mUserDataRepository: UserDataRepository
     ) : ViewModel(){
 
@@ -44,17 +48,12 @@ class ListViewModel @Inject constructor(
 
     val propertiesUiListViewLiveData: LiveData<List<PropertyUiListView>> =
         combine(propertyMergedListFlow, mUserDataRepository.userDataFlow){ propertiesList, userData ->
-            propertyToPropertyUiListView(propertiesList, userData.currency)
+            mListViewMapper.map(propertiesList, userData.currency)
         }.asLiveData(Dispatchers.IO)
 
     val propertiesUiMapViewLiveData: LiveData<List<PropertyUiMapView>> = propertyMergedListFlow
         .map { propertyToPropertyUiMapView(it) }
         .asLiveData(Dispatchers.IO)
-
-    private val propertiesFilterFlow: Flow<PropertyFilter> =
-        combine(propertyListSuccessFlow, mUserDataRepository.userDataFlow){ propertiesList, userData ->
-            propertiesToFilterMapper(propertiesList, userData)
-        }
 
     private var _selectedPropertyLiveData : MutableLiveData<String?> = MutableLiveData()
     val selectedPropertyLiveData: LiveData<String?> = _selectedPropertyLiveData
@@ -65,15 +64,14 @@ class ListViewModel @Inject constructor(
 
     var selectedPropertyIdForTabletLan: String? = null
 
-    lateinit var propertyFilter: PropertyFilter
+    var propertyFilter = PropertyFilter()
 
     init {
         fetchProperties()
 
         viewModelScope.launch(Dispatchers.IO) {
-            propertiesFilterFlow.collect {
-                propertyFilter = it
-                cancel()
+            mUserDataRepository.userDataFlow.collect {
+                propertyFilter.userData = it
             }
         }
     }
@@ -103,7 +101,31 @@ class ListViewModel @Inject constructor(
 
     fun applyFilter() {
         viewModelScope.launch(Dispatchers.IO) {
-            mPropertyUseCase.getPropertyWithFilters(propertyFilter)
+            if(!propertyFilter.isDefaultValues()) {
+                val filter = propertyFilter.copy()
+                filter.userData = propertyFilter.userData.copy()
+                filter.minPrice = propertyFilter.minPrice
+                filter.maxPrice = propertyFilter.maxPrice
+                filter.minSurface = propertyFilter.minSurface
+                filter.maxSurface = propertyFilter.maxSurface
+
+                if(filter.userData.currency == Currency.EURO) {
+                    if(filter.minPrice != 0L) {
+                        filter.minPrice =
+                            convertEurosToDollars(filter.minPrice.toDouble()).toLong()
+                    }
+                    if(filter.maxPrice != 0L) {
+                        filter.maxPrice =
+                            convertEurosToDollars(filter.maxPrice.toDouble()).toLong()
+                    }
+                }
+
+                if(filter.userData.unit == Unit.METRIC) {
+                    filter.minSurface = convertSquareMetersToSquareFoot(filter.minSurface.toDouble()).toLong()
+                    filter.maxSurface = convertSquareMetersToSquareFoot(filter.maxSurface.toDouble()).toLong()
+                }
+                mPropertyUseCase.getPropertyWithFilters(filter)
+            }
             cancel()
         }
     }

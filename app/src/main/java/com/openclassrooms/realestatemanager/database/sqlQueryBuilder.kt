@@ -12,22 +12,51 @@ fun constructSqlQuery(propertyFilter: PropertyFilter): String{
 
     var query = if(propertyFilter.mediasAmount > 0) {
         "SELECT *, COUNT(media_items.propertyId) as mediasAmount " +
-        "FROM properties " +
-        "LEFT JOIN media_items " +
-        "ON (media_items.propertyId = properties.propertyId) " +
-        "GROUP BY properties.propertyId " +
-        "HAVING "
+                "FROM properties " +
+                "LEFT JOIN media_items " +
+                "ON (media_items.propertyId = properties.propertyId) " +
+                "GROUP BY properties.propertyId " +
+                "HAVING "
     } else {
         "SELECT * FROM properties " +
-        "WHERE "
+                "WHERE "
     }
 
-    query += "price >= '${propertyFilter.selectedMinPrice.toBigDecimal().toPlainString()}' AND price <= '${propertyFilter.selectedMaxPrice.toBigDecimal().toPlainString()}' "
+    var addAnd = false
 
-    query += "AND surface >= '${propertyFilter.selectedMinSurface.toBigDecimal().toPlainString()}' AND surface <= '${propertyFilter.selectedMaxSurface.toBigDecimal().toPlainString()}' "
+    if(propertyFilter.minPrice != 0L) {
+        if(addAnd) query += "AND "
+        addAnd = true
+
+        query += "price >= '${propertyFilter.minPrice.toBigDecimal().toPlainString()}' "
+    }
+
+    if(propertyFilter.maxPrice != 0L){
+        if(addAnd) query += "AND "
+        addAnd = true
+
+        query += "price <= '${propertyFilter.maxPrice.toBigDecimal().toPlainString()}' "
+    }
+
+    if (propertyFilter.minSurface != 0L){
+        if(addAnd) query += "AND "
+        addAnd = true
+
+        query += "surface >= '${propertyFilter.minSurface.toBigDecimal().toPlainString()}' "
+    }
+
+    if(propertyFilter.maxSurface != 0L){
+        if(addAnd) query += "AND "
+        addAnd = true
+
+        query += "surface <= '${propertyFilter.maxSurface.toBigDecimal().toPlainString()}' "
+    }
 
     if(propertyFilter.propertyTypeList.isNotEmpty()) {
-        query += "AND ("
+        if(addAnd) query += "AND "
+        addAnd = true
+
+        query += "("
 
         for (type in propertyFilter.propertyTypeList) {
             query += "type = '$type' OR "
@@ -38,7 +67,10 @@ fun constructSqlQuery(propertyFilter: PropertyFilter): String{
 
     if (propertyFilter.pointOfInterestList.isNotEmpty()){
         for(poi in propertyFilter.pointOfInterestList) {
-            query += "AND (" +
+            if(addAnd) query += "AND "
+            addAnd = true
+
+            query += "(" +
                     "EXISTS (SELECT * FROM properties_point_of_interest_cross_ref as poi " +
                     "WHERE properties.propertyId = poi.propertyId AND " +
                     "description = '$poi')) "
@@ -46,32 +78,52 @@ fun constructSqlQuery(propertyFilter: PropertyFilter): String{
     }
 
     if(propertyFilter.city.isNotEmpty()){
-        query += "AND city LIKE '%${propertyFilter.city}%' "
+        if(addAnd) query += "AND "
+        addAnd = true
+
+        query += "city LIKE '%${propertyFilter.city}%' "
     }
 
     if(propertyFilter.roomsAmount > 0){
-        query += "AND roomsAmount >= '${propertyFilter.roomsAmount}' "
+        if(addAnd) query += "AND "
+        addAnd = true
+
+        query += "roomsAmount >= '${propertyFilter.roomsAmount}' "
     }
 
     if(propertyFilter.bedroomsAmount > 0){
-        query += "AND bedroomsAmount >= '${propertyFilter.bedroomsAmount}' "
+        if(addAnd) query += "AND "
+        addAnd = true
+
+        query += "bedroomsAmount >= '${propertyFilter.bedroomsAmount}' "
     }
 
     if(propertyFilter.bathroomsAmount > 0){
-        query += "AND bathroomsAmount >= '${propertyFilter.bathroomsAmount}' "
+        if(addAnd) query += "AND "
+        addAnd = true
+
+        query += "bathroomsAmount >= '${propertyFilter.bathroomsAmount}' "
     }
 
     if(propertyFilter.mediasAmount > 0){
-        query += "AND mediasAmount >= ${propertyFilter.mediasAmount} "
+        if(addAnd) query += "AND "
+        addAnd = true
+
+        query += "mediasAmount >= ${propertyFilter.mediasAmount} "
     }
 
     if(propertyFilter.available){
-        query += "AND soldDate IS NULL "
+        if(addAnd) query += "AND "
+        addAnd = true
+
+        query += "soldDate IS NULL "
         query += "AND postDate >= '${propertyFilter.postDate}' "
     }
 
     if(propertyFilter.sold){
-        query += "AND soldDate IS NOT NULL "
+        if(addAnd) query += "AND "
+
+        query += "soldDate IS NOT NULL "
         query += "AND soldDate >= '${propertyFilter.soldDate}' "
     }
 
@@ -79,13 +131,3 @@ fun constructSqlQuery(propertyFilter: PropertyFilter): String{
 
     return query
 }
-
-/*
-SELECT *, COUNT(media_items.propertyId) as mediaAmount
-FROM properties
-LEFT JOIN media_items
-ON (media_items.propertyId = properties.propertyId)
-GROUP BY properties.propertyId
-HAVING mediaAmount >= 4
-ORDER BY properties.propertyId
-* */
