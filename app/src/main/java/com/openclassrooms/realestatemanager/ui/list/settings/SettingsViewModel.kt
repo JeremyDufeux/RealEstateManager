@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.settings
+package com.openclassrooms.realestatemanager.ui.list.settings
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

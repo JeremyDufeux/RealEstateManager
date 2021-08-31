@@ -46,8 +46,6 @@
             android:name=".ui.details.DetailsActivity"
             android:parentActivityName=".ui.list.ListActivity" />
         <activity android:name=".ui.add.AddPropertyActivity" />
-        <activity android:name=".ui.settings.SettingsActivity"
-            android:parentActivityName=".ui.list.ListActivity"  />
         <activity
             android:name=".ui.mediaViewer.MediaViewerActivity"
             android:screenOrientation="fullSensor"

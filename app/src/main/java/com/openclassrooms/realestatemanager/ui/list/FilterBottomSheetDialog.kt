@@ -15,7 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.databinding.FilterBottomSheetDialogBinding
+import com.openclassrooms.realestatemanager.databinding.BottomSheetDialogFilterBinding
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.utils.extensions.setFormattedNumber
@@ -24,7 +24,7 @@ import com.openclassrooms.realestatemanager.utils.formatCalendarToString
 class FilterBottomSheetDialog: BottomSheetDialogFragment() {
 
     private val mViewModel: ListViewModel by activityViewModels()
-    private var mBinding: FilterBottomSheetDialogBinding? = null
+    private var mBinding: BottomSheetDialogFilterBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,7 +32,7 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        mBinding = FilterBottomSheetDialogBinding.inflate(inflater)
+        mBinding = BottomSheetDialogFilterBinding.inflate(inflater)
 
         configureUi()
 

@@ -17,7 +17,7 @@ import com.openclassrooms.realestatemanager.ui.add.BUNDLE_KEY_ADD_ACTIVITY_PROPE
 import com.openclassrooms.realestatemanager.ui.details.BUNDLE_KEY_PROPERTY_ID
 import com.openclassrooms.realestatemanager.ui.details.DetailsActivity
 import com.openclassrooms.realestatemanager.ui.details.DetailsFragment
-import com.openclassrooms.realestatemanager.ui.settings.SettingsActivity
+import com.openclassrooms.realestatemanager.ui.list.settings.SettingsBottomSheetDialog
 import com.openclassrooms.realestatemanager.utils.showToast
 import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import dagger.hilt.android.AndroidEntryPoint
@@ -89,16 +89,16 @@ class ListActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.list_activity_settings_menu -> openSettingsActivity()
+            R.id.list_activity_settings_menu -> showSettingsDialog()
             R.id.list_activity_edit_menu -> openEditPropertyActivity()
-            R.id.list_activity_filter_menu -> showBottomSheetDialog()
+            R.id.list_activity_filter_menu -> showFilterDialog()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun showBottomSheetDialog() {
-        val bottomSheetDialog = FilterBottomSheetDialog()
-        bottomSheetDialog.show(supportFragmentManager, "FilterBottomSheetDialog")
+    private fun showFilterDialog() {
+        val bottomDialog = FilterBottomSheetDialog()
+        bottomDialog.show(supportFragmentManager, "FilterBottomSheetDialog")
     }
 
     private fun openAddPropertyActivity() {
@@ -112,9 +112,9 @@ class ListActivity : AppCompatActivity() {
         startActivity(addPropertyActivityIntent)
     }
 
-    private fun openSettingsActivity() {
-        val addPropertyActivityIntent = Intent(this, SettingsActivity::class.java)
-        startActivity(addPropertyActivityIntent)
+    private fun showSettingsDialog() {
+        val settingsDialog = SettingsBottomSheetDialog()
+        settingsDialog.show(supportFragmentManager, "SettingsBottomSheetDialog")
     }
 
     private val stateObserver = Observer<State> { state ->
