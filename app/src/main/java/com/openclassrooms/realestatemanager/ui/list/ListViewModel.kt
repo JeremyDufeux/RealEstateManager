@@ -32,9 +32,6 @@ class ListViewModel @Inject constructor(
 
     val stateLiveData: LiveData<State> = mPropertyUseCase.stateFlow.asLiveData(Dispatchers.IO)
 
-    val stateFlowSuccess: Flow<State.Download.DownloadSuccess> = mPropertyUseCase.stateFlow.filterIsInstance()
-    val stateFlowFilterResult: Flow<State.Filter.Result> = mPropertyUseCase.stateFlow.filterIsInstance()
-
     private val propertyListSuccessFlow: Flow<List<Property>> = mPropertyUseCase.stateFlow
         .filterIsInstance<State.Download.DownloadSuccess>()
         .map { it.propertiesList }
