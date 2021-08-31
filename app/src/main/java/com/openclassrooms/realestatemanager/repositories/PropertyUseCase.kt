@@ -40,7 +40,6 @@ class PropertyUseCase @Inject constructor(
     private val _stateFlow = MutableStateFlow<State>(State.Idle)
     val stateFlow = _stateFlow.asStateFlow()
 
-
     init {
         mIoScope.launch {
             mPropertyRepository.stateFlow.collect { result ->
