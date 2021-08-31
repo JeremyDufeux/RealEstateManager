@@ -496,7 +496,6 @@
                 android:autofillHints="@string/real_estate_agent"
                 android:hint="@string/sold_date"
                 android:visibility="gone"
-                app:startIconDrawable="@drawable/ic_calendar"
                 app:endIconContentDescription="@string/clear_date_picker"
                 app:endIconDrawable="@drawable/ic_clear"
                 app:endIconMode="custom"
