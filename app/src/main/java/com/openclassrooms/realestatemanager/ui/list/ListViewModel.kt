@@ -36,11 +36,15 @@ class ListViewModel @Inject constructor(
         .filterIsInstance<State.Download.DownloadSuccess>()
         .map { it.propertiesList }
 
+    private val propertyListOfflineFlow: Flow<List<Property>> = mPropertyUseCase.stateFlow
+        .filterIsInstance<State.OfflineSuccess>()
+        .map { it.propertiesList }
+
     private val propertyListFilterFlow: Flow<List<Property>> = mPropertyUseCase.stateFlow
         .filterIsInstance<State.Filter.Result>()
         .map { it.propertiesList }
 
-    private val propertyMergedListFlow: Flow<List<Property>> = merge(propertyListSuccessFlow, propertyListFilterFlow)
+    private val propertyMergedListFlow: Flow<List<Property>> = merge(propertyListSuccessFlow, propertyListOfflineFlow, propertyListFilterFlow)
 
     val propertiesUiListViewLiveData: LiveData<List<PropertyUiListView>> =
         combine(propertyMergedListFlow, mUserDataRepository.userDataFlow){ propertiesList, userData ->

@@ -3,12 +3,9 @@ package com.openclassrooms.realestatemanager.ui.list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiListView
@@ -58,15 +55,8 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
         fun updateViewHolder(property: PropertyUiListView, position: Int) {
             val context = mBinding.root.context
 
-            Glide.with(context)
-                .load(property.pictureUrl)
-                .centerCrop()
-                .timeout(2000)
-                .error(ResourcesCompat.getDrawable(context.resources, R.drawable.ic_building, null))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(mBinding.fragmentListItemIv)
-
-            mBinding.fragmentListItemSoldTv.visibility = property.soldVisibility
+            mBinding.fragmentListItemPcv.setSold(property.sold)
+            mBinding.fragmentListItemPcv.setPropertyPicture(property.pictureUrl)
             mBinding.fragmentListItemCityTv.text = property.city
             mBinding.fragmentListItemPriceTv.text = property.priceString
             mBinding.fragmentListItemPriceTv.visibility = property.priceVisibility

@@ -104,7 +104,6 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
                 mBinding?.fragmentListSrl?.isEnabled = true
             }
             else -> {
-                hideProgress()
             }
         }
     }

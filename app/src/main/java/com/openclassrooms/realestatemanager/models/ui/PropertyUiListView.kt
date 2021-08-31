@@ -17,9 +17,4 @@ data class PropertyUiListView(
     } else {
         View.VISIBLE
     }
-    val soldVisibility: Int = if (sold){
-        View.VISIBLE
-    } else {
-        View.INVISIBLE
-    }
 }

@@ -16,9 +16,10 @@ sealed class State {
             object Empty : State()
             data class Url(val url: String) : State()
         }
-
         data class Error(val throwable: Throwable?) : State()
     }
+
+    data class OfflineSuccess(val propertiesList: List<Property>) : State()
 
     sealed class Filter {
         data class Result(val propertiesList: List<Property>) : State()
