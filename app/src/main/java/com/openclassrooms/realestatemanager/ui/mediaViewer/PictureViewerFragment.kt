@@ -14,7 +14,7 @@ import com.openclassrooms.realestatemanager.databinding.FragmentPrictureViewerBi
 
 
 class PictureViewerFragment : Fragment() {
-    private lateinit var mBinding: FragmentPrictureViewerBinding
+    private var mBinding: FragmentPrictureViewerBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,18 +30,18 @@ class PictureViewerFragment : Fragment() {
             .into(bitmapTarget())
 
         arguments?.getString(BUNDLE_KEY_MEDIA_DESCRIPTION) ?.let {
-            mBinding.pictureViewerFragmentTv.text = it
+            mBinding?.pictureViewerFragmentTv?.text = it
         }
         arguments?.getBoolean(BUNDLE_KEY_EDIT_MODE) ?.let {
-            mBinding.pictureViewerFragmentTv.visibility = View.GONE
+            mBinding?.pictureViewerFragmentTv?.visibility = View.GONE
         }
 
-        return mBinding.root
+        return mBinding!!.root
     }
 
     private fun bitmapTarget() = object : CustomTarget<Bitmap>() {
         override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-            mBinding.pictureViewerFragmentPv.setImageBitmap(resource)
+            mBinding?.pictureViewerFragmentPv?.setImageBitmap(resource)
         }
 
         override fun onLoadCleared(placeholder: Drawable?) {

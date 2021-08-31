@@ -26,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
     private val mViewModel: DetailsFragmentViewModel by viewModels()
-    private lateinit var mBinding : FragmentDetailsBinding
+    private var mBinding : FragmentDetailsBinding? = null
     private val mMediaAdapter = DetailsMediaListAdapter(this)
 
     companion object {
@@ -42,18 +42,21 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
     private fun configureViewModel() {
         mViewModel.propertyLiveData.observe(this, propertyObserver)
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         mBinding = FragmentDetailsBinding.inflate(layoutInflater)
 
         configureRecyclerViews()
 
-        return mBinding.root
+        return mBinding!!.root
     }
 
     private fun configureRecyclerViews() {
-        mBinding.fragmentDetailMediaRv.adapter = mMediaAdapter
-        mBinding.fragmentDetailMediaRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        mBinding?.apply {
+            fragmentDetailMediaRv.adapter = mMediaAdapter
+            fragmentDetailMediaRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        }
     }
 
     fun setPropertyId(propertyId: String) {
@@ -64,27 +67,27 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
 
         mMediaAdapter.submitList(property.mediaList)
 
-        mBinding.fragmentDetailPointOfInterestCg.removeAllViews()
+        mBinding?.apply {
+            fragmentDetailPointOfInterestCg.removeAllViews()
 
-        property.pointOfInterestList.map {
-            val image = ResourcesCompat.getDrawable(requireContext().resources, it.icon, null)
-            val chip = Chip(requireContext())
-            chip.text = getString(it.description)
-            chip.tag = it
-            chip.chipIcon = image
-            chip.setChipIconTintResource( R.color.colorAccent)
-            chip.isClickable = false
-            mBinding.fragmentDetailPointOfInterestCg.addView(chip)
-        }
+            property.pointOfInterestList.map {
+                val image = ResourcesCompat.getDrawable(requireContext().resources, it.icon, null)
+                val chip = Chip(requireContext())
+                chip.text = getString(it.description)
+                chip.tag = it
+                chip.chipIcon = image
+                chip.setChipIconTintResource( R.color.colorAccent)
+                chip.isClickable = false
+                fragmentDetailPointOfInterestCg.addView(chip)
+            }
 
-        Glide.with(this)
-            .load(property.mapPictureUrl)
-            .centerCrop()
-            .timeout(2000)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .into(mBinding.fragmentDetailMapIv)
+            Glide.with(this@DetailsFragment)
+                .load(property.mapPictureUrl)
+                .centerCrop()
+                .timeout(2000)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(fragmentDetailMapIv)
 
-        mBinding.apply {
             fragmentDetailTypeTv.text = getString(property.type.description)
 
             fragmentDetailPriceTv.text = property.priceString
@@ -123,9 +126,9 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
             fragmentDetailMapCv.visibility = property.mapVisibility
             fragmentDetailMapCv.setOnClickListener { openGoogleMaps(property.latitude, property.longitude) }
 
-            mBinding.fragmentDetailPointOfInterestCg.visibility = property.pointsOfInterestVisibility
-            mBinding.fragmentDetailPointOfInterestIv.visibility = property.pointsOfInterestVisibility
-            mBinding.fragmentDetailPointOfInterestTitleTv.visibility = property.pointsOfInterestVisibility
+            fragmentDetailPointOfInterestCg.visibility = property.pointsOfInterestVisibility
+            fragmentDetailPointOfInterestIv.visibility = property.pointsOfInterestVisibility
+            fragmentDetailPointOfInterestTitleTv.visibility = property.pointsOfInterestVisibility
 
             fragmentDetailPostDateTv.text = property.postDate
 
@@ -167,5 +170,11 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
         intent.putExtra(BUNDLE_KEY_PROPERTY_ID, mViewModel.propertyLiveData.value?.id)
         intent.putExtra(BUNDLE_KEY_SELECTED_MEDIA_INDEX, position)
         startActivity(intent)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        mBinding = null
     }
 }

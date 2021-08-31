@@ -36,7 +36,7 @@ class MapFragment : Fragment(),
     GoogleMap.OnMarkerClickListener{
 
     private val mViewModel: ListViewModel by activityViewModels()
-    private lateinit var mBinding : FragmentMapBinding
+    private var mBinding : FragmentMapBinding? = null
     private lateinit var mMap : GoogleMap
 
     companion object {
@@ -46,11 +46,11 @@ class MapFragment : Fragment(),
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         mBinding = FragmentMapBinding.inflate(layoutInflater)
-        mBinding.mapViewFragmentLocationBtn.setOnClickListener { requestFocusToLocation() }
+        mBinding?.mapViewFragmentLocationBtn?.setOnClickListener { requestFocusToLocation() }
 
         configureMaps()
 
-        return mBinding.root
+        return mBinding!!.root
     }
 
     private fun configureMaps(){
@@ -78,13 +78,13 @@ class MapFragment : Fragment(),
     private val stateObserver = Observer<State> { state ->
         when(state){
             is State.Download.Downloading -> {
-                mBinding.mapViewFragmentPb.visibility = View.VISIBLE
+                mBinding?.mapViewFragmentPb?.visibility = View.VISIBLE
             }
             is State.Download.DownloadSuccess -> {
-                mBinding.mapViewFragmentPb.visibility = View.GONE
+                mBinding?.mapViewFragmentPb?.visibility = View.GONE
             }
             is State.Download.Error -> {
-                mBinding.mapViewFragmentPb.visibility = View.GONE
+                mBinding?.mapViewFragmentPb?.visibility = View.GONE
                 if (state.throwable is OfflineError) {
                     showToast(requireContext(), R.string.you_re_not_connected_to_internet)
                 } else {
@@ -217,6 +217,8 @@ class MapFragment : Fragment(),
     override fun onDestroy() {
         super.onDestroy()
         stopLocationUpdates()
+
+        mBinding = null
     }
 
     private fun stopLocationUpdates() {

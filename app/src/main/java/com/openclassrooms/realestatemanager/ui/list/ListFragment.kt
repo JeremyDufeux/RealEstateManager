@@ -22,7 +22,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
     private val mViewModel: ListViewModel by activityViewModels()
-    private lateinit var mBinding : FragmentListBinding
+    private var mBinding : FragmentListBinding? = null
     private val mAdapter = PropertyListAdapter(this)
     private lateinit var mPropertyList : List<PropertyUiListView>
 
@@ -47,17 +47,21 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
 
         configureUi()
 
-        return mBinding.root
+        return mBinding!!.root
     }
 
     private fun configureUi() {
-        mBinding.fragmentListSrl.setOnRefreshListener { mViewModel.fetchProperties() }
+        mBinding?.apply {
+            fragmentListSrl.setOnRefreshListener { mViewModel.fetchProperties() }
 
-        mBinding.fragmentListRv.adapter = mAdapter
-        mBinding.fragmentListRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            fragmentListRv.adapter = mAdapter
+            fragmentListRv.layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        val itemDecoration : RecyclerView.ItemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
-        mBinding.fragmentListRv.addItemDecoration(itemDecoration)
+            val itemDecoration: RecyclerView.ItemDecoration =
+                DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+            fragmentListRv.addItemDecoration(itemDecoration)
+        }
     }
 
     private val propertiesObserver = Observer<List<PropertyUiListView>> { properties ->
@@ -79,7 +83,7 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
     private val stateObserver = Observer<State> { state ->
         when(state) {
             is State.Download.Downloading -> {
-                mBinding.fragmentListSrl.isRefreshing = true
+                mBinding?.fragmentListSrl?.isRefreshing = true
             }
             is State.Download.DownloadSuccess ->{
                 hideProgress()
@@ -94,10 +98,10 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
                 Timber.e("Error ListFragment.stateObserver: ${state.throwable.toString()}")
             }
             is State.Filter.Result -> {
-                mBinding.fragmentListSrl.isEnabled = false
+                mBinding?.fragmentListSrl?.isEnabled = false
             }
             is State.Filter.Clear -> {
-                mBinding.fragmentListSrl.isEnabled = true
+                mBinding?.fragmentListSrl?.isEnabled = true
             }
             else -> {
                 hideProgress()
@@ -106,11 +110,17 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
     }
 
     private fun hideProgress(){
-        mBinding.fragmentListSrl.isRefreshing = false
+        mBinding?.fragmentListSrl?.isRefreshing = false
     }
 
     override fun onPropertyClick(position: Int) {
         mViewModel.setSelectedPropertyId(mPropertyList[position].id)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        mBinding = null
     }
 
 }

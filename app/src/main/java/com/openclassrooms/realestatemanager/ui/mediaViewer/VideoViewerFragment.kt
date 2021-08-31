@@ -21,7 +21,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class VideoViewerFragment : Fragment() {
     private val  mViewModel : VideoViewerViewModel by viewModels()
-    private lateinit var mBinding: FragmentVideoViewerBinding
+    private var mBinding: FragmentVideoViewerBinding? = null
 
     private var mPlayer: SimpleExoPlayer? = null
 
@@ -36,13 +36,13 @@ class VideoViewerFragment : Fragment() {
             mViewModel.url = it
         }
         arguments?.getString(BUNDLE_KEY_MEDIA_DESCRIPTION) ?.let {
-            mBinding.videoViewerFragmentTv.text = it
+            mBinding?.videoViewerFragmentTv?.text = it
         }
         arguments?.getBoolean(BUNDLE_KEY_EDIT_MODE) ?.let {
-            mBinding.videoViewerFragmentTv.visibility = View.GONE
+            mBinding?.videoViewerFragmentTv?.visibility = View.GONE
         }
 
-        return mBinding.root
+        return mBinding!!.root
     }
 
     override fun onStart() {
@@ -86,8 +86,8 @@ class VideoViewerFragment : Fragment() {
         mPlayer = SimpleExoPlayer.Builder(requireContext())
             .build()
             .apply {
-                mBinding.videoViewerFragmentEp.player = this
-                mBinding.videoViewerFragmentEp.controllerAutoShow = false
+                mBinding?.videoViewerFragmentEp?.player = this
+                mBinding?.videoViewerFragmentEp?.controllerAutoShow = false
                 setMediaSource(mediaSources)
                 repeatMode = Player.REPEAT_MODE_ALL
                 playWhenReady = mViewModel.playWhenReady

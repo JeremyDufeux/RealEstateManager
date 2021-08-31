@@ -128,6 +128,9 @@ dependencies {
     //noinspection GradleDependency -> Needed for hilt injection
     implementation("androidx.work:work-runtime-ktx:2.5.0")
 
+    // Leak Canary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+
 }
 
 kapt {

@@ -17,9 +17,7 @@ import com.openclassrooms.realestatemanager.models.enums.Currency
 import com.openclassrooms.realestatemanager.models.enums.Unit
 import com.openclassrooms.realestatemanager.utils.find
 import com.openclassrooms.realestatemanager.utils.getStringResourceId
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class SettingsBottomSheetDialog : BottomSheetDialogFragment() {
 
     private val mViewModel: SettingsViewModel by viewModels()
@@ -117,5 +115,11 @@ class SettingsBottomSheetDialog : BottomSheetDialogFragment() {
     private fun saveSettings() {
         mViewModel.saveSettings()
         dismiss()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        mBinding = null
     }
 }

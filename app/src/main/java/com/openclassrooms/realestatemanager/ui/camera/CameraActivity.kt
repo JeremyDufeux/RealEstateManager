@@ -257,4 +257,9 @@ class CameraActivity : AppCompatActivity() {
         mCamera = null
         mPreview?.holder?.removeCallback(mPreview)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mViewModel.cancelJobs()
+    }
 }

@@ -9,6 +9,7 @@ import com.openclassrooms.realestatemanager.services.PictureSaver
 import com.openclassrooms.realestatemanager.services.VideoRecorder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,6 +30,9 @@ class CameraActivityViewModel @Inject constructor(
     var cameraMode: CameraMode = CameraMode.PHOTO
     var recording = false
 
+    private var mPictureSaverJob: Job
+    private var mVideoRecorderJob: Job
+
     enum class CameraMode{
         PHOTO, VIDEO
     }
@@ -41,13 +45,13 @@ class CameraActivityViewModel @Inject constructor(
             }
         }
 
-        mMainScope.launch() {
+        mPictureSaverJob = mMainScope.launch() {
             mPictureSaver.fileStateFlow.collect { pictureFile ->
                 _fileLiveData.value = pictureFile
             }
         }
 
-        mMainScope.launch() {
+        mVideoRecorderJob = mMainScope.launch() {
             mVideoRecorder.fileStateFlow.collect { videoFile ->
                 _fileLiveData.value = videoFile
             }
@@ -76,5 +80,10 @@ class CameraActivityViewModel @Inject constructor(
 
     fun setFileState(file: FileState.Success) {
         _fileLiveData.value = file
+    }
+
+    fun cancelJobs() {
+        mPictureSaverJob.cancel()
+        mVideoRecorderJob.cancel()
     }
 }
