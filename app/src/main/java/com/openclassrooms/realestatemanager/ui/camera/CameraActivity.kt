@@ -160,9 +160,12 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun startRecording() {
-        mCamera?.autoFocus(null)
-        mCamera?.unlock()
-        mCamera?.let { mViewModel.startRecording(it) }
+        mCamera?.apply {
+            autoFocus(null)
+            val sizeList: List<Camera.Size> = parameters?.supportedPreviewSizes as List<Camera.Size>
+            unlock()
+            mViewModel.startRecording(this, sizeList)
+        }
     }
 
     private fun stopRecording() {

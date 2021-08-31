@@ -70,8 +70,8 @@ class CameraActivityViewModel @Inject constructor(
         return mPictureSaver
     }
 
-    fun startRecording(camera: Camera) {
-        mVideoRecorder.startRecording(camera)
+    fun startRecording(camera: Camera, sizeList: List<Camera.Size>) {
+        mVideoRecorder.startRecording(camera, sizeList)
     }
 
     fun stopRecording() {

@@ -23,7 +23,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class VideoRecorder @Inject constructor(private val mContext: Context) {
+
+class VideoRecorder @Inject constructor(mContext: Context) {
 
     private val mResolver = mContext.contentResolver
 
@@ -35,13 +36,18 @@ class VideoRecorder @Inject constructor(private val mContext: Context) {
     private var mRecorder: MediaRecorder? = null
     private lateinit var mVideoUri: Uri
 
-    fun startRecording(camera: Camera) {
+    fun startRecording(camera: Camera, sizeList: List<Camera.Size>) {
         mRecorder = MediaRecorder().apply {
             setCamera(camera)
             setAudioSource(MediaRecorder.AudioSource.CAMCORDER)
             setVideoSource(MediaRecorder.VideoSource.CAMERA)
 
-            setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P))
+            val profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH)
+
+            profile.videoFrameWidth = sizeList[0].width
+            profile.videoFrameHeight = sizeList[0].height
+
+            setProfile(profile)
 
             setOrientationHint(mOrientationMode.rotation)
 
