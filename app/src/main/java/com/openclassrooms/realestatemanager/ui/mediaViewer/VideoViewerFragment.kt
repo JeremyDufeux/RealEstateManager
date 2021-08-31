@@ -39,7 +39,7 @@ class VideoViewerFragment : Fragment() {
             mBinding?.videoViewerFragmentTv?.text = it
         }
         arguments?.getBoolean(BUNDLE_KEY_EDIT_MODE) ?.let {
-            mBinding?.videoViewerFragmentTv?.visibility = View.GONE
+            if(it) mBinding?.videoViewerFragmentTv?.visibility = View.GONE
         }
 
         return mBinding!!.root
@@ -104,5 +104,11 @@ class VideoViewerFragment : Fragment() {
             release()
         }
         mPlayer = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        mBinding = null
     }
 }

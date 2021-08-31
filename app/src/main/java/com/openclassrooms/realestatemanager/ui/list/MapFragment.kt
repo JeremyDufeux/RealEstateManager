@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.ui.list
 import android.Manifest.permission
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,7 @@ class MapFragment : Fragment(),
     private val mViewModel: ListViewModel by activityViewModels()
     private var mBinding : FragmentMapBinding? = null
     private lateinit var mMap : GoogleMap
+    private lateinit var mLocation: Location
 
     companion object {
         fun newInstance() = MapFragment()
@@ -138,9 +140,8 @@ class MapFragment : Fragment(),
     }
 
     private fun focusToLocation() {
-        val location = mViewModel.location.value
-        location?.let {
-            val latLng = LatLng(location.latitude, location.longitude)
+        if(this::mLocation.isInitialized) {
+            val latLng = LatLng(mLocation.latitude, mLocation.longitude)
             val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM_VALUE)
             mMap.animateCamera(cameraUpdate)
         }
@@ -156,6 +157,7 @@ class MapFragment : Fragment(),
             hasLocationPermission() -> {
                 if(!mViewModel.locationStarted) {
                     mViewModel.startLocationUpdates()
+                    mViewModel.location.observe(viewLifecycleOwner, { mLocation = it })
                 }
                 mMap.isMyLocationEnabled = true
             }

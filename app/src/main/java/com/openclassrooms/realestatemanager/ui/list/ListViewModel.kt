@@ -18,7 +18,6 @@ import com.openclassrooms.realestatemanager.utils.Utils.convertEurosToDollars
 import com.openclassrooms.realestatemanager.utils.Utils.convertSquareMetersToSquareFoot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -126,7 +125,6 @@ class ListViewModel @Inject constructor(
                 }
                 mPropertyUseCase.getPropertyWithFilters(filter)
             }
-            cancel()
         }
     }
 
@@ -134,7 +132,6 @@ class ListViewModel @Inject constructor(
         propertyFilter.clearFilters()
         viewModelScope.launch(Dispatchers.IO) {
             mPropertyUseCase.removeFilters()
-            cancel()
         }
     }
 

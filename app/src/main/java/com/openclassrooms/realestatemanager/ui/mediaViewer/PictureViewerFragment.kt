@@ -33,7 +33,7 @@ class PictureViewerFragment : Fragment() {
             mBinding?.pictureViewerFragmentTv?.text = it
         }
         arguments?.getBoolean(BUNDLE_KEY_EDIT_MODE) ?.let {
-            mBinding?.pictureViewerFragmentTv?.visibility = View.GONE
+            if(it) mBinding?.pictureViewerFragmentTv?.visibility = View.GONE
         }
 
         return mBinding!!.root
@@ -46,5 +46,11 @@ class PictureViewerFragment : Fragment() {
 
         override fun onLoadCleared(placeholder: Drawable?) {
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        mBinding = null
     }
 }

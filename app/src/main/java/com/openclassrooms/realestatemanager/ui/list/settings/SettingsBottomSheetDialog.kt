@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.openclassrooms.realestatemanager.R
@@ -20,7 +20,7 @@ import com.openclassrooms.realestatemanager.utils.getStringResourceId
 
 class SettingsBottomSheetDialog : BottomSheetDialogFragment() {
 
-    private val mViewModel: SettingsViewModel by viewModels()
+    private val mViewModel: SettingsViewModel by activityViewModels()
     private var mBinding: BottomSheetDialogSettingsBinding? = null
 
     private lateinit var mContext: Context
