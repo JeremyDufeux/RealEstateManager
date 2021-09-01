@@ -9,6 +9,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.FirebaseFirestoreException.Code.DATA_LOSS
+import com.google.firebase.firestore.FirebaseFirestoreException.Code.UNAVAILABLE
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityListBinding
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
@@ -125,6 +128,19 @@ class ListActivity : AppCompatActivity() {
             is State.Upload.UploadSuccess.Empty -> {
                 mBinding.activityListProgressLine.visibility = View.GONE
                 showToast(this, R.string.all_properties_has_been_uploaded)
+            }
+            is State.Download.Error -> {
+                when (state.throwable) {
+                    is OfflineError -> {  showToast(this, R.string.you_re_not_connected_to_internet) }
+                    is FirebaseFirestoreException -> {
+                        when(state.throwable.code){
+                            UNAVAILABLE, DATA_LOSS -> { showToast(this, R.string.you_re_not_connected_to_internet) }
+                            else ->  {  showToast(this, R.string.an_error_append) }
+                        }
+                    }
+                    else -> {  showToast(this, R.string.an_error_append) }
+                }
+                Timber.e("Error ListFragment.stateObserver: ${state.throwable.toString()}")
             }
             is State.Upload.Error -> {
                 mBinding.activityListProgressLine.visibility = View.GONE

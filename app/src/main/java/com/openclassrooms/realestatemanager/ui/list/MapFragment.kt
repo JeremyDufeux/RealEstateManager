@@ -23,10 +23,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentMapBinding
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiMapView
-import com.openclassrooms.realestatemanager.utils.showToast
-import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 const val DEFAULT_ZOOM_VALUE = 15f
 const val LOCATION_PERMISSION = permission.ACCESS_FINE_LOCATION
@@ -87,12 +84,6 @@ class MapFragment : Fragment(),
             }
             is State.Download.Error -> {
                 mBinding?.mapViewFragmentPb?.visibility = View.GONE
-                if (state.throwable is OfflineError) {
-                    showToast(requireContext(), R.string.you_re_not_connected_to_internet)
-                } else {
-                    showToast(requireContext(), R.string.an_error_append)
-                }
-                Timber.e("Error ListFragment.stateObserver: ${state.throwable.toString()}")
             }
             else -> {}
         }

@@ -14,10 +14,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiListView
-import com.openclassrooms.realestatemanager.utils.showToast
-import com.openclassrooms.realestatemanager.utils.throwable.OfflineError
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
@@ -90,12 +87,6 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
             }
             is State.Download.Error -> {
                 hideProgress()
-                if (state.throwable is OfflineError) {
-                    showToast(requireContext(), R.string.you_re_not_connected_to_internet)
-                } else {
-                    showToast(requireContext(), R.string.an_error_append)
-                }
-                Timber.e("Error ListFragment.stateObserver: ${state.throwable.toString()}")
             }
             is State.Filter.Result -> {
                 mBinding?.fragmentListSrl?.isEnabled = false
