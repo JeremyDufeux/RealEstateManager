@@ -31,7 +31,7 @@ class OfflinePropertyRepository @Inject constructor(
     private val mVideoDownloadService: VideoDownloadService,
     private val mPropertyDao: PropertyDao) {
 
-    fun getProperties(): List<Property> = mPropertyDao.getProperties().let { list ->
+    suspend fun getProperties(): List<Property> = mPropertyDao.getProperties().let { list ->
         val propertyList = mutableListOf<Property>()
         for (property in list) {
             propertyList.add(propertyEntityToPropertyMapper(property))
@@ -39,7 +39,7 @@ class OfflinePropertyRepository @Inject constructor(
         return propertyList
     }
 
-    fun getPropertyWithId(propertyId: String): Property?{
+    suspend fun getPropertyWithId(propertyId: String): Property?{
         val propertyEntity = mPropertyDao.getPropertyWithId(propertyId)
 
         return propertyEntity?.let { propertyEntityToPropertyMapper(it) }
@@ -58,13 +58,13 @@ class OfflinePropertyRepository @Inject constructor(
         deleteOldData()
     }
 
-    private fun prepareDatabaseBeforeUpdate() {
+    private suspend fun prepareDatabaseBeforeUpdate() {
         mPropertyDao.updatePropertiesToOld()
         mPropertyDao.updateMediasToOld()
         mPropertyDao.updatePointsOfInterestToOld()
     }
 
-    private fun deleteOldData() {
+    private suspend fun deleteOldData() {
         mPropertyDao.deleteOldProperties()
         mPropertyDao.deleteOldMedias()
         mPropertyDao.deleteOldPointsOfInterest()
@@ -112,7 +112,7 @@ class OfflinePropertyRepository @Inject constructor(
         }
     }
 
-    fun getPropertiesToUpload(): List<Property> {
+    suspend fun getPropertiesToUpload(): List<Property> {
         val propertyList = mutableListOf<Property>()
         for (property in mPropertyDao.getPropertiesToUpload()) {
             propertyList.add(propertyEntityToPropertyMapper(property))
@@ -120,11 +120,11 @@ class OfflinePropertyRepository @Inject constructor(
         return propertyList
     }
 
-    fun getMediaItemsToUpload(): List<MediaItem> {
+    suspend fun getMediaItemsToUpload(): List<MediaItem> {
         return mediaItemsEntityToMediaItemsMapper(mPropertyDao.getMediaItemsToUpload())
     }
 
-    fun getMediaItemsToDelete(): List<MediaItem> {
+    suspend fun getMediaItemsToDelete(): List<MediaItem> {
         return mediaItemsEntityToMediaItemsMapper(mPropertyDao.getMediaItemsToDelete())
     }
 
@@ -140,7 +140,7 @@ class OfflinePropertyRepository @Inject constructor(
         mPropertyDao.insertMediaItem(mediaItemEntity)
     }
 
-    fun deleteMedia(mediaItem: MediaItem) {
+    suspend fun deleteMedia(mediaItem: MediaItem) {
         mPropertyDao.deleteMediaWithId(mediaItem.id)
 
         if(mediaItem.fileType == FileType.VIDEO){
@@ -169,7 +169,7 @@ class OfflinePropertyRepository @Inject constructor(
         }
     }
 
-    fun getPropertyWithFilters(propertyFilter: PropertyFilter) : List<Property> {
+    suspend fun getPropertyWithFilters(propertyFilter: PropertyFilter) : List<Property> {
         val queryString = constructSqlQuery(propertyFilter)
 
         val query = SimpleSQLiteQuery(queryString)

@@ -63,7 +63,7 @@ class PropertyUseCase @Inject constructor(
         }
     }
 
-    fun getOfflineProperties() {
+    suspend fun getOfflineProperties() {
         mOfflinePropertyRepository.getProperties().let {
             _stateFlow.value = State.OfflineSuccess(it)
         }
@@ -185,13 +185,13 @@ class PropertyUseCase @Inject constructor(
         _stateFlow.value = State.Idle
     }
 
-    fun getPropertyWithFilters(propertyFilter: PropertyFilter) {
+    suspend fun getPropertyWithFilters(propertyFilter: PropertyFilter) {
         mOfflinePropertyRepository.getPropertyWithFilters(propertyFilter).let {
             _stateFlow.value = State.Filter.Result(it)
         }
     }
 
-    fun removeFilters() {
+    suspend fun removeFilters() {
         _stateFlow.value = State.Filter.Clear
         mOfflinePropertyRepository.getProperties().let {
             _stateFlow.value = State.Download.DownloadSuccess(it)

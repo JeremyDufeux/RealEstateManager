@@ -54,17 +54,21 @@ class PropertyDaoTest{
     }
 
     @Test
-    fun testGetPropertiesAndAssertCount() {
-        val propertyList = propertyDao.getProperties()
+    fun testGetPropertiesAndAssertCount() : Unit = runBlocking {
+        launch(Dispatchers.Main) {
+            val propertyList = propertyDao.getProperties()
 
-        assert(propertyList.size == 7)
+            assert(propertyList.size == 7)
+        }
     }
 
     @Test
-    fun testGetPropertyWithIdAndAssertData() {
-        val property = propertyDao.getPropertyWithId("1")
+    fun testGetPropertyWithIdAndAssertData(): Unit = runBlocking {
+        launch(Dispatchers.Main) {
+            val property = propertyDao.getPropertyWithId("1")
 
-        assert(property?.propertyEntity?.propertyId == "1")
+            assert(property?.propertyEntity?.propertyId == "1")
+        }
     }
 
     @Test
@@ -208,41 +212,47 @@ class PropertyDaoTest{
     }
 
     @Test
-    fun testDeletePoiToPropertyAndAssertData(){
-        val propertyId = "1"
-        var property = propertyDao.getPropertyWithId(propertyId)!!
+    fun testDeletePoiToPropertyAndAssertData(): Unit = runBlocking {
+        launch(Dispatchers.Main) {
+            val propertyId = "1"
+            var property = propertyDao.getPropertyWithId(propertyId)!!
 
-        assert(property.pointOfInterestList.isNotEmpty())
+            assert(property.pointOfInterestList.isNotEmpty())
 
-        propertyDao.deletePointsOfInterestForProperty(property.propertyEntity.propertyId)
+            propertyDao.deletePointsOfInterestForProperty(property.propertyEntity.propertyId)
 
-        property = propertyDao.getPropertyWithId(propertyId)!!
+            property = propertyDao.getPropertyWithId(propertyId)!!
 
-        assert(property.pointOfInterestList.isEmpty())
+            assert(property.pointOfInterestList.isEmpty())
+        }
     }
 
     @Test
-    fun testDeleteMediaToPropertyAndAssertData(){
-        val propertyId = "1"
-        var property = propertyDao.getPropertyWithId(propertyId)!!
+    fun testDeleteMediaToPropertyAndAssertData(): Unit = runBlocking {
+        launch(Dispatchers.Main) {
+            val propertyId = "1"
+            var property = propertyDao.getPropertyWithId(propertyId)!!
 
-        assert(property.mediaList.isNotEmpty())
-        val mediaToDelete = property.mediaList[0]
+            assert(property.mediaList.isNotEmpty())
+            val mediaToDelete = property.mediaList[0]
 
-        propertyDao.deleteMediaWithId(mediaToDelete.mediaId)
+            propertyDao.deleteMediaWithId(mediaToDelete.mediaId)
 
-        property = propertyDao.getPropertyWithId(propertyId)!!
+            property = propertyDao.getPropertyWithId(propertyId)!!
 
-        assert(!property.mediaList.contains(mediaToDelete))
+            assert(!property.mediaList.contains(mediaToDelete))
+        }
     }
 
     @Test
-    fun testUpdatePropertiesToOldAndDeleteAndAssertData(){
-        propertyDao.updatePropertiesToOld()
-        propertyDao.deleteOldProperties()
-        val properties = propertyDao.getProperties()
+    fun testUpdatePropertiesToOldAndDeleteAndAssertData(): Unit = runBlocking {
+        launch(Dispatchers.Main) {
+            propertyDao.updatePropertiesToOld()
+            propertyDao.deleteOldProperties()
+            val properties = propertyDao.getProperties()
 
-        assert(properties.isEmpty())
+            assert(properties.isEmpty())
+        }
     }
 
     @Test
@@ -267,12 +277,14 @@ class PropertyDaoTest{
     }
 
     @Test
-    fun testUpdateMediaToOldAndDeleteAndAssertData(){
-        propertyDao.updateMediasToOld()
-        propertyDao.deleteOldMedias()
-        val medias = propertyDao.getMedias()
+    fun testUpdateMediaToOldAndDeleteAndAssertData(): Unit = runBlocking {
+        launch(Dispatchers.Main) {
+            propertyDao.updateMediasToOld()
+            propertyDao.deleteOldMedias()
+            val medias = propertyDao.getMedias()
 
-        assert(medias.isEmpty())
+            assert(medias.isEmpty())
+        }
     }
 
     @Test
@@ -297,12 +309,14 @@ class PropertyDaoTest{
     }
 
     @Test
-    fun testUpdatePoiToOldAndDeleteAndAssertData(){
-        propertyDao.updatePointsOfInterestToOld()
-        propertyDao.deleteOldPointsOfInterest()
-        val poiList = propertyDao.getPointsOfInterestCrossRef()
+    fun testUpdatePoiToOldAndDeleteAndAssertData(): Unit = runBlocking {
+        launch(Dispatchers.Main) {
+            propertyDao.updatePointsOfInterestToOld()
+            propertyDao.deleteOldPointsOfInterest()
+            val poiList = propertyDao.getPointsOfInterestCrossRef()
 
-        assert(poiList.isEmpty())
+            assert(poiList.isEmpty())
+        }
     }
 
     @Test

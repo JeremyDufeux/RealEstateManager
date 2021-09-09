@@ -11,11 +11,11 @@ interface PropertyDao {
 
     @Transaction
     @Query("SELECT * FROM properties ORDER BY propertyId")
-    fun getProperties(): List<PropertyWithMediaItemAndPointsOfInterestEntity>
+    suspend fun getProperties(): List<PropertyWithMediaItemAndPointsOfInterestEntity>
 
     @Transaction
     @Query("SELECT * FROM properties WHERE propertyId=:propertyId")
-    fun getPropertyWithId(propertyId: String): PropertyWithMediaItemAndPointsOfInterestEntity?
+    suspend fun getPropertyWithId(propertyId: String): PropertyWithMediaItemAndPointsOfInterestEntity?
 
     @Transaction
     @Query("SELECT * FROM properties WHERE propertyId=:propertyId")
@@ -23,15 +23,15 @@ interface PropertyDao {
 
     @Transaction
     @Query("SELECT * FROM properties WHERE dataState='WAITING_UPLOAD'")
-    fun getPropertiesToUpload(): List<PropertyWithMediaItemAndPointsOfInterestEntity>
+    suspend fun getPropertiesToUpload(): List<PropertyWithMediaItemAndPointsOfInterestEntity>
 
     @Transaction
     @Query("SELECT * FROM media_items WHERE dataState='WAITING_UPLOAD'")
-    fun getMediaItemsToUpload(): List<MediaItemEntity>
+    suspend fun getMediaItemsToUpload(): List<MediaItemEntity>
 
     @Transaction
     @Query("SELECT * FROM media_items WHERE dataState='WAITING_DELETE'")
-    fun getMediaItemsToDelete(): List<MediaItemEntity>
+    suspend fun getMediaItemsToDelete(): List<MediaItemEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProperty(property: PropertyEntity)
@@ -46,43 +46,43 @@ interface PropertyDao {
     suspend fun insertPropertyPointOfInterestCrossRef(propertyPointOfInterestCrossRef: PropertyPointOfInterestCrossRef)
 
     @Query("DELETE FROM properties_point_of_interest_cross_ref WHERE propertyId=:id")
-    fun deletePointsOfInterestForProperty(id: String)
+    suspend fun deletePointsOfInterestForProperty(id: String)
 
     @Query("DELETE FROM media_items WHERE mediaId=:id")
-    fun deleteMediaWithId(id: String)
+    suspend fun deleteMediaWithId(id: String)
 
     @Query("DELETE FROM properties WHERE dataState='OLD'")
-    fun deleteOldProperties()
+    suspend fun deleteOldProperties()
 
     @Query("DELETE FROM media_items WHERE dataState='OLD'")
-    fun deleteOldMedias()
+    suspend fun deleteOldMedias()
 
     @Query("DELETE FROM properties_point_of_interest_cross_ref WHERE dataState='OLD'")
-    fun deleteOldPointsOfInterest()
+    suspend fun deleteOldPointsOfInterest()
 
     @Query("UPDATE properties SET dataState='OLD'")
-    fun updatePropertiesToOld()
+    suspend fun updatePropertiesToOld()
 
     @Query("UPDATE media_items SET dataState='OLD'")
-    fun updateMediasToOld()
+    suspend fun updateMediasToOld()
 
     @Query("UPDATE properties_point_of_interest_cross_ref SET dataState='OLD'")
-    fun updatePointsOfInterestToOld()
+    suspend fun updatePointsOfInterestToOld()
 
     @RawQuery
-    fun getPropertyWithFilters(query: SimpleSQLiteQuery): List<PropertyWithMediaItemAndPointsOfInterestEntity>
+    suspend fun getPropertyWithFilters(query: SimpleSQLiteQuery): List<PropertyWithMediaItemAndPointsOfInterestEntity>
 
     // For testing
 
     @VisibleForTesting
     @Query("SELECT * FROM media_items")
-    fun getMedias(): List<MediaItemEntity>
+    suspend fun getMedias(): List<MediaItemEntity>
 
     @VisibleForTesting
     @Query("SELECT * FROM points_of_interest")
-    fun getPointsOfInterest(): List<PointOfInterestEntity>
+    suspend fun getPointsOfInterest(): List<PointOfInterestEntity>
 
     @VisibleForTesting
     @Query("SELECT * FROM properties_point_of_interest_cross_ref")
-    fun getPointsOfInterestCrossRef(): List<PropertyPointOfInterestCrossRef>
+    suspend fun getPointsOfInterestCrossRef(): List<PropertyPointOfInterestCrossRef>
 }
