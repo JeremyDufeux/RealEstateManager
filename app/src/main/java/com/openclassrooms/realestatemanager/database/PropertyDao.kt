@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.database
 
+import androidx.annotation.VisibleForTesting
 import androidx.room.*
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.openclassrooms.realestatemanager.models.databaseEntites.*
@@ -70,4 +71,18 @@ interface PropertyDao {
 
     @RawQuery
     fun getPropertyWithFilters(query: SimpleSQLiteQuery): List<PropertyWithMediaItemAndPointsOfInterestEntity>
+
+    // For testing
+
+    @VisibleForTesting
+    @Query("SELECT * FROM media_items")
+    fun getMedias(): List<MediaItemEntity>
+
+    @VisibleForTesting
+    @Query("SELECT * FROM points_of_interest")
+    fun getPointsOfInterest(): List<PointOfInterestEntity>
+
+    @VisibleForTesting
+    @Query("SELECT * FROM properties_point_of_interest_cross_ref")
+    fun getPointsOfInterestCrossRef(): List<PropertyPointOfInterestCrossRef>
 }

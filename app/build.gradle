@@ -52,6 +52,11 @@ android {
     kotlinOptions.freeCompilerArgs += [
             "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
             "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi"]
+
+    packagingOptions {
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/AL2.0'
+    }
 }
 
 dependencies {
@@ -103,9 +108,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
 
     // Kotlin Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.5.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.5.1'
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1"
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'

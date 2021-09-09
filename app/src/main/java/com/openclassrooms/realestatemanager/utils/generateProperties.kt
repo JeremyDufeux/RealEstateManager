@@ -30,7 +30,7 @@ fun generateProperties() : List<Property> {
                 MediaItem("2e0805f7-1fe8-4392-9952-00e8ecb75d58", "1", "https://photos.zillowstatic.com/fp/a1ac5668a4dcc1795e250b8f2779633f-o_a.jpg", "Bedroom", FileType.PICTURE)
             ),
             addressLine1 = "45 Rockefeller Plaza",
-            city = "Manhathan",
+            city = "Manhattan",
             postalCode = "NY 10111",
             country = "USA",
             latitude = 40.7589408497391,
@@ -67,7 +67,7 @@ fun generateProperties() : List<Property> {
                 MediaItem("2a5ab2dc-d789-4e4c-8f5e-2a29ef1b3200", "2", "https://photos.zillowstatic.com/fp/a60feda35e489359a1f46c34fbc31106-cc_ft_384.jpg", "Living room", FileType.PICTURE)
             ),
             addressLine1 = "303 E 57th St APT 32B",
-            city = "Manhathan",
+            city = "Manhattan",
             postalCode = "NY 10022",
             country = "USA",
             latitude = 40.759524542858905,
@@ -162,7 +162,7 @@ fun generateProperties() : List<Property> {
                 MediaItem("3d7092de-5f20-47cc-b6ef-6fc49c86d67e", "4", "https://photos.zillowstatic.com/fp/bca7129277de8af2f982c78e57be11ef-cc_ft_384.jpg" , "Living room 3", FileType.PICTURE)
             ),
             addressLine1 = "111 W 57th St PENTHOUSE 72",
-            city = "Manhathan",
+            city = "Manhattan",
             postalCode = "NY 10019",
             country = "USA",
             latitude = 40.76482158883576,
