@@ -12,8 +12,11 @@ import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.utils.getStaticMapUrl
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -110,11 +113,10 @@ class PropertyDaoTest{
     @Test
     fun testGetPropertiesFlowAndAssertData(): Unit = runBlocking {
         launch(Dispatchers.Main) {
-            propertyDao.getPropertyWithIdFlow("1").collect {
-                assert(it.propertyEntity.propertyId == "1")
-                assert(it.propertyEntity.propertyId != "2")
-                cancel()
-            }
+            val property = propertyDao.getPropertyWithIdFlow("1").first()
+
+            assert(property.propertyEntity.propertyId == "1")
+            assert(property.propertyEntity.propertyId != "2")
         }
     }
 
