@@ -3,7 +3,7 @@
 buildscript {
 
     ext {
-        kotlin_version = '1.5.10'
+        kotlin_version = '1.5.30'
         hilt_version = '2.38.1'
     }
     repositories {
@@ -12,14 +12,14 @@ buildscript {
         maven { url "https://www.jitpack.io" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath 'com.android.tools.build:gradle:7.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // Dagger Hilt
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
 
         // Firebase
-        classpath 'com.google.gms:google-services:4.3.8'
+        classpath 'com.google.gms:google-services:4.3.10'
 
         // Crashlytics
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
