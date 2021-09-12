@@ -79,7 +79,7 @@ class OfflinePropertyRepository @Inject constructor(
     }
 
     suspend fun addProperty(property: Property, dataState: DataState) {
-        val propertyEntity = propertyToPropertyEntityMapper(property)
+        val propertyEntity = propertyToPropertyEntityMapper(property, dataState)
         propertyEntity.dataState = dataState
         mPropertyDao.insertProperty(propertyEntity)
 
@@ -149,8 +149,7 @@ class OfflinePropertyRepository @Inject constructor(
     }
 
     suspend fun updateProperty(property: Property) {
-        val propertyEntity = propertyToPropertyEntityMapper(property)
-        propertyEntity.dataState = DataState.WAITING_UPLOAD
+        val propertyEntity = propertyToPropertyEntityMapper(property, DataState.WAITING_UPLOAD)
 
         mPropertyDao.insertProperty(propertyEntity)
 

@@ -59,7 +59,7 @@ class HiltFakeDatabaseModule {
                 val contentValues = ContentValues()
 
                 for(property in properties){
-                    val propertyEntity = propertyToPropertyEntityMapper(property)
+                    val propertyEntity = propertyToPropertyEntityMapper(property, DataState.SERVER)
                     contentValues.put("propertyId", propertyEntity.propertyId)
                     contentValues.put("type", propertyEntity.type.toString())
                     contentValues.put("price", propertyEntity.price)
