@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager
+package com.openclassrooms.realestatemanager.modules
 
 import android.content.ContentValues
 import androidx.room.OnConflictStrategy
@@ -14,7 +14,6 @@ import com.openclassrooms.realestatemanager.mappers.propertyToPropertyEntityMapp
 import com.openclassrooms.realestatemanager.models.databaseEntites.PropertyPointOfInterestCrossRef
 import com.openclassrooms.realestatemanager.models.enums.DataState
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
-import com.openclassrooms.realestatemanager.modules.HiltDatabaseModule
 import com.openclassrooms.realestatemanager.utils.generateProperties
 import dagger.Module
 import dagger.Provides
@@ -27,7 +26,7 @@ import javax.inject.Singleton
     components = [SingletonComponent::class],
     replaces = [HiltDatabaseModule::class]
 )
-class HiltFakeDatabaseModule {
+class FakeDatabaseModule {
 
     @Singleton
     @Provides

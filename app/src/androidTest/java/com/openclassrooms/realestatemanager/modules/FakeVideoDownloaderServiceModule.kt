@@ -11,27 +11,26 @@ import com.google.android.exoplayer2.upstream.cache.Cache
 import com.google.android.exoplayer2.upstream.cache.NoOpCacheEvictor
 import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.services.FakeVideoDownloaderService
 import com.openclassrooms.realestatemanager.services.VideoDownloadService
-import com.openclassrooms.realestatemanager.services.VideoDownloadServiceImpl
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dagger.hilt.testing.TestInstallIn
 import java.io.File
 import java.util.concurrent.Executors
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
-class HiltVideoDownloadServiceModule {
-
-    @Qualifier
-    annotation class UserAgent
+@TestInstallIn(
+    components = [SingletonComponent::class],
+    replaces = [HiltVideoDownloadServiceModule::class]
+)
+class FakeVideoDownloaderServiceModule {
 
     @Provides
-    @UserAgent
+    @HiltVideoDownloadServiceModule.UserAgent
     fun provideUserAgent(): String{
         return ("ExoPlayerDemo/"
                 + ExoPlayerLibraryInfo.VERSION
@@ -42,7 +41,7 @@ class HiltVideoDownloadServiceModule {
     }
 
     @Provides
-    fun provideDownloadDirectory(@ApplicationContext context: Context): File{
+    fun provideDownloadDirectory(@ApplicationContext context: Context): File {
         return File(context.getExternalFilesDir(null), context.getString(R.string.app_name))
     }
 
@@ -64,7 +63,7 @@ class HiltVideoDownloadServiceModule {
         @ApplicationContext context: Context,
         downloadCache: Cache,
         databaseProvider: DatabaseProvider,
-        @UserAgent userAgent: String
+        @HiltVideoDownloadServiceModule.UserAgent userAgent: String
     ): DownloadManager {
         val httpDataSourceFactory = DefaultHttpDataSource.Factory().setUserAgent(userAgent)
 
@@ -79,7 +78,7 @@ class HiltVideoDownloadServiceModule {
 
     @Provides
     @Singleton
-    fun provideVideoDownloadService(): VideoDownloadService{
-        return VideoDownloadServiceImpl()
+    fun provideVideoDownloadService(): VideoDownloadService {
+        return FakeVideoDownloaderService()
     }
 }
