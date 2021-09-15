@@ -56,6 +56,9 @@ android {
     packagingOptions {
         exclude 'META-INF/LGPL2.1'
         exclude 'META-INF/AL2.0'
+        exclude 'win32-x86/attach_hotspot_windows.dll'
+        exclude 'win32-x86-64/attach_hotspot_windows.dll'
+        exclude 'META-INF/licenses/ASM'
     }
 }
 
@@ -138,6 +141,12 @@ dependencies {
     // Leak Canary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
+    // Mockito
+    testImplementation 'org.mockito.kotlin:mockito-kotlin:3.12.4'
+    androidTestImplementation 'org.mockito:mockito-android:3.12.4'
+
+    // GRPC - Needed to avoid crash on Android 11 devices
+    implementation "io.grpc:grpc-okhttp:1.32.2"
 }
 
 kapt {

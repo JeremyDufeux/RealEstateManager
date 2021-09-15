@@ -12,25 +12,23 @@ import com.google.android.exoplayer2.scheduler.Scheduler
 import com.google.android.exoplayer2.util.Util
 import com.openclassrooms.realestatemanager.models.MediaItem
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 private const val JOB_ID = 1
 
 @AndroidEntryPoint
-class VideoDownloadServiceImpl @Inject constructor(): VideoDownloadService, DownloadService(
-    FOREGROUND_NOTIFICATION_ID_NONE,
-    0,
-    null,
-    0,
-    0) {
-
-    @Inject
-    @ApplicationContext
-    lateinit var mContext: Context
-
-    @Inject
-    lateinit var mDownloadManager: DownloadManager
+class VideoDownloadServiceImpl @Inject constructor(
+        val mContext: Context,
+        val mDownloadManager: DownloadManager
+    ):
+    VideoDownloadService,
+    DownloadService(
+        FOREGROUND_NOTIFICATION_ID_NONE,
+        0,
+        null,
+        0,
+        0
+    ) {
 
     override fun getDownloadManager(): DownloadManager {
         return mDownloadManager.apply {

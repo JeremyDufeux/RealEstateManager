@@ -5,8 +5,6 @@ import android.os.Build
 import com.google.android.exoplayer2.ExoPlayerLibraryInfo
 import com.google.android.exoplayer2.database.DatabaseProvider
 import com.google.android.exoplayer2.database.ExoDatabaseProvider
-import com.google.android.exoplayer2.offline.DownloadManager
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.google.android.exoplayer2.upstream.cache.Cache
 import com.google.android.exoplayer2.upstream.cache.NoOpCacheEvictor
 import com.google.android.exoplayer2.upstream.cache.SimpleCache
@@ -19,7 +17,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import java.io.File
-import java.util.concurrent.Executors
 import javax.inject.Singleton
 
 @Module
@@ -55,25 +52,6 @@ class FakeVideoDownloaderServiceModule {
     @Singleton
     fun provideUserDownloadCache(downloadDirectory: File, databaseProvider: DatabaseProvider): Cache {
         return SimpleCache(downloadDirectory, NoOpCacheEvictor(), databaseProvider)
-    }
-
-    @Provides
-    @Singleton
-    fun provideDownloadManager(
-        @ApplicationContext context: Context,
-        downloadCache: Cache,
-        databaseProvider: DatabaseProvider,
-        @HiltVideoDownloadServiceModule.UserAgent userAgent: String
-    ): DownloadManager {
-        val httpDataSourceFactory = DefaultHttpDataSource.Factory().setUserAgent(userAgent)
-
-        return DownloadManager(
-            context,
-            databaseProvider,
-            downloadCache,
-            httpDataSourceFactory,
-            Executors.newFixedThreadPool(6)
-        )
     }
 
     @Provides

@@ -79,7 +79,10 @@ class HiltVideoDownloadServiceModule {
 
     @Provides
     @Singleton
-    fun provideVideoDownloadService(): VideoDownloadService{
-        return VideoDownloadServiceImpl()
+    fun provideVideoDownloadService(
+        @ApplicationContext context: Context,
+        downloadManager: DownloadManager
+    ): VideoDownloadService{
+        return VideoDownloadServiceImpl(context, downloadManager)
     }
 }
