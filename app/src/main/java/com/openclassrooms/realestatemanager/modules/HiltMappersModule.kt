@@ -11,7 +11,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Module
 @InstallIn(ViewModelComponent::class)
-class MappersModule {
+class HiltMappersModule {
     @Provides
     fun providePropertyToPropertyUiListViewMapper(@ApplicationContext context: Context) : PropertyToPropertyUiListViewMapper {
         return PropertyToPropertyUiListViewMapper(context)
