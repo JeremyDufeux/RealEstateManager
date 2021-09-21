@@ -5,6 +5,7 @@ import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
 import com.openclassrooms.realestatemanager.utils.generateOnlineProperties
 import kotlinx.coroutines.delay
+import timber.log.Timber
 
 class FakePropertyApiService: PropertyApiService {
     private val mPropertyList = mutableListOf<Property>()
@@ -15,6 +16,7 @@ class FakePropertyApiService: PropertyApiService {
 
     override suspend fun fetchProperties(): State {
         delay(200)
+        Timber.d("Debug fetchProperties : ${mPropertyList.size}")
         return State.Download.DownloadSuccess(mPropertyList)
     }
 

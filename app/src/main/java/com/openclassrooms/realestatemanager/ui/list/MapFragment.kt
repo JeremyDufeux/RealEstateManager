@@ -182,7 +182,7 @@ class MapFragment : Fragment(),
             LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED
     }
 
-    val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission())
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission())
     {
         isGranted: Boolean ->
             if (isGranted) {

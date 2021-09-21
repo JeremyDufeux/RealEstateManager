@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.repositories
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.common.truth.Truth.assertThat
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.PropertyFilter
@@ -12,7 +13,6 @@ import com.openclassrooms.realestatemanager.utils.generateOfflineProperties
 import com.openclassrooms.realestatemanager.utils.getStaticMapUrl
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -62,7 +62,7 @@ class OfflinePropertyRepositoryTest {
         launch(Dispatchers.Main) {
             val propertyList = mOfflinePropertyRepository.getProperties()
 
-            assertEquals(7, propertyList.size)
+            assertThat(propertyList).hasSize(7)
         }
     }
 
@@ -71,8 +71,8 @@ class OfflinePropertyRepositoryTest {
         launch(Dispatchers.Main){
             val property = mOfflinePropertyRepository.getPropertyWithId("1")
 
-            assertEquals("1", property?.id)
-            assertEquals(169000.0, property?.price)
+            assertThat(property?.id).isEqualTo("1")
+            assertThat(property?.price).isEqualTo(169000.0)
         }
     }
 
@@ -81,8 +81,8 @@ class OfflinePropertyRepositoryTest {
         launch(Dispatchers.Main){
             val property = mOfflinePropertyRepository.getPropertyWithIdFlow("1").first()
 
-            assertEquals("1", property.id)
-            assertEquals(169000.0, property.price)
+            assertThat(property.id).isEqualTo("1")
+            assertThat(property.price).isEqualTo(169000.0)
         }
     }
 
@@ -95,9 +95,9 @@ class OfflinePropertyRepositoryTest {
 
             val properties = mOfflinePropertyRepository.getProperties()
 
-            assertEquals(newPropertyList.size, properties.size)
-            assertEquals(true, properties.firstOrNull { it.id == newPropertyList[0].id } != null)
-            assertEquals(true, properties.firstOrNull { it.id == "5" } == null)
+            assertThat(newPropertyList).hasSize(properties.size)
+            assertThat(properties.firstOrNull { it.id == newPropertyList[0].id }).isNotNull()
+            assertThat(properties.firstOrNull { it.id == "5" }).isNull()
         }
     }
 
@@ -137,8 +137,8 @@ class OfflinePropertyRepositoryTest {
             val properties = mOfflinePropertyRepository.getProperties()
             val propertyToUpload = mOfflinePropertyRepository.getPropertiesToUpload()
 
-            assertEquals(propertiesCount + 1 , properties.size)
-            assertEquals(true, propertyToUpload.firstOrNull { it.id == id } != null)
+            assertThat(properties).hasSize(propertiesCount + 1)
+            assertThat(propertyToUpload.firstOrNull { it.id == id }).isNotNull()
         }
     }
 
@@ -155,7 +155,7 @@ class OfflinePropertyRepositoryTest {
 
             val mediasToUpload = mOfflinePropertyRepository.getMediaItemsToUpload()
 
-            assertEquals(true, mediasToUpload.firstOrNull { it.id == mediaToAdd.id } != null)
+            assertThat(mediasToUpload.firstOrNull { it.id == mediaToAdd.id }).isNotNull()
         }
     }
 
@@ -168,7 +168,7 @@ class OfflinePropertyRepositoryTest {
 
             val propertyAfterDelete = mOfflinePropertyRepository.getPropertyWithId("1")!!
 
-            assertEquals(property.mediaList.size - 1, propertyAfterDelete.mediaList.size)
+            assertThat(propertyAfterDelete.mediaList).hasSize(property.mediaList.size - 1)
         }
     }
 
@@ -182,7 +182,7 @@ class OfflinePropertyRepositoryTest {
 
             val mediasToDelete = mOfflinePropertyRepository.getMediaItemsToDelete()
 
-            assertEquals(true, mediasToDelete.firstOrNull{it.id == mediaItem.id} != null)
+            assertThat(mediasToDelete.firstOrNull{it.id == mediaItem.id}).isNotNull()
         }
     }
 
@@ -196,7 +196,7 @@ class OfflinePropertyRepositoryTest {
 
             val propertyAfterUpdate = mOfflinePropertyRepository.getPropertyWithId("1")!!
 
-            assertEquals(property.price, propertyAfterUpdate.price)
+            assertThat(propertyAfterUpdate.price).isEqualTo(property.price)
         }
     }
 
@@ -222,7 +222,7 @@ class OfflinePropertyRepositoryTest {
 
             val properties = mOfflinePropertyRepository.getPropertyWithFilters(propertyFilter)
 
-            assertEquals(1, properties.size)
+            assertThat(properties).hasSize(1)
         }
     }
 }

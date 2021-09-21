@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.repositories
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import app.cash.turbine.test
+import com.google.common.truth.Truth.assertThat
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.enums.FileType
@@ -10,7 +12,6 @@ import com.openclassrooms.realestatemanager.utils.generateOnlineProperties
 import com.openclassrooms.realestatemanager.utils.getStaticMapUrl
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.*
 import javax.inject.Inject
+import kotlin.time.ExperimentalTime
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
@@ -54,27 +56,30 @@ class PropertyRepositoryTest {
         mainThreadSurrogate.close()
     }
 
+    @ExperimentalTime
     @Test
     fun testFetchPropertiesAndAssertResult(): Unit = runBlocking {
         launch(Dispatchers.Main) {
-            assertEquals(State.Idle, propertyRepository.stateFlow.first())
+            propertyRepository.stateFlow.test {
+                assertThat(awaitItem()).isInstanceOf(State.Idle::class.java)
 
-            propertyRepository.fetchProperties()
-            val result = propertyRepository.stateFlow.first()
+                propertyRepository.fetchProperties()
+                assertThat(awaitItem()).isInstanceOf(State.Download.Downloading::class.java)
+                val result = awaitItem()
+                assertThat(result).isInstanceOf(State.Download.DownloadSuccess::class.java)
 
-            assertEquals(true, result is State.Download.DownloadSuccess)
-            assertEquals(
-                generateOnlineProperties().size,
-                (result as State.Download.DownloadSuccess).propertiesList.size
-            )
+                val list = (result as State.Download.DownloadSuccess).propertiesList
+                assertThat(list).hasSize(generateOnlineProperties().size)
+            }
         }
     }
 
+    @ExperimentalTime
     @Test
     fun testAddPropertiesAndAssertResult(): Unit = runBlocking {
         launch(Dispatchers.Main) {
             val propertyToAdd = Property(
-                id = "101",
+                id = "201",
                 type = PropertyType.FLAT,
                 price = 295000.0,
                 surface = 800.0,
@@ -99,26 +104,36 @@ class PropertyRepositoryTest {
                 agentName = "Kristen Fortino",
                 mapPictureUrl = getStaticMapUrl(40.82568643585645, -73.94261050737286)
             )
+            propertyRepository.stateFlow.test {
+                assertThat(awaitItem()).isInstanceOf(State.Idle::class.java)
+                propertyRepository.addProperty(propertyToAdd)
+                assertThat(awaitItem()).isInstanceOf(State.Upload.UploadSuccess.Empty::class.java)
 
-            propertyRepository.addProperty(propertyToAdd)
+                propertyRepository.fetchProperties()
+                assertThat(awaitItem()).isInstanceOf(State.Download.Downloading::class.java)
+                val result = awaitItem()
+                assertThat(result).isInstanceOf(State.Download.DownloadSuccess::class.java)
 
-            assertEquals(State.Upload.UploadSuccess.Empty, propertyRepository.stateFlow.first())
+                val list = (result as State.Download.DownloadSuccess).propertiesList
+                assertThat(list).hasSize(generateOnlineProperties().size+1)
+            }
         }
     }
 
+    @ExperimentalTime
     @Test
     fun testAddPropertyWithMediasAndAssertResult(): Unit = runBlocking {
         launch(Dispatchers.Main) {
             val mediaList = listOf(
                 MediaItem(
-                    "16fe027f-2e99-401f-ac3b-d2462d0083d7",
+                    "1001",
                     "6",
                     "https://photos.zillowstatic.com/fp/8e335a55b050bf45a3d2777fd1060659-cc_ft_768.jpg",
                     "Dining room",
                     FileType.PICTURE
                 ),
                 MediaItem(
-                    "2c4f0a24-6da4-481e-ad83-f769812e8eaa",
+                    "1002",
                     "5",
                     "https://photos.zillowstatic.com/fp/ecec97465481bdde4c0b095fd6ae7119-cc_ft_384.jpg",
                     "Facade 2",
@@ -127,7 +142,7 @@ class PropertyRepositoryTest {
             )
 
             val propertyToAdd = Property(
-                id = "101",
+                id = "201",
                 type = PropertyType.FLAT,
                 price = 295000.0,
                 surface = 800.0,
@@ -154,17 +169,35 @@ class PropertyRepositoryTest {
                 mediaList = mediaList
             )
 
-            propertyRepository.addPropertyWithMedias(propertyToAdd)
+            propertyRepository.stateFlow.test {
+                assertThat(awaitItem()).isInstanceOf(State.Idle::class.java)
+                propertyRepository.addPropertyWithMedias(propertyToAdd)
+                assertThat(awaitItem()).isInstanceOf(State.Upload.Uploading::class.java)
+                assertThat(awaitItem()).isInstanceOf(State.Idle::class.java)
+                assertThat(awaitItem()).isInstanceOf(State.Upload.UploadSuccess.Empty::class.java)
 
-            assertEquals(State.Upload.UploadSuccess.Empty, propertyRepository.stateFlow.first())
+                propertyRepository.fetchProperties()
+                assertThat(awaitItem()).isInstanceOf(State.Download.Downloading::class.java)
+                val result = awaitItem()
+                assertThat(result).isInstanceOf(State.Download.DownloadSuccess::class.java)
+
+                val list = (result as State.Download.DownloadSuccess).propertiesList
+                assertThat(list).hasSize(generateOnlineProperties().size+1)
+
+                val addedProperty = list.firstOrNull{it.id == "201"}
+                assertThat(addedProperty?.mediaList).hasSize(2)
+                assertThat(addedProperty?.mediaList?.firstOrNull{ it.id == "1002"}?.description).isEqualTo("Facade 2")
+                assertThat(addedProperty?.mediaList?.firstOrNull{ it.id == "1002"}?.url).isEqualTo("Fake Url")
+            }
         }
     }
 
+    @ExperimentalTime
     @Test
     fun testUploadMediasAndAssertResult(): Unit = runBlocking {
         launch(Dispatchers.Main) {
             val mediaToAdd = MediaItem(
-                "16fe027f-2e99-401f-ac3b-d2462d0083d7",
+                "1001",
                 "6",
                 "https://photos.zillowstatic.com/fp/8e335a55b050bf45a3d2777fd1060659-cc_ft_768.jpg",
                 "Dining room",
@@ -172,15 +205,14 @@ class PropertyRepositoryTest {
 
             propertyRepository.uploadMedia(mediaToAdd)
 
-            assertEquals(State.Idle, propertyRepository.stateFlow.first())
-
+            assertThat(propertyRepository.stateFlow.first()).isInstanceOf(State.Idle::class.java)
         }
     }
     @Test
     fun testDeleteMediasAndAssertResult(): Unit = runBlocking {
         launch(Dispatchers.Main) {
             val mediaToDelete = MediaItem(
-                "16fe027f-2e99-401f-ac3b-d2462d0083d7",
+                "1001",
                 "6",
                 "https://photos.zillowstatic.com/fp/8e335a55b050bf45a3d2777fd1060659-cc_ft_768.jpg",
                 "Dining room",
@@ -188,7 +220,7 @@ class PropertyRepositoryTest {
 
             propertyRepository.deleteMedia(mediaToDelete)
 
-            assertEquals(State.Idle, propertyRepository.stateFlow.first())
+            assertThat(propertyRepository.stateFlow.first()).isInstanceOf(State.Idle::class.java)
         }
     }
 }

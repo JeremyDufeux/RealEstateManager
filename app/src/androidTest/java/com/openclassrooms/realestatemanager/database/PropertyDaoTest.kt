@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.database
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.common.truth.Truth.assertThat
 import com.openclassrooms.realestatemanager.models.databaseEntites.MediaItemEntity
 import com.openclassrooms.realestatemanager.models.databaseEntites.PointOfInterestEntity
 import com.openclassrooms.realestatemanager.models.databaseEntites.PropertyEntity
@@ -61,7 +62,7 @@ class PropertyDaoTest{
         launch(Dispatchers.Main) {
             val propertyList = propertyDao.getProperties()
 
-            assert(propertyList.size == 7)
+            assertThat(propertyList).hasSize(7)
         }
     }
 
@@ -70,7 +71,7 @@ class PropertyDaoTest{
         launch(Dispatchers.Main) {
             val property = propertyDao.getPropertyWithId("1")
 
-            assert(property?.propertyEntity?.propertyId == "1")
+            assertThat(property?.propertyEntity?.propertyId).isEqualTo("1")
         }
     }
 
@@ -95,18 +96,20 @@ class PropertyDaoTest{
                 longitude = -73.97983110154346,
                 postDate = Calendar.getInstance().also {
                     it.timeInMillis = 0
-                    it.set(2021, 7, 25) }.timeInMillis,
+                    it.set(2021, 7, 25)
+                }.timeInMillis,
                 soldDate = null,
                 agentName = "John McCain",
                 mapPictureUrl = getStaticMapUrl(40.7589408497391, -73.97983110154246),
-                dataState = DataState.NONE)
+                dataState = DataState.NONE
+            )
 
             propertyDao.insertProperty(propertyToAdd)
 
             val propertyList = propertyDao.getProperties()
 
-            assert(propertyList.size == 8)
-            assert(propertyList.find{ it.propertyEntity.propertyId == "101" } != null)
+            assertThat(propertyList).hasSize(8)
+            assertThat(propertyList.find { it.propertyEntity.propertyId == "101" }).isNotNull()
         }
     }
 
@@ -115,8 +118,8 @@ class PropertyDaoTest{
         launch(Dispatchers.Main) {
             val property = propertyDao.getPropertyWithIdFlow("1").first()
 
-            assert(property.propertyEntity.propertyId == "1")
-            assert(property.propertyEntity.propertyId != "2")
+            assertThat(property.propertyEntity.propertyId).isEqualTo("1")
+            assertThat(property.propertyEntity.propertyId).isNotEqualTo("2")
         }
     }
 
@@ -151,8 +154,8 @@ class PropertyDaoTest{
 
             val propertyList = propertyDao.getPropertiesToUpload()
 
-            assert(propertyList.size == 1)
-            assert(propertyList.find{ it.propertyEntity.propertyId == "101" } != null)
+            assertThat(propertyList).hasSize(1)
+            assertThat(propertyList.find{ it.propertyEntity.propertyId == "101" }).isNotNull()
         }
     }
 
@@ -170,8 +173,8 @@ class PropertyDaoTest{
 
             val mediaList = propertyDao.getMediaItemsToUpload()
 
-            assert(mediaList.size == 1)
-            assert(mediaList.find{ it.mediaId == mediasToAdd.mediaId} != null)
+            assertThat(mediaList).hasSize(1)
+            assertThat(mediaList.find{ it.mediaId == mediasToAdd.mediaId}).isNotNull()
         }
     }
 
@@ -184,7 +187,7 @@ class PropertyDaoTest{
 
             val poiList = propertyDao.getPointsOfInterest()
 
-            assert(poiList.contains(poiToAdd))
+            assertThat(poiList).contains(poiToAdd)
         }
     }
 
@@ -197,7 +200,7 @@ class PropertyDaoTest{
             val pointOfInterestEntity = PointOfInterestEntity(poi.toString())
             val poiCount = property?.pointOfInterestList?.size!!
 
-            assert(!property.pointOfInterestList.contains(pointOfInterestEntity))
+            assertThat(property.pointOfInterestList).doesNotContain(pointOfInterestEntity)
 
             val poiToAdd = PropertyPointOfInterestCrossRef(
                 property.propertyEntity.propertyId,
@@ -208,8 +211,8 @@ class PropertyDaoTest{
 
             property = propertyDao.getPropertyWithId(propertyId)
 
-            assert(property?.pointOfInterestList?.size == (poiCount+1))
-            assert(property?.pointOfInterestList?.contains(pointOfInterestEntity)!!)
+            assertThat(property?.pointOfInterestList).hasSize(poiCount+1)
+            assertThat(property?.pointOfInterestList).contains(pointOfInterestEntity)
         }
     }
 
@@ -219,13 +222,13 @@ class PropertyDaoTest{
             val propertyId = "1"
             var property = propertyDao.getPropertyWithId(propertyId)!!
 
-            assert(property.pointOfInterestList.isNotEmpty())
+            assertThat(property.pointOfInterestList).isNotEmpty()
 
             propertyDao.deletePointsOfInterestForProperty(property.propertyEntity.propertyId)
 
             property = propertyDao.getPropertyWithId(propertyId)!!
 
-            assert(property.pointOfInterestList.isEmpty())
+            assertThat(property.pointOfInterestList).isEmpty()
         }
     }
 
@@ -235,14 +238,14 @@ class PropertyDaoTest{
             val propertyId = "1"
             var property = propertyDao.getPropertyWithId(propertyId)!!
 
-            assert(property.mediaList.isNotEmpty())
+            assertThat(property.mediaList).isNotEmpty()
             val mediaToDelete = property.mediaList[0]
 
             propertyDao.deleteMediaWithId(mediaToDelete.mediaId)
 
             property = propertyDao.getPropertyWithId(propertyId)!!
 
-            assert(!property.mediaList.contains(mediaToDelete))
+            assertThat(property.mediaList).doesNotContain(mediaToDelete)
         }
     }
 
@@ -253,7 +256,7 @@ class PropertyDaoTest{
             propertyDao.deleteOldProperties()
             val properties = propertyDao.getProperties()
 
-            assert(properties.isEmpty())
+            assertThat(properties).isEmpty()
         }
     }
 
@@ -273,8 +276,8 @@ class PropertyDaoTest{
 
             val properties = propertyDao.getProperties()
 
-            assert(properties.size == 1)
-            assert(properties.find{ it.propertyEntity.propertyId == propertyId } != null)
+            assertThat(properties).hasSize(1)
+            assertThat(properties.find{ it.propertyEntity.propertyId == propertyId }).isNotNull()
         }
     }
 
@@ -285,7 +288,7 @@ class PropertyDaoTest{
             propertyDao.deleteOldMedias()
             val medias = propertyDao.getMedias()
 
-            assert(medias.isEmpty())
+            assertThat(medias).isEmpty()
         }
     }
 
@@ -305,8 +308,8 @@ class PropertyDaoTest{
 
             val medias = propertyDao.getMedias()
 
-            assert(medias.size == 1)
-            assert(medias.find{ it.mediaId == media.mediaId } != null)
+            assertThat(medias).hasSize(1)
+            assertThat(medias.find{ it.mediaId == media.mediaId }).isNotNull()
         }
     }
 
@@ -317,7 +320,7 @@ class PropertyDaoTest{
             propertyDao.deleteOldPointsOfInterest()
             val poiList = propertyDao.getPointsOfInterestCrossRef()
 
-            assert(poiList.isEmpty())
+            assertThat(poiList).isEmpty()
         }
     }
 
@@ -338,7 +341,7 @@ class PropertyDaoTest{
 
             val poiCrossRefList = propertyDao.getPointsOfInterestCrossRef()
 
-            assert(poiCrossRefList.size == poiList.size)
+            assertThat(poiCrossRefList.size).isEqualTo(poiList.size)
         }
     }
 }

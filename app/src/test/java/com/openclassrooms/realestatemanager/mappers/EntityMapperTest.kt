@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.mappers
 
+import com.google.common.truth.Truth.assertThat
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.databaseEntites.MediaItemEntity
@@ -27,7 +28,7 @@ class EntityMapperTest: TestCase() {
             roomsAmount = 3,
             bathroomsAmount = 1,
             bedroomsAmount = 1,
-            description = "This 800 square foot condo home has 2 bedrooms and 1.0 bathrooms. This home is located at 323 Edgecombe Ave APT 7, New York, NY 10031",
+            description = "This 800 square foot condo home has 2 bedrooms and 1.0 bathrooms. This home is located at 323 Edgecombe Ave APT 7).isEqualTo(New York).isEqualTo(NY 10031",
             addressLine1 = "323 Edgecombe Ave APT 7",
             city = "Harlem",
             postalCode = "NY 10031",
@@ -46,24 +47,24 @@ class EntityMapperTest: TestCase() {
 
         val propertyEntity = propertyToPropertyEntityMapper(property, DataState.NONE)
 
-        assertEquals(property.id, propertyEntity.propertyId)
-        assertEquals(property.type, propertyEntity.type)
-        assertEquals(property.price, propertyEntity.price)
-        assertEquals(property.surface, propertyEntity.surface)
-        assertEquals(property.roomsAmount, propertyEntity.roomsAmount)
-        assertEquals(property.bathroomsAmount, propertyEntity.bathroomsAmount)
-        assertEquals(property.description, propertyEntity.description)
-        assertEquals(property.addressLine1, propertyEntity.addressLine1)
-        assertEquals(property.addressLine2, propertyEntity.addressLine2)
-        assertEquals(property.city, propertyEntity.city)
-        assertEquals(property.postalCode, propertyEntity.postalCode)
-        assertEquals(property.country, propertyEntity.country)
-        assertEquals(property.latitude, propertyEntity.latitude)
-        assertEquals(property.longitude, propertyEntity.longitude)
-        assertEquals(property.postDate, propertyEntity.postDate)
-        assertEquals(property.soldDate, propertyEntity.soldDate)
-        assertEquals(property.agentName, propertyEntity.agentName)
-        assertEquals(DataState.NONE, propertyEntity.dataState)
+        assertThat(property.id).isEqualTo(propertyEntity.propertyId)
+        assertThat(property.type).isEqualTo(propertyEntity.type)
+        assertThat(property.price).isEqualTo(propertyEntity.price)
+        assertThat(property.surface).isEqualTo(propertyEntity.surface)
+        assertThat(property.roomsAmount).isEqualTo(propertyEntity.roomsAmount)
+        assertThat(property.bathroomsAmount).isEqualTo(propertyEntity.bathroomsAmount)
+        assertThat(property.description).isEqualTo(propertyEntity.description)
+        assertThat(property.addressLine1).isEqualTo(propertyEntity.addressLine1)
+        assertThat(property.addressLine2).isEqualTo(propertyEntity.addressLine2)
+        assertThat(property.city).isEqualTo(propertyEntity.city)
+        assertThat(property.postalCode).isEqualTo(propertyEntity.postalCode)
+        assertThat(property.country).isEqualTo(propertyEntity.country)
+        assertThat(property.latitude).isEqualTo(propertyEntity.latitude)
+        assertThat(property.longitude).isEqualTo(propertyEntity.longitude)
+        assertThat(property.postDate).isEqualTo(propertyEntity.postDate)
+        assertThat(property.soldDate).isEqualTo(propertyEntity.soldDate)
+        assertThat(property.agentName).isEqualTo(propertyEntity.agentName)
+        assertThat(DataState.NONE).isEqualTo(propertyEntity.dataState)
     }
 
     @Test
@@ -72,24 +73,24 @@ class EntityMapperTest: TestCase() {
 
         val propertyEntity = propertyToPropertyEntityMapper(property, DataState.NONE)
 
-        assertEquals("", propertyEntity.propertyId)
-        assertEquals(PropertyType.FLAT, propertyEntity.type)
-        assertEquals(null, propertyEntity.price)
-        assertEquals(null, propertyEntity.surface)
-        assertEquals(null, propertyEntity.roomsAmount)
-        assertEquals(null, propertyEntity.bathroomsAmount)
-        assertEquals("", propertyEntity.description)
-        assertEquals("", propertyEntity.addressLine1)
-        assertEquals("", propertyEntity.addressLine2)
-        assertEquals("", propertyEntity.city)
-        assertEquals("", propertyEntity.postalCode)
-        assertEquals("", propertyEntity.country)
-        assertEquals(null, propertyEntity.latitude)
-        assertEquals(null, propertyEntity.longitude)
-        assertEquals(0, propertyEntity.postDate)
-        assertEquals(null, propertyEntity.soldDate)
-        assertEquals("", propertyEntity.agentName)
-        assertEquals(DataState.NONE, propertyEntity.dataState)
+        assertThat(propertyEntity.propertyId).isEqualTo("")
+        assertThat(propertyEntity.type).isEqualTo(PropertyType.FLAT)
+        assertThat(propertyEntity.price).isEqualTo(null)
+        assertThat(propertyEntity.surface).isEqualTo(null)
+        assertThat(propertyEntity.roomsAmount).isEqualTo(null)
+        assertThat(propertyEntity.bathroomsAmount).isEqualTo(null)
+        assertThat(propertyEntity.description).isEqualTo("")
+        assertThat(propertyEntity.addressLine1).isEqualTo("")
+        assertThat(propertyEntity.addressLine2).isEqualTo("")
+        assertThat(propertyEntity.city).isEqualTo("")
+        assertThat(propertyEntity.postalCode).isEqualTo("")
+        assertThat(propertyEntity.country).isEqualTo("")
+        assertThat(propertyEntity.latitude).isEqualTo(null)
+        assertThat(propertyEntity.longitude).isEqualTo(null)
+        assertThat(propertyEntity.postDate).isEqualTo(0)
+        assertThat(propertyEntity.soldDate).isEqualTo(null)
+        assertThat(propertyEntity.agentName).isEqualTo("")
+        assertThat(propertyEntity.dataState).isEqualTo(DataState.NONE)
     }
 
 
@@ -103,9 +104,9 @@ class EntityMapperTest: TestCase() {
 
         val pointsOfInterestList = pointsOfInterestEntityToPointsOfInterestMapper(pointsOfInterestEntityList)
 
-        assertEquals(pointsOfInterestEntityList.size, pointsOfInterestList.size)
-        assertEquals(true, pointsOfInterestList.firstOrNull { it == PointOfInterest.GROCERY } != null)
-        assertEquals(true, pointsOfInterestList.firstOrNull { it == PointOfInterest.PARKING } == null)
+        assertThat(pointsOfInterestList).hasSize(pointsOfInterestEntityList.size)
+        assertThat(pointsOfInterestList.firstOrNull { it == PointOfInterest.GROCERY }).isNotNull()
+        assertThat(pointsOfInterestList.firstOrNull { it == PointOfInterest.PARKING }).isNull()
     }
 
     @Test
@@ -128,12 +129,12 @@ class EntityMapperTest: TestCase() {
             mediaEntityList.add(mediaItemToMediaItemEntityMapper(mediaItem))
         }
 
-        assertEquals(mediaList.size, mediaEntityList.size)
-        assertEquals(true, mediaEntityList.firstOrNull { it.mediaId == mediaList[0].id } != null)
-        assertEquals(true, mediaEntityList.firstOrNull { it.description == mediaList[0].description } != null)
-        assertEquals(true, mediaEntityList.firstOrNull { it.fileType == mediaList[0].fileType } != null)
-        assertEquals(true, mediaEntityList.firstOrNull { it.propertyId == mediaList[0].propertyId } != null)
-        assertEquals(true, mediaEntityList.firstOrNull { it.url == mediaList[0].url } != null)
+        assertThat(mediaEntityList).hasSize(mediaList.size)
+        assertThat(mediaEntityList.firstOrNull { it.mediaId == mediaList[0].id }).isNotNull()
+        assertThat(mediaEntityList.firstOrNull { it.description == mediaList[0].description }).isNotNull()
+        assertThat(mediaEntityList.firstOrNull { it.fileType == mediaList[0].fileType }).isNotNull()
+        assertThat(mediaEntityList.firstOrNull { it.propertyId == mediaList[0].propertyId }).isNotNull()
+        assertThat(mediaEntityList.firstOrNull { it.url == mediaList[0].url }).isNotNull()
     }
 
     @Test
@@ -155,12 +156,12 @@ class EntityMapperTest: TestCase() {
 
         val mediaList = mediaItemsEntityToMediaItemsMapper(mediaEntityList)
 
-        assertEquals(mediaEntityList.size, mediaList.size)
-        assertEquals(true, mediaList.firstOrNull { it.id == mediaEntityList[0].mediaId } != null)
-        assertEquals(true, mediaList.firstOrNull { it.description == mediaEntityList[0].description } != null)
-        assertEquals(true, mediaList.firstOrNull { it.fileType == mediaEntityList[0].fileType } != null)
-        assertEquals(true, mediaList.firstOrNull { it.propertyId == mediaEntityList[0].propertyId } != null)
-        assertEquals(true, mediaList.firstOrNull { it.url == mediaEntityList[0].url } != null)
+        assertThat(mediaEntityList).hasSize(mediaList.size)
+        assertThat(mediaEntityList.firstOrNull { it.mediaId == mediaList[0].id }).isNotNull()
+        assertThat(mediaEntityList.firstOrNull { it.description == mediaList[0].description }).isNotNull()
+        assertThat(mediaEntityList.firstOrNull { it.fileType == mediaList[0].fileType }).isNotNull()
+        assertThat(mediaEntityList.firstOrNull { it.propertyId == mediaList[0].propertyId }).isNotNull()
+        assertThat(mediaEntityList.firstOrNull { it.url == mediaList[0].url }).isNotNull()
 
     }
 
@@ -174,7 +175,7 @@ class EntityMapperTest: TestCase() {
             roomsAmount = 3,
             bathroomsAmount = 1,
             bedroomsAmount = 1,
-            description = "This 800 square foot condo home has 2 bedrooms and 1.0 bathrooms. This home is located at 323 Edgecombe Ave APT 7, New York, NY 10031",
+            description = "This 800 square foot condo home has 2 bedrooms and 1.0 bathrooms. This home is located at 323 Edgecombe Ave APT 7).isEqualTo(New York).isEqualTo(NY 10031",
             addressLine1 = "323 Edgecombe Ave APT 7",
             addressLine2 = "",
             city = "Harlem",
@@ -221,37 +222,36 @@ class EntityMapperTest: TestCase() {
 
         val property = propertyEntityToPropertyMapper(propertyWithMediaItemAndPointsOfInterestEntity)
 
-        assertEquals(propertyEntity.propertyId, property.id)
-        assertEquals(propertyEntity.type, property.type)
-        assertEquals(propertyEntity.price, property.price)
-        assertEquals(propertyEntity.surface, property.surface)
-        assertEquals(propertyEntity.roomsAmount, property.roomsAmount)
-        assertEquals(propertyEntity.bathroomsAmount, property.bathroomsAmount)
-        assertEquals(propertyEntity.bedroomsAmount, property.bedroomsAmount)
-        assertEquals(propertyEntity.description, property.description)
-        assertEquals(propertyEntity.addressLine1, property.addressLine1)
-        assertEquals(propertyEntity.addressLine2, property.addressLine2)
-        assertEquals(propertyEntity.city, property.city)
-        assertEquals(propertyEntity.postalCode, property.postalCode)
-        assertEquals(propertyEntity.country, property.country)
-        assertEquals(propertyEntity.latitude, property.latitude)
-        assertEquals(propertyEntity.longitude, property.longitude)
-        assertEquals(propertyEntity.postDate, property.postDate)
-        assertEquals(propertyEntity.soldDate, property.soldDate)
-        assertEquals(propertyEntity.agentName, property.agentName)
-        assertEquals(propertyEntity.mapPictureUrl, property.mapPictureUrl)
+        assertThat(property.id).isEqualTo(propertyEntity.propertyId)
+        assertThat(property.type).isEqualTo(propertyEntity.type)
+        assertThat(property.price).isEqualTo(propertyEntity.price)
+        assertThat(property.surface).isEqualTo(propertyEntity.surface)
+        assertThat(property.roomsAmount).isEqualTo(propertyEntity.roomsAmount)
+        assertThat(property.bathroomsAmount).isEqualTo(propertyEntity.bathroomsAmount)
+        assertThat(property.bedroomsAmount).isEqualTo(propertyEntity.bedroomsAmount)
+        assertThat(property.description).isEqualTo(propertyEntity.description)
+        assertThat(property.addressLine1).isEqualTo(propertyEntity.addressLine1)
+        assertThat(property.addressLine2).isEqualTo(propertyEntity.addressLine2)
+        assertThat(property.city).isEqualTo(propertyEntity.city)
+        assertThat(property.postalCode).isEqualTo(propertyEntity.postalCode)
+        assertThat(property.country).isEqualTo(propertyEntity.country)
+        assertThat(property.latitude).isEqualTo(propertyEntity.latitude)
+        assertThat(property.longitude).isEqualTo(propertyEntity.longitude)
+        assertThat(property.postDate).isEqualTo(propertyEntity.postDate)
+        assertThat(property.soldDate).isEqualTo(propertyEntity.soldDate)
+        assertThat(property.agentName).isEqualTo(propertyEntity.agentName)
+        assertThat(property.mapPictureUrl).isEqualTo(propertyEntity.mapPictureUrl)
 
-        assertEquals(mediaEntityList.size, property.mediaList.size)
-        assertEquals(true, property.mediaList.firstOrNull { it.id == mediaEntityList[0].mediaId } != null)
-        assertEquals(true, property.mediaList.firstOrNull { it.description == mediaEntityList[0].description } != null)
-        assertEquals(true, property.mediaList.firstOrNull { it.fileType == mediaEntityList[0].fileType } != null)
-        assertEquals(true, property.mediaList.firstOrNull { it.propertyId == mediaEntityList[0].propertyId } != null)
-        assertEquals(true, property.mediaList.firstOrNull { it.url == mediaEntityList[0].url } != null)
+        assertThat(property.mediaList).hasSize(mediaEntityList.size)
 
-        assertEquals(pointsOfInterestEntityList.size, property.pointOfInterestList.size)
-        assertEquals(true, property.pointOfInterestList.firstOrNull { it == PointOfInterest.GROCERY } != null)
-        assertEquals(true, property.pointOfInterestList.firstOrNull { it == PointOfInterest.PARKING } == null)
+        assertThat(property.mediaList.firstOrNull { it.id == mediaEntityList[0].mediaId }).isNotNull()
+        assertThat(property.mediaList.firstOrNull { it.description == mediaEntityList[0].description }).isNotNull()
+        assertThat(property.mediaList.firstOrNull { it.fileType == mediaEntityList[0].fileType }).isNotNull()
+        assertThat(property.mediaList.firstOrNull { it.propertyId == mediaEntityList[0].propertyId }).isNotNull()
+        assertThat(property.mediaList.firstOrNull { it.url == mediaEntityList[0].url }).isNotNull()
 
+        assertThat(property.pointOfInterestList).hasSize(pointsOfInterestEntityList.size)
+        assertThat(property.pointOfInterestList.firstOrNull { it == PointOfInterest.GROCERY }).isNotNull()
+        assertThat(property.pointOfInterestList.firstOrNull { it == PointOfInterest.PARKING }).isNull()
     }
-
 }

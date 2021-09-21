@@ -2,12 +2,12 @@ package com.openclassrooms.realestatemanager.database
 
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.common.truth.Truth.assertThat
 import com.openclassrooms.realestatemanager.models.PropertyFilter
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
@@ -61,7 +61,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(7, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(7)
         }
     }
 
@@ -76,7 +76,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(5, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(5)
         }
     }
 
@@ -92,7 +92,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(5, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(5)
         }
     }
 
@@ -107,7 +107,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(5, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(5)
         }
     }
 
@@ -122,7 +122,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(5, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(5)
         }
     }
 
@@ -138,7 +138,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(3, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(3)
         }
     }
 
@@ -154,7 +154,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(2, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(2)
         }
     }
 
@@ -170,7 +170,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(4, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(4)
         }
     }
 
@@ -186,7 +186,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(4, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(4)
         }
     }
 
@@ -202,7 +202,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(3, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(3)
         }
     }
 
@@ -217,7 +217,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(3, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(3)
         }
     }
 
@@ -232,7 +232,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(4, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(4)
         }
     }
 
@@ -247,7 +247,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(4, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(4)
         }
     }
 
@@ -262,7 +262,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(3, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(3)
         }
     }
 
@@ -277,7 +277,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(3, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(3)
         }
     }
 
@@ -292,7 +292,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(4, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(4)
         }
     }
 
@@ -308,7 +308,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(1, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(1)
         }
     }
 
@@ -323,7 +323,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(3, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(3)
         }
     }
 
@@ -339,7 +339,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(2, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(2)
         }
     }
 
@@ -368,7 +368,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(1, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(1)
         }
     }
 
@@ -397,7 +397,7 @@ class PropertyDaoFilterTest{
 
             val propertyList = propertyDao.getPropertyWithFilters(query)
 
-            assertEquals(1, propertyList.size)
+            assertThat(propertyList.size).isEqualTo(1)
         }
     }
 }

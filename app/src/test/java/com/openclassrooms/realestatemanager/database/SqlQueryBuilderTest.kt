@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.database
 
+import com.google.common.truth.Truth.assertThat
 import com.openclassrooms.realestatemanager.models.PropertyFilter
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
@@ -21,7 +22,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterPriceAndSurface : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -37,7 +38,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterPriceAndSurface : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -55,7 +56,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterPriceAndSurface : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
     
     @Test
@@ -71,7 +72,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterSurfaceAndSurface : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -87,7 +88,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterSurfaceAndSurface : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -105,7 +106,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterSurfaceAndSurface : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -125,7 +126,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterPriceAndSurfaceWithBigNumbers : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -142,7 +143,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterOneType : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -158,7 +159,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterMultipleType : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -176,7 +177,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterOnePoi : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -198,7 +199,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterMultiplePoi : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -214,7 +215,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterMultiplePoi : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -230,7 +231,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterRoomAmount : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -246,7 +247,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterBathroomAmount : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -262,7 +263,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterBedroomAmount : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -280,7 +281,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterMediasAmount : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -297,7 +298,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterAvailable : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -315,7 +316,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterAvailableAndPostDate : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -332,7 +333,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterSold : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -350,7 +351,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterSold : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -402,7 +403,7 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterSold : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 
     @Test
@@ -454,6 +455,6 @@ class SqlQueryBuilderTest: TestCase() {
 
         println("Debug testBuilderWithFilterSold : $expectedQuery")
 
-        assertEquals(expectedQuery, query)
+        assertThat(query).isEqualTo(expectedQuery)
     }
 }

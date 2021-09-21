@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.utils
 
+import com.google.common.truth.Truth.assertThat
 import com.openclassrooms.realestatemanager.utils.Utils.*
 import junit.framework.TestCase
 import org.junit.Test
@@ -10,36 +11,36 @@ class ConversionsTest: TestCase() {
     fun testConvertSquareFootToSquareMeters() {
         val squareFoot = 50.0
         val squareMeter = convertSquareFootToSquareMeters(squareFoot)
-        assertEquals(4.645152000, squareMeter)
-        assertEquals(4.65, round(squareMeter, 2))
+        assertThat(squareMeter).isEqualTo(4.645152000)
+        assertThat(round(squareMeter, 2)).isEqualTo(4.65)
     }
 
     @Test
     fun testConvertSquareMetersToSquareFoot() {
         val squareMeter = 50.0
         val squareFoot = convertSquareMetersToSquareFoot(squareMeter)
-        assertEquals(538.195520835500, squareFoot)
-        assertEquals(538.2, round(squareFoot, 2))
+        assertThat(squareFoot).isEqualTo(538.195520835500)
+        assertThat(round(squareFoot, 2)).isEqualTo(538.2)
     }
 
     @Test
     fun testConvertSquareFootToSquareMetersToSquareFoot() {
         val squareFoot = 50.0
         val squareMeter = convertSquareFootToSquareMeters(squareFoot)
-        assertEquals(4.64515200, squareMeter)
+        assertThat(squareMeter).isEqualTo(4.64515200)
 
         val convertedSquareFoot =  convertSquareMetersToSquareFoot(squareMeter)
-        assertEquals(squareFoot, round(convertedSquareFoot, 2))
+        assertThat(round(convertedSquareFoot, 2)).isEqualTo(squareFoot)
     }
 
     @Test
     fun testConvertSquareMetersToSquareFootToSquareMeters() {
         val squareMeter = 50.0
         val squareFoot = convertSquareMetersToSquareFoot(squareMeter)
-        assertEquals(538.195520835500, squareFoot)
+        assertThat(squareFoot).isEqualTo(538.195520835500)
 
         val convertedSquareMeters = convertSquareFootToSquareMeters(squareFoot)
-        assertEquals(squareMeter, round(convertedSquareMeters, 2))
+        assertThat(round(convertedSquareMeters, 2)).isEqualTo(squareMeter)
     }
 
 }

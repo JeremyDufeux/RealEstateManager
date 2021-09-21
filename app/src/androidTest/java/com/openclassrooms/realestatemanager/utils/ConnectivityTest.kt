@@ -3,8 +3,8 @@ package com.openclassrooms.realestatemanager.utils
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import com.openclassrooms.realestatemanager.utils.Utils.isInternetAvailable
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -39,11 +39,11 @@ class ConnectivityTest {
             disableConnections()
             delay(CONNECTION_DELAY) // Delay to set for commands may vary depending on devices
 
-            assertEquals(false, isInternetAvailable(context))
+            assertThat(isInternetAvailable(context)).isFalse()
 
             enableConnections()
             delay(CONNECTION_DELAY)
-            assertEquals(true, isInternetAvailable(context))
+            assertThat(isInternetAvailable(context)).isTrue()
         }
     }
 }

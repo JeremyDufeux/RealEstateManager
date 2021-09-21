@@ -5,13 +5,12 @@ import android.database.Cursor
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.utils.generateOfflineProperties
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -40,17 +39,17 @@ class ContentProviderTest {
     @Test
     fun queryPropertiesTestCountRows() {
         val cursor: Cursor? = mContentResolver.query(mPropertiesUri, null, null,null, null)
-        assertNotNull(cursor)
+        assertThat(cursor).isNotNull()
 
         if (cursor != null) {
-            assertEquals(true, cursor.moveToFirst())
+            assertThat(cursor.moveToFirst()).isTrue()
 
             var rows = 0
             do{
                 rows++
             }while (cursor.moveToNext())
 
-            assertEquals(generateOfflineProperties().size, rows)
+            assertThat(generateOfflineProperties()).hasSize(rows)
 
             cursor.close()
         }
@@ -59,10 +58,10 @@ class ContentProviderTest {
     @Test
     fun queryPropertiesTestAssertFirstRow() {
         val cursor: Cursor? = mContentResolver.query(mPropertiesUri, null, null,null, null)
-        assertNotNull(cursor)
+        assertThat(cursor).isNotNull()
 
         if (cursor != null) {
-            assertEquals(true, cursor.moveToFirst())
+            assertThat(cursor.moveToFirst()).isTrue()
 
             val id = cursor.getString(cursor.getColumnIndex("propertyId"))
             val type = cursor.getString(cursor.getColumnIndex("type"))
@@ -90,25 +89,25 @@ class ContentProviderTest {
 
             val property = generateOfflineProperties()[0]
 
-            assertEquals(property.id, id)
-            assertEquals(property.type.toString(), type)
-            assertEquals(property.price, price)
-            assertEquals(property.surface, surface)
-            assertEquals(property.roomsAmount, roomsAmount)
-            assertEquals(property.bathroomsAmount, bathroomsAmount)
-            assertEquals(property.bedroomsAmount, bedroomsAmount)
-            assertEquals(property.description, description)
-            assertEquals(property.addressLine1, addressLine1)
-            assertEquals(property.addressLine2, addressLine2)
-            assertEquals(property.city, city)
-            assertEquals(property.postalCode, postalCode)
-            assertEquals(property.country, country)
-            assertEquals(property.latitude, latitude)
-            assertEquals(property.longitude, longitude)
-            assertEquals(property.mapPictureUrl, mapPictureUrl)
-            assertEquals(property.postDate, postDate)
-            assertEquals(property.soldDate, soldDate)
-            assertEquals(property.agentName, agentName)
+            assertThat(id).isEqualTo(property.id)
+            assertThat(type).isEqualTo(property.type.toString())
+            assertThat(price).isEqualTo(property.price)
+            assertThat(surface).isEqualTo(property.surface)
+            assertThat(roomsAmount).isEqualTo(property.roomsAmount)
+            assertThat(bathroomsAmount).isEqualTo(property.bathroomsAmount)
+            assertThat(bedroomsAmount).isEqualTo(property.bedroomsAmount)
+            assertThat(description).isEqualTo(property.description)
+            assertThat(addressLine1).isEqualTo(property.addressLine1)
+            assertThat(addressLine2).isEqualTo(property.addressLine2)
+            assertThat(city).isEqualTo(property.city)
+            assertThat(postalCode).isEqualTo(property.postalCode)
+            assertThat(country).isEqualTo(property.country)
+            assertThat(latitude).isEqualTo(property.latitude)
+            assertThat(longitude).isEqualTo(property.longitude)
+            assertThat(mapPictureUrl).isEqualTo(property.mapPictureUrl)
+            assertThat(postDate).isEqualTo(property.postDate)
+            assertThat(soldDate).isEqualTo(property.soldDate)
+            assertThat(agentName).isEqualTo(property.agentName)
 
             cursor.close()
         }
@@ -118,10 +117,10 @@ class ContentProviderTest {
     fun queryPropertyWithId2TestAssertData() {
         val propertyId = "3"
         val cursor: Cursor? = mContentResolver.query(Uri.withAppendedPath(mPropertiesUri, "/$propertyId"), null, null,null, null)
-        assertNotNull(cursor)
+        assertThat(cursor).isNotNull()
 
         if (cursor != null) {
-            assertEquals(true, cursor.moveToFirst())
+            assertThat(cursor.moveToFirst()).isTrue()
 
             val id = cursor.getString(cursor.getColumnIndex("propertyId"))
             val type = cursor.getString(cursor.getColumnIndex("type"))
@@ -149,25 +148,25 @@ class ContentProviderTest {
 
             val property = generateOfflineProperties().find { it.id == propertyId }
 
-            assertEquals(property?.id, id)
-            assertEquals(property?.type.toString(), type)
-            assertEquals(property?.price, price)
-            assertEquals(property?.surface, surface)
-            assertEquals(property?.roomsAmount, roomsAmount)
-            assertEquals(property?.bathroomsAmount, bathroomsAmount)
-            assertEquals(property?.bedroomsAmount, bedroomsAmount)
-            assertEquals(property?.description, description)
-            assertEquals(property?.addressLine1, addressLine1)
-            assertEquals(property?.addressLine2, addressLine2)
-            assertEquals(property?.city, city)
-            assertEquals(property?.postalCode, postalCode)
-            assertEquals(property?.country, country)
-            assertEquals(property?.latitude, latitude)
-            assertEquals(property?.longitude, longitude)
-            assertEquals(property?.mapPictureUrl, mapPictureUrl)
-            assertEquals(property?.postDate, postDate)
-            assertEquals(property?.soldDate, soldDate)
-            assertEquals(property?.agentName, agentName)
+            assertThat(id).isEqualTo(property?.id)
+            assertThat(type).isEqualTo(property?.type.toString())
+            assertThat(price).isEqualTo(property?.price)
+            assertThat(surface).isEqualTo(property?.surface)
+            assertThat(roomsAmount).isEqualTo(property?.roomsAmount)
+            assertThat(bathroomsAmount).isEqualTo(property?.bathroomsAmount)
+            assertThat(bedroomsAmount).isEqualTo(property?.bedroomsAmount)
+            assertThat(description).isEqualTo(property?.description)
+            assertThat(addressLine1).isEqualTo(property?.addressLine1)
+            assertThat(addressLine2).isEqualTo(property?.addressLine2)
+            assertThat(city).isEqualTo(property?.city)
+            assertThat(postalCode).isEqualTo(property?.postalCode)
+            assertThat(country).isEqualTo(property?.country)
+            assertThat(latitude).isEqualTo(property?.latitude)
+            assertThat(longitude).isEqualTo(property?.longitude)
+            assertThat(mapPictureUrl).isEqualTo(property?.mapPictureUrl)
+            assertThat(postDate).isEqualTo(property?.postDate)
+            assertThat(soldDate).isEqualTo(property?.soldDate)
+            assertThat(agentName).isEqualTo(property?.agentName)
 
             cursor.close()
         }
@@ -177,20 +176,20 @@ class ContentProviderTest {
     fun queryPropertyWithFakeIdTestAssertCursorEmpty() {
         val propertyId = "7b37a173-48ab-4869-b355-6eda251a09a7"
         val cursor: Cursor? = mContentResolver.query(Uri.withAppendedPath(mPropertiesUri, "/$propertyId"), null, null,null, null)
-        assertNotNull(cursor)
+        assertThat(cursor).isNotNull()
+        
         if (cursor != null) {
-            assertEquals(false, cursor.moveToFirst())
+            assertThat(cursor.moveToFirst()).isFalse()
         }
     }
 
     @Test
     fun queryMediasTestCountRows() {
         val cursor: Cursor? = mContentResolver.query(mMediasUri, null, null,null, null)
-
-        assertNotNull(cursor)
+        assertThat(cursor).isNotNull()
 
         if (cursor != null) {
-            assertEquals(true, cursor.moveToFirst())
+            assertThat(cursor.moveToFirst()).isTrue()
 
             var rows = 0
             do{
@@ -202,7 +201,7 @@ class ContentProviderTest {
                 expectedRows += property.mediaList.size
             }
 
-            assertEquals(expectedRows, rows)
+            assertThat(rows).isEqualTo(expectedRows)
 
             cursor.close()
         }
@@ -212,11 +211,10 @@ class ContentProviderTest {
     fun queryMediasForPropertyIdTestCountRows() {
         val propertyId = "4"
         val cursor: Cursor? = mContentResolver.query(Uri.withAppendedPath(mPropertiesUri, "/$propertyId/${getMediasPath()}"), null, null,null, null)
-
-        assertNotNull(cursor)
+        assertThat(cursor).isNotNull()
 
         if (cursor != null) {
-            assertEquals(true, cursor.moveToFirst())
+            assertThat(cursor.moveToFirst()).isTrue()
 
             var rows = 0
             do{
@@ -225,7 +223,7 @@ class ContentProviderTest {
 
             val expectedRows = generateOfflineProperties().find { it.id == propertyId }?.mediaList?.size
 
-            assertEquals(expectedRows, rows)
+            assertThat(expectedRows).isEqualTo(rows)
 
             cursor.close()
         }
@@ -235,11 +233,10 @@ class ContentProviderTest {
     fun queryMediasForPropertyIdTestCheckDataOfFirstOne() {
         val propertyId = "4"
         val cursor: Cursor? = mContentResolver.query(Uri.withAppendedPath(mPropertiesUri, "/$propertyId/${getMediasPath()}"), null, null,null, null)
-
-        assertNotNull(cursor)
+        assertThat(cursor).isNotNull()
 
         if (cursor != null) {
-            assertEquals(true, cursor.moveToFirst())
+            assertThat(cursor.moveToFirst()).isTrue()
 
             val mediaId = cursor.getString(cursor.getColumnIndex("mediaId"))
             val mediaProperty = cursor.getString(cursor.getColumnIndex("propertyId"))
@@ -250,11 +247,11 @@ class ContentProviderTest {
             val mediaList = generateOfflineProperties().find { it.id == propertyId }?.mediaList
             val media = mediaList?.find { it.id == mediaId }
 
-            assertEquals(propertyId, mediaProperty)
-            assertEquals(media?.id, mediaId)
-            assertEquals(media?.url, url)
-            assertEquals(media?.description, description)
-            assertEquals(media?.fileType, FileType.valueOf(fileType))
+            assertThat(mediaProperty).isEqualTo(propertyId)
+            assertThat(mediaId).isEqualTo(media?.id)
+            assertThat(url).isEqualTo(media?.url)
+            assertThat(description).isEqualTo(media?.description)
+            assertThat(FileType.valueOf(fileType)).isEqualTo(media?.fileType)
 
             cursor.close()
         }
@@ -263,11 +260,10 @@ class ContentProviderTest {
     @Test
     fun queryPointOfInterestIdTestCountRows() {
         val cursor: Cursor? = mContentResolver.query(mPointsOfInterestUri, null, null,null, null)
-
-        assertNotNull(cursor)
+        assertThat(cursor).isNotNull()
 
         if (cursor != null) {
-            assertEquals(true, cursor.moveToFirst())
+            assertThat(cursor.moveToFirst()).isTrue()
 
             var rows = 0
             do{
@@ -276,7 +272,7 @@ class ContentProviderTest {
 
             val expectedRows = PointOfInterest.values().size
 
-            assertEquals(expectedRows, rows)
+            assertThat(rows).isEqualTo(expectedRows)
 
             cursor.close()
         }
@@ -286,11 +282,10 @@ class ContentProviderTest {
     fun queryPioForPropertyIdTestCheckData() {
         val propertyId = "6"
         val cursor: Cursor? = mContentResolver.query(Uri.withAppendedPath(mPropertiesUri, "/$propertyId/${getPointOfInterestPath()}"), null, null,null, null)
-
-        assertNotNull(cursor)
+        assertThat(cursor).isNotNull()
 
         if (cursor != null) {
-            assertEquals(true, cursor.moveToFirst())
+            assertThat(cursor.moveToFirst()).isTrue()
 
             val poiList = mutableListOf<PointOfInterest>()
 
@@ -299,13 +294,13 @@ class ContentProviderTest {
                 poiList.add(PointOfInterest.valueOf(poi))
             }while (cursor.moveToNext())
 
-            assertEquals(true, poiList.contains(PointOfInterest.SCHOOL))
-            assertEquals(false, poiList.contains(PointOfInterest.GROCERY))
-            assertEquals(false, poiList.contains(PointOfInterest.PARK))
-            assertEquals(true, poiList.contains(PointOfInterest.PUBLIC_TRANSPORT))
-            assertEquals(false, poiList.contains(PointOfInterest.SWIMMING_POOL))
-            assertEquals(true, poiList.contains(PointOfInterest.FITNESS_CLUB))
-            assertEquals(true, poiList.contains(PointOfInterest.PARKING))
+            assertThat(poiList).contains(PointOfInterest.SCHOOL)
+            assertThat(poiList).contains(PointOfInterest.PUBLIC_TRANSPORT)
+            assertThat(poiList).contains(PointOfInterest.FITNESS_CLUB)
+            assertThat(poiList).contains(PointOfInterest.PARKING)
+            assertThat(poiList).doesNotContain(PointOfInterest.GROCERY)
+            assertThat(poiList).doesNotContain(PointOfInterest.PARK)
+            assertThat(poiList).doesNotContain(PointOfInterest.SWIMMING_POOL)
 
             cursor.close()
         }
