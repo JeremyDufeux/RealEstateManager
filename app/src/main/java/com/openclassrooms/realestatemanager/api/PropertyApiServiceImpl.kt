@@ -39,7 +39,7 @@ class PropertyApiServiceImpl @Inject constructor(): PropertyApiService{
         }
     }
 
-    override fun addProperty(property: Property): State{
+    override suspend fun addProperty(property: Property): State{
         return try {
             getPropertiesCollection().document(property.id).set(property)
             for (media in property.mediaList) {

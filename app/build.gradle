@@ -141,12 +141,14 @@ dependencies {
     // Leak Canary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
-    // Mockito
-    testImplementation 'org.mockito.kotlin:mockito-kotlin:3.12.4'
-    androidTestImplementation 'org.mockito:mockito-android:3.12.4'
-
     // GRPC - Needed to avoid crash on Android 11 devices
     implementation "io.grpc:grpc-okhttp:1.32.2"
+
+    // Truth
+    androidTestImplementation "com.google.truth:truth:1.1.3"
+
+    // Turbine
+    androidTestImplementation 'app.cash.turbine:turbine:0.6.1'
 }
 
 kapt {

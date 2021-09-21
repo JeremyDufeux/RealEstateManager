@@ -1,14 +1,12 @@
 package com.openclassrooms.realestatemanager.repositories
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.openclassrooms.realestatemanager.MockitoHelper
-import com.openclassrooms.realestatemanager.api.PropertyApiService
 import com.openclassrooms.realestatemanager.models.MediaItem
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.models.sealedClasses.State
-import com.openclassrooms.realestatemanager.utils.generateProperties
+import com.openclassrooms.realestatemanager.utils.generateOnlineProperties
 import com.openclassrooms.realestatemanager.utils.getStaticMapUrl
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -25,9 +23,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import java.util.*
+import javax.inject.Inject
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
@@ -38,8 +35,8 @@ class PropertyRepositoryTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-    private var mPropertyApiService: PropertyApiService = mock(PropertyApiService::class.java)
-    private val mPropertyRepository = PropertyRepository(mPropertyApiService)
+    @Inject
+    lateinit var propertyRepository: PropertyRepository
 
     @Before
     fun inject() {
@@ -60,18 +57,14 @@ class PropertyRepositoryTest {
     @Test
     fun testFetchPropertiesAndAssertResult(): Unit = runBlocking {
         launch(Dispatchers.Main) {
-            `when`(
-                mPropertyApiService.fetchProperties()
-            ).thenReturn(State.Download.DownloadSuccess(generateProperties()))
+            assertEquals(State.Idle, propertyRepository.stateFlow.first())
 
-            assertEquals(State.Idle, mPropertyRepository.stateFlow.first())
-
-            mPropertyRepository.fetchProperties()
-            val result = mPropertyRepository.stateFlow.first()
+            propertyRepository.fetchProperties()
+            val result = propertyRepository.stateFlow.first()
 
             assertEquals(true, result is State.Download.DownloadSuccess)
             assertEquals(
-                generateProperties().size,
+                generateOnlineProperties().size,
                 (result as State.Download.DownloadSuccess).propertiesList.size
             )
         }
@@ -80,10 +73,6 @@ class PropertyRepositoryTest {
     @Test
     fun testAddPropertiesAndAssertResult(): Unit = runBlocking {
         launch(Dispatchers.Main) {
-            `when`(
-                mPropertyApiService.addProperty(MockitoHelper.anyObject())
-            ).thenReturn(State.Upload.UploadSuccess.Empty)
-
             val propertyToAdd = Property(
                 id = "101",
                 type = PropertyType.FLAT,
@@ -111,22 +100,15 @@ class PropertyRepositoryTest {
                 mapPictureUrl = getStaticMapUrl(40.82568643585645, -73.94261050737286)
             )
 
-            mPropertyRepository.addProperty(propertyToAdd)
+            propertyRepository.addProperty(propertyToAdd)
 
-            assertEquals(State.Upload.UploadSuccess.Empty, mPropertyRepository.stateFlow.first())
+            assertEquals(State.Upload.UploadSuccess.Empty, propertyRepository.stateFlow.first())
         }
     }
 
     @Test
     fun testAddPropertyWithMediasAndAssertResult(): Unit = runBlocking {
         launch(Dispatchers.Main) {
-            `when`(
-                mPropertyApiService.addProperty(MockitoHelper.anyObject())
-            ).thenReturn(State.Upload.UploadSuccess.Empty)
-            `when`(
-                mPropertyApiService.uploadMedia(MockitoHelper.anyObject())
-            ).thenReturn(State.Upload.UploadSuccess.Url("Fake url"))
-
             val mediaList = listOf(
                 MediaItem(
                     "16fe027f-2e99-401f-ac3b-d2462d0083d7",
@@ -172,19 +154,15 @@ class PropertyRepositoryTest {
                 mediaList = mediaList
             )
 
-            mPropertyRepository.addPropertyWithMedias(propertyToAdd)
+            propertyRepository.addPropertyWithMedias(propertyToAdd)
 
-            assertEquals(State.Upload.UploadSuccess.Empty, mPropertyRepository.stateFlow.first())
+            assertEquals(State.Upload.UploadSuccess.Empty, propertyRepository.stateFlow.first())
         }
     }
 
     @Test
     fun testUploadMediasAndAssertResult(): Unit = runBlocking {
         launch(Dispatchers.Main) {
-            `when`(
-                mPropertyApiService.uploadMedia(MockitoHelper.anyObject())
-            ).thenReturn(State.Upload.UploadSuccess.Url("Fake url"))
-
             val mediaToAdd = MediaItem(
                 "16fe027f-2e99-401f-ac3b-d2462d0083d7",
                 "6",
@@ -192,19 +170,15 @@ class PropertyRepositoryTest {
                 "Dining room",
                 FileType.PICTURE)
 
-            mPropertyRepository.uploadMedia(mediaToAdd)
+            propertyRepository.uploadMedia(mediaToAdd)
 
-            assertEquals(State.Idle, mPropertyRepository.stateFlow.first())
+            assertEquals(State.Idle, propertyRepository.stateFlow.first())
 
         }
     }
     @Test
     fun testDeleteMediasAndAssertResult(): Unit = runBlocking {
         launch(Dispatchers.Main) {
-            `when`(
-                mPropertyApiService.deleteMedia(MockitoHelper.anyObject())
-            ).thenReturn(State.Upload.UploadSuccess.Empty)
-
             val mediaToDelete = MediaItem(
                 "16fe027f-2e99-401f-ac3b-d2462d0083d7",
                 "6",
@@ -212,9 +186,9 @@ class PropertyRepositoryTest {
                 "Dining room",
                 FileType.PICTURE)
 
-            mPropertyRepository.deleteMedia(mediaToDelete)
+            propertyRepository.deleteMedia(mediaToDelete)
 
-            assertEquals(State.Idle, mPropertyRepository.stateFlow.first())
+            assertEquals(State.Idle, propertyRepository.stateFlow.first())
         }
     }
 }

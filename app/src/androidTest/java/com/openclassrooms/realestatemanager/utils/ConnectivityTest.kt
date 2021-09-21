@@ -36,24 +36,14 @@ class ConnectivityTest {
     @Test
     fun testIsInternetAvailableAssertFalseAndTrue() : Unit = runBlocking {
         launch(Dispatchers.Main) {
-            disableData()
-            delay(5000) // Delay to set for commands may vary depending on devices
+            disableConnections()
+            delay(CONNECTION_DELAY) // Delay to set for commands may vary depending on devices
 
             assertEquals(false, isInternetAvailable(context))
 
-            enableData()
-            delay(5000)
+            enableConnections()
+            delay(CONNECTION_DELAY)
             assertEquals(true, isInternetAvailable(context))
         }
-    }
-
-    private fun disableData(){
-        InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand("svc wifi disable")
-        InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand("svc data disable")
-    }
-
-    private fun enableData(){
-        InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand("svc wifi enable")
-        InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand("svc data enable")
     }
 }

@@ -18,8 +18,8 @@ private const val JOB_ID = 1
 
 @AndroidEntryPoint
 class VideoDownloadServiceImpl @Inject constructor(
-        val mContext: Context,
-        val mDownloadManager: DownloadManager
+    val mContext: Context,
+    private val mDownloadManager: DownloadManager
     ):
     VideoDownloadService,
     DownloadService(

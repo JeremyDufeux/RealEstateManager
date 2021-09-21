@@ -7,7 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
-import com.openclassrooms.realestatemanager.utils.generateProperties
+import com.openclassrooms.realestatemanager.utils.generateOfflineProperties
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Assert.assertEquals
@@ -50,7 +50,7 @@ class ContentProviderTest {
                 rows++
             }while (cursor.moveToNext())
 
-            assertEquals(generateProperties().size, rows)
+            assertEquals(generateOfflineProperties().size, rows)
 
             cursor.close()
         }
@@ -88,7 +88,7 @@ class ContentProviderTest {
                 soldDate = cursor.getLong(cursor.getColumnIndex("soldDate"))
             }
 
-            val property = generateProperties()[0]
+            val property = generateOfflineProperties()[0]
 
             assertEquals(property.id, id)
             assertEquals(property.type.toString(), type)
@@ -147,7 +147,7 @@ class ContentProviderTest {
                 soldDate = cursor.getLong(cursor.getColumnIndex("soldDate"))
             }
 
-            val property = generateProperties().find { it.id == propertyId }
+            val property = generateOfflineProperties().find { it.id == propertyId }
 
             assertEquals(property?.id, id)
             assertEquals(property?.type.toString(), type)
@@ -198,7 +198,7 @@ class ContentProviderTest {
             }while (cursor.moveToNext())
 
             var expectedRows = 0
-            for (property in generateProperties()){
+            for (property in generateOfflineProperties()){
                 expectedRows += property.mediaList.size
             }
 
@@ -223,7 +223,7 @@ class ContentProviderTest {
                 rows++
             }while (cursor.moveToNext())
 
-            val expectedRows = generateProperties().find { it.id == propertyId }?.mediaList?.size
+            val expectedRows = generateOfflineProperties().find { it.id == propertyId }?.mediaList?.size
 
             assertEquals(expectedRows, rows)
 
@@ -247,7 +247,7 @@ class ContentProviderTest {
             val description = cursor.getString(cursor.getColumnIndex("description"))
             val fileType = cursor.getString(cursor.getColumnIndex("fileType"))
 
-            val mediaList = generateProperties().find { it.id == propertyId }?.mediaList
+            val mediaList = generateOfflineProperties().find { it.id == propertyId }?.mediaList
             val media = mediaList?.find { it.id == mediaId }
 
             assertEquals(propertyId, mediaProperty)

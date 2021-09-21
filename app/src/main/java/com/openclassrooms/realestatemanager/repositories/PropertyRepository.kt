@@ -25,7 +25,7 @@ class PropertyRepository @Inject constructor(
         }
     }
 
-    fun addProperty(property: Property) {
+    suspend fun addProperty(property: Property) {
         _stateFlow.value = mPropertyApiService.addProperty(property)
     }
 

@@ -14,7 +14,7 @@ import com.openclassrooms.realestatemanager.mappers.propertyToPropertyEntityMapp
 import com.openclassrooms.realestatemanager.models.databaseEntites.PropertyPointOfInterestCrossRef
 import com.openclassrooms.realestatemanager.models.enums.DataState
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
-import com.openclassrooms.realestatemanager.utils.generateProperties
+import com.openclassrooms.realestatemanager.utils.generateOfflineProperties
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -54,7 +54,7 @@ class FakeDatabaseModule {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
 
-                val properties = generateProperties()
+                val properties = generateOfflineProperties()
                 val contentValues = ContentValues()
 
                 for(property in properties){

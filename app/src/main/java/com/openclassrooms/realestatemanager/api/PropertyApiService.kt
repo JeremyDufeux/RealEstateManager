@@ -6,7 +6,7 @@ import com.openclassrooms.realestatemanager.models.sealedClasses.State
 
 interface PropertyApiService {
     suspend fun fetchProperties() : State
-    fun addProperty(property: Property): State
+    suspend fun addProperty(property: Property): State
     suspend fun uploadMedia(mediaItem: MediaItem): State
     suspend fun deleteMedia(mediaItem: MediaItem): State
 }

@@ -8,7 +8,7 @@ import com.openclassrooms.realestatemanager.models.enums.DataState
 import com.openclassrooms.realestatemanager.models.enums.FileType
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
-import com.openclassrooms.realestatemanager.utils.generateProperties
+import com.openclassrooms.realestatemanager.utils.generateOfflineProperties
 import com.openclassrooms.realestatemanager.utils.getStaticMapUrl
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -89,7 +89,7 @@ class OfflinePropertyRepositoryTest {
     @Test
     fun testUpdateDatabaseWithTwoPropertyAndAssertData(): Unit = runBlocking {
         launch(Dispatchers.Main) {
-            val newPropertyList = generateProperties().subList(0, 2)
+            val newPropertyList = generateOfflineProperties().subList(0, 2)
 
             mOfflinePropertyRepository.updateDatabase(newPropertyList)
 
