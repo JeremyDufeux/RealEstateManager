@@ -24,8 +24,8 @@ fun TextInputEditText.setFormattedNumber(number: String){
         selection++
     }
 
-    if(selection > text.toString().length) {
-        setSelection(text.toString().length)
+    if(selection > formattedText.length) {
+        setSelection(formattedText.length)
     } else {
         setSelection(selection)
     }
