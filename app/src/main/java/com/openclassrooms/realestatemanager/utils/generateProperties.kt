@@ -588,7 +588,14 @@ fun generateOnlineProperties() : List<Property> {
                 it.timeInMillis = 0
                 it.set(2021, 8, 8) }.timeInMillis,
             agentName = "Kristen Fortino",
-            mapPictureUrl = getStaticMapUrl(40.82568643585645, -73.94261050737286)
+            mapPictureUrl = getStaticMapUrl(40.82568643585645, -73.94261050737286),
+            mediaList = listOf(
+                MediaItem("51466a72-579c-4fc0-acd5-99351286bf6f", "101", "https://photos.zillowstatic.com/fp/cbde3883e38a4e44919cc079ace4f232-cc_ft_384.jpg" , "Hall", FileType.PICTURE)
+            ),
+            pointOfInterestList = listOf(
+                PointOfInterest.SCHOOL,
+                PointOfInterest.GROCERY
+            )
         )
     )
 }
