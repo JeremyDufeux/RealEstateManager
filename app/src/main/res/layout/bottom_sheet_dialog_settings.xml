@@ -30,7 +30,7 @@
             android:src="@drawable/ic_check"
             android:scaleType="fitCenter"
             android:background="@color/white"
-            android:contentDescription="@string/apply_filters"
+            android:contentDescription="@string/apply_settings"
             app:tint="@color/colorAccent" />
 
     </FrameLayout>
@@ -49,65 +49,66 @@
                 android:layout_width="@dimen/default_icon_size"
                 android:layout_height="@dimen/default_icon_size"
                 android:contentDescription="@string/unit"
+                android:layout_marginTop="@dimen/default_margin"
                 android:src="@drawable/ic_unit"
-                app:layout_constraintBottom_toBottomOf="@+id/settings_bottom_unit_tv"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/settings_bottom_unit_tv" />
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            <TextView
                 android:id="@+id/settings_bottom_unit_tv"
-                style="@style/dropdownMenu"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_margin"
+                android:text="@string/unit"
+                android:textSize="@dimen/text_size"
+                app:layout_constraintBottom_toBottomOf="@+id/settings_bottom_unit_iv"
+                app:layout_constraintStart_toEndOf="@+id/settings_bottom_unit_iv"
+                app:layout_constraintTop_toTopOf="@+id/settings_bottom_unit_iv" />
+
+            <RadioGroup
+                android:id="@+id/settings_bottom_unit_rg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin"
-                android:autofillHints="@string/unit"
-                android:hint="@string/unit"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/settings_bottom_unit_iv"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_marginStart="@dimen/default_margin"
+                app:layout_constraintStart_toStartOf="@+id/settings_bottom_unit_tv"
+                app:layout_constraintTop_toBottomOf="@id/settings_bottom_unit_iv">
 
-                <AutoCompleteTextView
-                    android:id="@+id/settings_bottom_unit_tv_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    tools:ignore="LabelFor" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+            </RadioGroup>
 
             <ImageView
                 android:id="@+id/settings_bottom_currency_iv"
                 style="@style/detailIcon"
                 android:layout_width="@dimen/default_icon_size"
                 android:layout_height="@dimen/default_icon_size"
+                android:layout_marginTop="@dimen/default_margin"
                 android:contentDescription="@string/property_type"
                 android:src="@drawable/ic_money"
-                app:layout_constraintBottom_toBottomOf="@+id/settings_bottom_currency_tv"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/settings_bottom_currency_tv" />
+                app:layout_constraintTop_toBottomOf="@+id/settings_bottom_unit_rg" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            <TextView
                 android:id="@+id/settings_bottom_currency_tv"
-                style="@style/dropdownMenu"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_margin"
+                android:text="@string/currency"
+                android:textSize="@dimen/text_size"
+                app:layout_constraintBottom_toBottomOf="@+id/settings_bottom_currency_iv"
+                app:layout_constraintStart_toEndOf="@+id/settings_bottom_currency_iv"
+                app:layout_constraintTop_toTopOf="@+id/settings_bottom_currency_iv" />
+
+            <RadioGroup
+                android:id="@+id/settings_bottom_currency_rg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin"
-                android:autofillHints="@string/currency"
-                android:hint="@string/currency"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/settings_bottom_currency_iv"
-                app:layout_constraintTop_toBottomOf="@+id/settings_bottom_unit_tv">
+                android:layout_marginStart="@dimen/default_margin"
+                app:layout_constraintStart_toStartOf="@+id/settings_bottom_currency_tv"
+                app:layout_constraintTop_toBottomOf="@id/settings_bottom_currency_iv">
 
-                <AutoCompleteTextView
-                    android:id="@+id/settings_bottom_currency_tv_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    tools:ignore="LabelFor" />
+            </RadioGroup>
 
-            </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

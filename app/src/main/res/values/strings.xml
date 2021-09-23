@@ -135,5 +135,6 @@
     <string name="remove_filters">Remove filters</string>
     <string name="from">From</string>
     <string name="to">To</string>
+    <string name="apply_settings">Apply settings</string>
 
 </resources>

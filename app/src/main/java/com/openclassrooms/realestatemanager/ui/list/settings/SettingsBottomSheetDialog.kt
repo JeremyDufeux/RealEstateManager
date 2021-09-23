@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.widget.RadioButton
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -15,8 +15,7 @@ import com.openclassrooms.realestatemanager.databinding.BottomSheetDialogSetting
 import com.openclassrooms.realestatemanager.models.UserData
 import com.openclassrooms.realestatemanager.models.enums.Currency
 import com.openclassrooms.realestatemanager.models.enums.Unit
-import com.openclassrooms.realestatemanager.utils.find
-import com.openclassrooms.realestatemanager.utils.getStringResourceId
+import com.openclassrooms.realestatemanager.utils.extensions.setCircleColor
 
 class SettingsBottomSheetDialog : BottomSheetDialogFragment() {
 
@@ -25,8 +24,6 @@ class SettingsBottomSheetDialog : BottomSheetDialogFragment() {
 
     private lateinit var mContext: Context
 
-    private lateinit var mUnitAdapter: ArrayAdapter<String>
-    private lateinit var mCurrencyAdapter: ArrayAdapter<String>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,11 +45,8 @@ class SettingsBottomSheetDialog : BottomSheetDialogFragment() {
     }
 
     private val userDataObserver = Observer<UserData> { userData ->
-        var index = mUnitAdapter.getPosition(getString(userData.unit.unitNameResId))
-        mBinding?.settingsBottomUnitTvInput?.setText(mUnitAdapter.getItem(index).toString(), false)
-
-        index = mCurrencyAdapter.getPosition(getString(userData.currency.currencyNameResId))
-        mBinding?.settingsBottomCurrencyTvInput?.setText(mCurrencyAdapter.getItem(index).toString(), false)
+        mBinding?.settingsBottomUnitRg?.check(userData.unit.unitNameResId)
+        mBinding?.settingsBottomCurrencyRg?.check(userData.currency.currencyNameResId)
     }
 
 
@@ -63,54 +57,31 @@ class SettingsBottomSheetDialog : BottomSheetDialogFragment() {
             unitArray.add(getString(unit.unitNameResId))
         }
 
-        mUnitAdapter = ArrayAdapter<String>(
-            mContext,
-            R.layout.list_item,
-            unitArray
-        )
+        mBinding?.settingsBottomSaveIb?.setOnClickListener { saveSettings() }
 
-        val currencyArray = mutableListOf<String>()
+        for (unit in Unit.values()){
+            val radioButton = RadioButton(mContext)
+            radioButton.id = unit.unitNameResId
+            radioButton.text = getString(unit.unitNameResId)
+            radioButton.setCircleColor(ResourcesCompat.getColor(resources, R.color.colorAccent, null))
+            mBinding?.settingsBottomUnitRg?.addView(radioButton)
+        }
+        mBinding?.settingsBottomUnitRg?.setOnCheckedChangeListener { _, checkedId ->
+            mViewModel.userData.unit = Unit.values().find { it.unitNameResId == checkedId }!!
+        }
 
         for (currency in Currency.values()){
-            currencyArray.add(getString(currency.currencyNameResId))
+            val radioButton = RadioButton(mContext)
+            radioButton.id = currency.currencyNameResId
+            radioButton.text = getString(currency.currencyNameResId)
+            radioButton.setCircleColor(ResourcesCompat.getColor(resources, R.color.colorAccent, null))
+            mBinding?.settingsBottomCurrencyRg?.addView(radioButton)
+        }
+        mBinding?.settingsBottomCurrencyRg?.setOnCheckedChangeListener { _, checkedId ->
+            mViewModel.userData.currency = Currency.values().find { it.currencyNameResId == checkedId }!!
         }
 
-        mBinding?.settingsBottomUnitTvInput?.apply {
-            setAdapter(mUnitAdapter)
-            setText(adapter.getItem(0).toString(), false)
-            onItemClickListener = unitListener()
-        }
-
-        mCurrencyAdapter= ArrayAdapter<String>(
-            mContext,
-            R.layout.list_item,
-            currencyArray
-        )
-
-        mBinding?.settingsBottomCurrencyTvInput?.apply {
-            setAdapter(mCurrencyAdapter)
-            setText(adapter.getItem(0).toString(), false)
-            onItemClickListener = currencyListener()
-        }
-
-        mBinding?.settingsBottomSaveIb?.setOnClickListener { saveSettings() }
     }
-
-    private fun unitListener() =
-        AdapterView.OnItemClickListener { parent, _, position, _ ->
-            if (parent != null) {
-                val unit = Unit::unitNameResId.find(getStringResourceId(mContext, parent.getItemAtPosition(position) as String))!!
-                mViewModel.userData.unit = unit
-            }
-        }
-
-    private fun currencyListener() =
-        AdapterView.OnItemClickListener { parent, _, position, _ ->
-            if (parent != null) {
-                val currency = Currency::currencyNameResId.find(getStringResourceId(mContext, parent.getItemAtPosition(position) as String))!!
-                mViewModel.userData.currency = currency
-            }
-        }
 
     private fun saveSettings() {
         mViewModel.saveSettings()
