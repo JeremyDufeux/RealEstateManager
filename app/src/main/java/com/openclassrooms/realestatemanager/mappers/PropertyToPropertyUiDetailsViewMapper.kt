@@ -45,7 +45,7 @@ class PropertyToPropertyUiDetailsViewMapper @Inject constructor(
 
         val surfaceString = if (property.price != null) {
             if (userData.unit == Unit.IMPERIAL) {
-                String.format("%d %s", property.surface?.toInt(), Unit.IMPERIAL.abbreviationRsId)
+                String.format("%d %s", property.surface?.toInt(), mContext.getString(Unit.IMPERIAL.abbreviationRsId))
             } else {
                 String.format(
                     "%.2f %s",
