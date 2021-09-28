@@ -43,13 +43,13 @@ class PropertyUseCase @Inject constructor(
     init {
         mIoScope.launch {
             mPropertyRepository.stateFlow.collect { result ->
-                _stateFlow.value = result
                 if(result is State.Download.DownloadSuccess){
                     mOfflinePropertyRepository.updateDatabase(result.propertiesList)
                 }
                 else if(result is State.Upload.UploadSuccess.Empty){
                     onUploadSuccess()
                 }
+                _stateFlow.value = result
             }
         }
     }

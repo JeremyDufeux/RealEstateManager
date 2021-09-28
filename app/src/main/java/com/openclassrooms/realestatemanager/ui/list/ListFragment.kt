@@ -65,7 +65,7 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
         mPropertyList = properties
         mAdapter.updateList(properties)
 
-        if(resources.getBoolean(R.bool.isTabletLand)) {
+        if(resources.getBoolean(R.bool.isTabletLand) && mPropertyList.isNotEmpty()) {
             if(mViewModel.selectedPropertyIdForTabletLan == null
                 || mPropertyList.firstOrNull{ it.id == mViewModel.selectedPropertyIdForTabletLan} == null){
                 mViewModel.selectedPropertyIdForTabletLan = properties[0].id
