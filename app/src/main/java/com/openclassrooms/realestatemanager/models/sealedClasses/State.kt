@@ -4,6 +4,7 @@ import com.openclassrooms.realestatemanager.models.Property
 
 sealed class State {
     object Idle : State()
+
     sealed class Download {
         object Downloading : State()
         data class DownloadSuccess(val propertiesList: List<Property>) : State()

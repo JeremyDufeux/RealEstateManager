@@ -14,9 +14,8 @@ class PropertyToPropertyUiListViewMapper @Inject constructor(
     fun map(properties: List<Property>, currency: Currency): List<PropertyUiListView> {
 
         val propertiesUi = mutableListOf<PropertyUiListView>()
-        for (property in properties.sortedByDescending
-        { it.postDate })
-        {
+
+        for (property in properties.sortedByDescending{ it.postDate }) {
             val priceString = if (property.price != null) {
                 if (currency == Currency.DOLLAR) {
                     String.format(
