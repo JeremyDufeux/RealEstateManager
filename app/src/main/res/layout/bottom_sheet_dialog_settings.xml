@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="@dimen/default_padding"
+    android:background="@color/white"
     tools:context=".ui.list.settings.SettingsBottomSheetDialog">
 
     <FrameLayout
@@ -45,7 +46,7 @@
 
             <ImageView
                 android:id="@+id/settings_bottom_unit_iv"
-                style="@style/detailIcon"
+                style="@style/iIcon"
                 android:layout_width="@dimen/default_icon_size"
                 android:layout_height="@dimen/default_icon_size"
                 android:contentDescription="@string/unit"
@@ -60,10 +61,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_margin"
                 android:text="@string/unit"
-                android:textSize="@dimen/text_size"
                 app:layout_constraintBottom_toBottomOf="@+id/settings_bottom_unit_iv"
                 app:layout_constraintStart_toEndOf="@+id/settings_bottom_unit_iv"
-                app:layout_constraintTop_toTopOf="@+id/settings_bottom_unit_iv" />
+                app:layout_constraintTop_toTopOf="@+id/settings_bottom_unit_iv"
+                style="@style/textTitle" />
 
             <RadioGroup
                 android:id="@+id/settings_bottom_unit_rg"
@@ -78,7 +79,7 @@
 
             <ImageView
                 android:id="@+id/settings_bottom_currency_iv"
-                style="@style/detailIcon"
+                style="@style/iIcon"
                 android:layout_width="@dimen/default_icon_size"
                 android:layout_height="@dimen/default_icon_size"
                 android:layout_marginTop="@dimen/default_margin"
@@ -93,10 +94,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_margin"
                 android:text="@string/currency"
-                android:textSize="@dimen/text_size"
                 app:layout_constraintBottom_toBottomOf="@+id/settings_bottom_currency_iv"
                 app:layout_constraintStart_toEndOf="@+id/settings_bottom_currency_iv"
-                app:layout_constraintTop_toTopOf="@+id/settings_bottom_currency_iv" />
+                app:layout_constraintTop_toTopOf="@+id/settings_bottom_currency_iv"
+                style="@style/textTitle" />
 
             <RadioGroup
                 android:id="@+id/settings_bottom_currency_rg"

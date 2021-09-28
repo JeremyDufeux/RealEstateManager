@@ -4,10 +4,14 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/drawable-anydpi/splashscreen.xml" value="0.3692708333333333" />
+        <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/layout-land/fragment_details.xml" value="0.2693693693693694" />
+        <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/layout-sw600dp-land/fragment_details.xml" value="0.1633879781420765" />
         <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/layout/activity_add_property.xml" value="0.37083333333333335" />
-        <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/layout/bottom_sheet_dialog_filter.xml" value="0.4046875" />
+        <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/layout/bottom_sheet_dialog_filter.xml" value="0.7942157953281423" />
         <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/layout/bottom_sheet_dialog_settings.xml" value="0.37083333333333335" />
+        <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/layout/fragment_details.xml" value="0.15572916666666667" />
         <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/layout/fragment_list.xml" value="0.1935185185185185" />
+        <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/layout/fragment_list_item.xml" value="0.371875" />
         <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/layout/property_cardview.xml" value="0.5" />
         <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/menu-land/list_activity_toolbar_menu.xml" value="0.18229166666666666" />
         <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/menu-sw600dp-land/list_activity_toolbar_menu.xml" value="0.13671875" />

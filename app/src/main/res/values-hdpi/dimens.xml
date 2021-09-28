@@ -16,7 +16,7 @@
     <dimen name="activity_add_property_media_container_size">104dp</dimen>
     <dimen name="activity_add_property_media_size">100dp</dimen>
     <dimen name="activity_add_property_media_padding">2dp</dimen>
-    <dimen name="activity_add_property_postal_code_width">150dp</dimen>
+    <dimen name="activity_add_property_postal_code_width">100dp</dimen>
 
     <!-- filter_bottom_sheet -->
     <dimen name="activity_add_property_slider_text_margin">10dp</dimen>

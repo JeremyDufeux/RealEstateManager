@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="@dimen/fragment_details_padding"
+    android:background="@color/white"
     tools:context=".ui.details.DetailsFragment">
 
     <TextView
@@ -52,7 +53,7 @@
 
             <TextView
                 android:id="@+id/fragment_detail_media_title_tv"
-                style="@style/detailTitle"
+                style="@style/textTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -74,7 +75,7 @@
 
             <TextView
                 android:id="@+id/fragment_detail_description_title_tv"
-                style="@style/detailTitle"
+                style="@style/textTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
@@ -95,7 +96,7 @@
 
             <ImageView
                 android:id="@+id/fragment_detail_surface_iv"
-                style="@style/detailIcon"
+                style="@style/iIcon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginHorizontal="10dp"
@@ -107,7 +108,7 @@
 
             <TextView
                 android:id="@+id/fragment_detail_surface_title_tv"
-                style="@style/detailSubtitle"
+                style="@style/textlSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -130,23 +131,23 @@
 
             <ImageView
                 android:id="@+id/fragment_detail_rooms_iv"
-                style="@style/detailIcon"
+                style="@style/iIcon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="18dp"
-                android:contentDescription="@string/number_of_rooms"
+                android:contentDescription="@string/rooms_amount"
                 android:src="@drawable/ic_home"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_detail_surface_iv" />
 
             <TextView
                 android:id="@+id/fragment_detail_rooms_title_tv"
-                style="@style/detailSubtitle"
+                style="@style/textlSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="@string/number_of_rooms"
+                android:text="@string/rooms_amount"
                 app:layout_constraintBottom_toBottomOf="@+id/fragment_detail_rooms_iv"
                 app:layout_constraintStart_toEndOf="@+id/fragment_detail_rooms_iv"
                 app:layout_constraintTop_toTopOf="@+id/fragment_detail_rooms_iv" />
@@ -164,23 +165,23 @@
 
             <ImageView
                 android:id="@+id/fragment_detail_bathrooms_iv"
-                style="@style/detailIcon"
+                style="@style/iIcon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="18dp"
-                android:contentDescription="@string/number_of_bathrooms"
+                android:contentDescription="@string/bathrooms_amount"
                 android:src="@drawable/ic_bathroom"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_detail_rooms_iv" />
 
             <TextView
                 android:id="@+id/fragment_detail_bathrooms_title_tv"
-                style="@style/detailSubtitle"
+                style="@style/textlSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="@string/number_of_bathrooms"
+                android:text="@string/bathrooms_amount"
                 app:layout_constraintBottom_toBottomOf="@+id/fragment_detail_bathrooms_iv"
                 app:layout_constraintStart_toEndOf="@+id/fragment_detail_bathrooms_iv"
                 app:layout_constraintTop_toTopOf="@+id/fragment_detail_bathrooms_iv" />
@@ -198,23 +199,23 @@
 
             <ImageView
                 android:id="@+id/fragment_detail_bedrooms_iv"
-                style="@style/detailIcon"
+                style="@style/iIcon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="18dp"
-                android:contentDescription="@string/number_of_bedrooms"
+                android:contentDescription="@string/bedrooms_amount"
                 android:src="@drawable/ic_bedroom"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_detail_bathrooms_iv" />
 
             <TextView
                 android:id="@+id/fragment_detail_bedrooms_title_tv"
-                style="@style/detailSubtitle"
+                style="@style/textlSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="@string/number_of_bedrooms"
+                android:text="@string/bedrooms_amount"
                 app:layout_constraintBottom_toBottomOf="@+id/fragment_detail_bedrooms_iv"
                 app:layout_constraintStart_toEndOf="@+id/fragment_detail_bedrooms_iv"
                 app:layout_constraintTop_toTopOf="@+id/fragment_detail_bedrooms_iv" />
@@ -232,7 +233,7 @@
 
             <ImageView
                 android:id="@+id/fragment_detail_location_iv"
-                style="@style/detailIcon"
+                style="@style/iIcon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginHorizontal="10dp"
@@ -244,7 +245,7 @@
 
             <TextView
                 android:id="@+id/fragment_detail_location_title_tv"
-                style="@style/detailSubtitle"
+                style="@style/textlSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -298,7 +299,7 @@
 
             <ImageView
                 android:id="@+id/fragment_detail_point_of_interest_iv"
-                style="@style/detailIcon"
+                style="@style/iIcon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginHorizontal="10dp"
@@ -310,7 +311,7 @@
 
             <TextView
                 android:id="@+id/fragment_detail_point_of_interest_title_tv"
-                style="@style/detailSubtitle"
+                style="@style/textlSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -330,7 +331,7 @@
 
             <ImageView
                 android:id="@+id/fragment_detail_date_iv"
-                style="@style/detailIcon"
+                style="@style/iIcon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginHorizontal="10dp"
@@ -342,7 +343,7 @@
 
             <TextView
                 android:id="@+id/fragment_detail_post_date_title_tv"
-                style="@style/detailSubtitle"
+                style="@style/textlSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -364,7 +365,7 @@
 
             <TextView
                 android:id="@+id/fragment_detail_sold_date_title_tv"
-                style="@style/detailSubtitle"
+                style="@style/textlSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -386,7 +387,7 @@
 
             <ImageView
                 android:id="@+id/fragment_detail_agent_iv"
-                style="@style/detailIcon"
+                style="@style/iIcon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginHorizontal="10dp"
@@ -398,7 +399,7 @@
 
             <TextView
                 android:id="@+id/fragment_detail_agent_title_tv"
-                style="@style/detailSubtitle"
+                style="@style/textlSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"

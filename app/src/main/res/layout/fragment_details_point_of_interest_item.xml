@@ -18,7 +18,7 @@
 
         <ImageView
             android:id="@+id/fragment_detail_point_of_interest_item_iv"
-            style="@style/detailIcon"
+            style="@style/iIcon"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:contentDescription="@string/point_of_interest"

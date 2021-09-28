@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@color/white"
     android:padding="@dimen/default_padding">
 
     <FrameLayout
@@ -51,7 +52,7 @@
                 android:src="@drawable/ic_apartment"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                style="@style/detailIcon" />
+                style="@style/iIcon" />
 
             <TextView
                 android:id="@+id/filter_bottom_sheet_type_title_tv"
@@ -61,7 +62,7 @@
                 android:text="@string/types_title"
                 app:layout_constraintStart_toEndOf="@+id/filter_bottom_sheet_type_iv"
                 app:layout_constraintBottom_toBottomOf="@id/filter_bottom_sheet_type_iv"
-                style="@style/detailTitle"/>
+                style="@style/textTitle"/>
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/filter_bottom_sheet_type_cg"
@@ -81,7 +82,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_city_et"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_city_et"
-                style="@style/detailIcon"/>
+                style="@style/iIcon"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/filter_bottom_sheet_city_et"
@@ -116,7 +117,7 @@
                 android:src="@drawable/ic_money"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_city_et"
-                style="@style/detailIcon"/>
+                style="@style/iIcon"/>
 
             <TextView
                 android:id="@+id/filter_bottom_sheet_price_title_tv"
@@ -126,7 +127,7 @@
                 android:text="@string/price_range_title"
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_price_iv"
                 app:layout_constraintStart_toEndOf="@+id/filter_bottom_sheet_price_iv"
-                style="@style/detailTitle" />
+                style="@style/textTitle" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/filter_bottom_sheet_price_min_et"
@@ -179,7 +180,7 @@
                 android:src="@drawable/ic_surface"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_price_min_et"
-                style="@style/detailIcon" />
+                style="@style/iIcon" />
 
             <TextView
                 android:id="@+id/filter_bottom_sheet_surface_title_tv"
@@ -189,7 +190,7 @@
                 android:text="@string/surface_range_title"
                 app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_money_iv"
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_money_iv"
-                style="@style/detailTitle" />
+                style="@style/textTitle" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/filter_bottom_sheet_surface_min_et"
@@ -242,7 +243,7 @@
                 android:src="@drawable/ic_home"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_surface_min_et"
-                style="@style/detailIcon" />
+                style="@style/iIcon" />
 
             <TextView
                 android:id="@+id/filter_bottom_sheet_rooms_title_tv"
@@ -252,7 +253,7 @@
                 android:layout_marginStart="@dimen/default_margin"
                 app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_room_iv"
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_room_iv"
-                style="@style/detailTitle" />
+                style="@style/textTitle" />
 
             <ImageButton
                 android:id="@+id/filter_bottom_sheet_decrease_room_ib"
@@ -277,7 +278,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_decrease_room_ib"
                 app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_increase_room_ib"
                 app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_decrease_room_ib"
-                style="@style/detailTitle" />
+                style="@style/textTitle" />
 
             <ImageButton
                 android:id="@+id/filter_bottom_sheet_increase_room_ib"
@@ -301,7 +302,7 @@
                 android:src="@drawable/ic_bathroom"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_rooms_title_tv"
-                style="@style/detailIcon"/>
+                style="@style/iIcon"/>
 
             <TextView
                 android:id="@+id/filter_bottom_sheet_bathrooms_title_tv"
@@ -311,7 +312,7 @@
                 android:layout_marginStart="@dimen/default_margin"
                 app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_bathroom_iv"
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_bathroom_iv"
-                style="@style/detailTitle" />
+                style="@style/textTitle" />
 
             <ImageButton
                 android:id="@+id/filter_bottom_sheet_decrease_bathroom_ib"
@@ -336,7 +337,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_decrease_bathroom_ib"
                 app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_increase_bathroom_ib"
                 app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_decrease_bathroom_ib"
-                style="@style/detailTitle"/>
+                style="@style/textTitle"/>
 
             <ImageButton
                 android:id="@+id/filter_bottom_sheet_increase_bathroom_ib"
@@ -360,7 +361,7 @@
                 android:src="@drawable/ic_bedroom"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_bathrooms_title_tv"
-                style="@style/detailIcon" />
+                style="@style/iIcon" />
 
             <TextView
                 android:id="@+id/filter_bottom_sheet_bedrooms_title_tv"
@@ -370,7 +371,7 @@
                 android:layout_marginStart="@dimen/default_margin"
                 app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_bedroom_iv"
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_bedroom_iv"
-                style="@style/detailTitle"/>
+                style="@style/textTitle"/>
 
             <ImageButton
                 android:id="@+id/filter_bottom_sheet_decrease_bedroom_ib"
@@ -395,7 +396,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_decrease_bedroom_ib"
                 app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_increase_bedroom_ib"
                 app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_decrease_bedroom_ib"
-                style="@style/detailTitle"/>
+                style="@style/textTitle"/>
 
             <ImageButton
                 android:id="@+id/filter_bottom_sheet_increase_bedroom_ib"
@@ -419,7 +420,7 @@
                 android:src="@drawable/ic_picture"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_bedrooms_title_tv"
-                style="@style/detailIcon" />
+                style="@style/iIcon" />
 
             <TextView
                 android:id="@+id/filter_bottom_sheet_medias_title_tv"
@@ -429,7 +430,7 @@
                 android:text="@string/medias_title"
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_medias_iv"
                 app:layout_constraintStart_toEndOf="@+id/filter_bottom_sheet_medias_iv"
-                style="@style/detailTitle"/>
+                style="@style/textTitle"/>
 
             <ImageButton
                 android:id="@+id/filter_bottom_sheet_decrease_medias_ib"
@@ -454,7 +455,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_decrease_medias_ib"
                 app:layout_constraintEnd_toStartOf="@+id/filter_bottom_sheet_increase_medias_ib"
                 app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_decrease_medias_ib"
-                style="@style/detailTitle" />
+                style="@style/textTitle" />
 
             <ImageButton
                 android:id="@+id/filter_bottom_sheet_increase_medias_ib"
@@ -478,7 +479,7 @@
                 android:src="@drawable/ic_near"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/filter_bottom_sheet_medias_title_tv"
-                style="@style/detailIcon"/>
+                style="@style/iIcon"/>
 
             <TextView
                 android:id="@+id/filter_bottom_sheet_poi_title_tv"
@@ -488,7 +489,7 @@
                 android:layout_marginStart="@dimen/default_margin"
                 app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_poi_iv"
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_poi_iv"
-                style="@style/detailTitle" />
+                style="@style/textTitle" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/filter_bottom_sheet_poi_cg"
@@ -508,7 +509,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_available_title_tv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_available_title_tv"
-                style="@style/detailIcon"/>
+                style="@style/iIcon"/>
 
             <TextView
                 android:id="@+id/filter_bottom_sheet_available_title_tv"
@@ -519,7 +520,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_available_cb"
                 app:layout_constraintStart_toEndOf="@+id/filter_bottom_sheet_post_iv"
                 app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_available_cb"
-                style="@style/detailTitle" />
+                style="@style/textTitle" />
 
             <CheckBox
                 android:id="@+id/filter_bottom_sheet_available_cb"
@@ -562,7 +563,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_sold_title_tv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_sold_title_tv"
-                style="@style/detailIcon"/>
+                style="@style/iIcon"/>
 
             <TextView
                 android:id="@+id/filter_bottom_sheet_sold_title_tv"
@@ -573,7 +574,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/filter_bottom_sheet_sold_cb"
                 app:layout_constraintStart_toEndOf="@id/filter_bottom_sheet_sold_iv"
                 app:layout_constraintTop_toTopOf="@+id/filter_bottom_sheet_sold_cb"
-                style="@style/detailTitle" />
+                style="@style/textTitle" />
 
             <CheckBox
                 android:id="@+id/filter_bottom_sheet_sold_cb"
