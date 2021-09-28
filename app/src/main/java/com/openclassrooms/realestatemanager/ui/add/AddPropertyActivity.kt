@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.add
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -48,6 +49,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
     private val mChipList = mutableMapOf<PointOfInterest, Chip>()
 
     override fun onCreate(savedInstancProperty: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstancProperty)
 
         mBinding = ActivityAddPropertyBinding.inflate(layoutInflater)
@@ -136,6 +138,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         mViewModel.mediaListLiveData.observe(this, propertyMediaListObserver)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private val propertyMediaListObserver = Observer<List<MediaItem>> { list ->
         mAdapter.submitList(list)
         mAdapter.notifyDataSetChanged()

@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/drawable-anydpi/splashscreen.xml" value="0.3692708333333333" />
         <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/layout/activity_add_property.xml" value="0.37083333333333335" />
         <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/layout/bottom_sheet_dialog_filter.xml" value="0.4046875" />
         <entry key="..\:/Documents/Programming/Android/Projects/RealEstateManager/app/src/main/res/layout/bottom_sheet_dialog_settings.xml" value="0.37083333333333335" />

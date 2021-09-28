@@ -36,6 +36,7 @@ class ListActivity : AppCompatActivity() {
     private var editMenuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
 
         mBinding = ActivityListBinding.inflate(layoutInflater)

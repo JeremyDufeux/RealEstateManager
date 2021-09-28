@@ -30,6 +30,7 @@ class DetailsActivity : AppCompatActivity() {
     lateinit var propertyId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
 
         if(resources.getBoolean(R.bool.isTabletLand)){

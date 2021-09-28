@@ -10,6 +10,14 @@
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
+    <!-- Splash Screen theme. -->
+    <style name="SplashScreen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splashscreen</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <style name="fullscreenTheme" parent="Theme.AppCompat.Light.NoActionBar" >
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
