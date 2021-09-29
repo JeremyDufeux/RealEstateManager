@@ -3,7 +3,7 @@ package com.openclassrooms.realestatemanager.ui.list
 import android.location.Location
 import androidx.lifecycle.*
 import com.openclassrooms.realestatemanager.mappers.PropertyToPropertyUiListViewMapper
-import com.openclassrooms.realestatemanager.mappers.propertyToPropertyUiMapView
+import com.openclassrooms.realestatemanager.mappers.PropertyToPropertyUiMapViewMapper
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.models.PropertyFilter
 import com.openclassrooms.realestatemanager.models.enums.Currency
@@ -27,6 +27,7 @@ class ListViewModel @Inject constructor(
     private val mPropertyUseCase: PropertyUseCase,
     private val mLocationService: LocationService,
     private val mListViewMapper : PropertyToPropertyUiListViewMapper,
+    private val mMapViewMapper : PropertyToPropertyUiMapViewMapper,
     mUserDataRepository: UserDataRepository
     ) : ViewModel(){
 
@@ -51,9 +52,10 @@ class ListViewModel @Inject constructor(
             mListViewMapper.map(propertiesList, userData.currency)
         }.asLiveData(Dispatchers.IO)
 
-    val propertiesUiMapViewLiveData: LiveData<List<PropertyUiMapView>> = propertyMergedListFlow
-        .map { propertyToPropertyUiMapView(it) }
-        .asLiveData(Dispatchers.IO)
+    val propertiesUiMapViewLiveData: LiveData<List<PropertyUiMapView>> =
+        combine(propertyMergedListFlow, mUserDataRepository.userDataFlow){ propertiesList, userData ->
+            mMapViewMapper.map(propertiesList, userData.currency)
+        }.asLiveData(Dispatchers.IO)
 
     private var _selectedPropertyLiveData : MutableLiveData<String?> = MutableLiveData()
     val selectedPropertyLiveData: LiveData<String?> = _selectedPropertyLiveData

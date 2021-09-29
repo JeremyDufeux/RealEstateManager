@@ -37,6 +37,7 @@ class MapFragment : Fragment(),
     private var mBinding : FragmentMapBinding? = null
     private lateinit var mMap : GoogleMap
     private lateinit var mLocation: Location
+    private val mMarkerList = mutableListOf<Marker?>()
 
     companion object {
         fun newInstance() = MapFragment()
@@ -72,6 +73,7 @@ class MapFragment : Fragment(),
     private fun startObserver() {
         mViewModel.stateLiveData.observe(this, stateObserver)
         mViewModel.propertiesUiMapViewLiveData.observe(this, propertiesObserver)
+        mViewModel.selectedPropertyLiveData.observe(this, selectedPropertyObserver)
     }
 
     private val stateObserver = Observer<State> { state ->
@@ -95,6 +97,7 @@ class MapFragment : Fragment(),
 
     private fun updateMap(properties: List<PropertyUiMapView>){
         mMap.clear()
+        mMarkerList.clear()
 
         for(property in properties){
             if(property.latitude != null && property.longitude != null) {
@@ -102,10 +105,33 @@ class MapFragment : Fragment(),
                 markerOptions.apply {
                     position(LatLng(property.latitude!!, property.longitude!!))
                     icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker))
+                    title(property.priceString)
                 }
                 val marker = mMap.addMarker(markerOptions)
+                mMarkerList.add(marker)
+
+                marker?.title = property.priceString
                 marker?.tag = property.id
+
+
+                if(resources.getBoolean(R.bool.isTabletLand) && properties.isNotEmpty()) {
+                    if(mViewModel.selectedPropertyIdForTabletLan == null
+                        || properties.firstOrNull{ it.id == mViewModel.selectedPropertyIdForTabletLan} == null){
+                        mViewModel.selectedPropertyIdForTabletLan = properties[0].id
+                        mViewModel.setSelectedPropertyId(properties[0].id)
+                    } else {
+                        if(property.id == mViewModel.selectedPropertyIdForTabletLan){
+                            marker?.showInfoWindow()
+                        }
+                    }
+                }
             }
+        }
+    }
+
+    private val selectedPropertyObserver = Observer<String?> { propertyId ->
+        if(resources.getBoolean(R.bool.isTabletLand)) {
+            mMarkerList.firstOrNull { (it?.tag as String) == propertyId }?.showInfoWindow()
         }
     }
 

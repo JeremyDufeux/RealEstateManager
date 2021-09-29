@@ -36,6 +36,7 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
     private fun configureViewModel() {
         mViewModel.stateLiveData.observe(this, stateObserver)
         mViewModel.propertiesUiListViewLiveData.observe(this, propertiesObserver)
+        mViewModel.selectedPropertyLiveData.observe(this, selectedPropertyObserver)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -96,6 +97,14 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
             }
             else -> {
             }
+        }
+    }
+
+    private val selectedPropertyObserver = Observer<String?> { propertyId ->
+        if (propertyId != null && resources.getBoolean(R.bool.isTabletLand)) {
+            val index = mPropertyList.indexOfFirst { it.id == propertyId }
+
+            mAdapter.selectProperty(index)
         }
     }
 

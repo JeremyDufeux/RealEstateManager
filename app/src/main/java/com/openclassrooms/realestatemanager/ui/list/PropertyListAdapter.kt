@@ -40,8 +40,11 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
     }
 
     fun selectProperty(position: Int) {
-        notifyItemChanged(position)
+        val previousItem = mSelectedItem
         mSelectedItem = position
+
+        notifyItemChanged(previousItem)
+        notifyItemChanged(position)
     }
 
     fun updateList(list : List<PropertyUiListView>){
@@ -71,13 +74,8 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
             }
 
             mBinding.root.setOnClickListener {
-                mPropertyListener.onPropertyClick(adapterPosition)
-
-                val previousItem = mSelectedItem
-                mSelectedItem = adapterPosition
-
-                notifyItemChanged(previousItem)
-                notifyItemChanged(adapterPosition)
+                mPropertyListener.onPropertyClick(bindingAdapterPosition)
+                selectProperty(bindingAdapterPosition)
             }
         }
     }

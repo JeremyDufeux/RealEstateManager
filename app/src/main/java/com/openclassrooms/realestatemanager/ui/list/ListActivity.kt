@@ -167,21 +167,18 @@ class ListActivity : AppCompatActivity() {
 
     private val selectedPropertyObserver = Observer<String?> { propertyId ->
         if(propertyId != null) {
+            mViewModel.selectedPropertyIdForTabletLan = propertyId
             if (resources.getBoolean(R.bool.isTabletLand)) {
-                showDetailsFragmentForTablet(propertyId)
-                mViewModel.selectedPropertyIdForTabletLan = propertyId
+                showDetailsFragmentForTablet()
             } else {
                 val detailsActivityIntent = Intent(this, DetailsActivity::class.java)
                 detailsActivityIntent.putExtra(BUNDLE_KEY_PROPERTY_ID, propertyId)
                 startActivity(detailsActivityIntent)
-                mViewModel.setSelectedPropertyId(null)
             }
-        } else if(mViewModel.selectedPropertyIdForTabletLan != null){
-            showDetailsFragmentForTablet(mViewModel.selectedPropertyIdForTabletLan!!)
         }
     }
 
-    private fun showDetailsFragmentForTablet(propertyId: String){
+    private fun showDetailsFragmentForTablet(){
         editMenuItem?.isVisible = true
 
         mBinding.apply {
@@ -190,6 +187,6 @@ class ListActivity : AppCompatActivity() {
         }
         val detailFragment: DetailsFragment =
             supportFragmentManager.findFragmentById(R.id.activity_list_details_fragment) as DetailsFragment
-        detailFragment.setPropertyId(propertyId)
+        mViewModel.selectedPropertyIdForTabletLan?.let { detailFragment.setPropertyId(it) }
     }
 }
