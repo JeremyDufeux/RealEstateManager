@@ -47,7 +47,7 @@ class DetailsActivity : AppCompatActivity() {
 
     private fun configureFragment() {
         val detailFragment : DetailsFragment = supportFragmentManager.findFragmentById(R.id.activity_details_fragmentContainer) as DetailsFragment
-        propertyId = intent?.extras?.getString(BUNDLE_KEY_PROPERTY_ID)!!
+        propertyId = intent?.extras?.getString(BUNDLE_KEY_PROPERTY_ID).toString()
 
         detailFragment.setPropertyId(propertyId)
     }
