@@ -126,7 +126,7 @@ class EntityMapperTest: TestCase() {
 
         val mediaEntityList = mutableListOf<MediaItemEntity>()
         for(mediaItem in mediaList) {
-            mediaEntityList.add(mediaItemToMediaItemEntityMapper(mediaItem))
+            mediaEntityList.add(mediaItemToMediaItemEntityMapper(mediaItem, DataState.NONE))
         }
 
         assertThat(mediaEntityList).hasSize(mediaList.size)

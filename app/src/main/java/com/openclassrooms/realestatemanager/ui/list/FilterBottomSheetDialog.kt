@@ -19,7 +19,7 @@ import com.openclassrooms.realestatemanager.databinding.BottomSheetDialogFilterB
 import com.openclassrooms.realestatemanager.models.enums.PointOfInterest
 import com.openclassrooms.realestatemanager.models.enums.PropertyType
 import com.openclassrooms.realestatemanager.utils.extensions.setFormattedNumber
-import com.openclassrooms.realestatemanager.utils.formatCalendarToString
+import com.openclassrooms.realestatemanager.utils.formatTimestampToString
 
 class FilterBottomSheetDialog: BottomSheetDialogFragment() {
 
@@ -283,7 +283,7 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
 
             // Post field
             if(mViewModel.propertyFilter.postDate != 0L){
-                filterBottomSheetPostDateEtInput.setText(formatCalendarToString(mViewModel.propertyFilter.postDate))
+                filterBottomSheetPostDateEtInput.setText(formatTimestampToString(mViewModel.propertyFilter.postDate))
             } else {
                 filterBottomSheetPostDateEtInput.setText("")
             }
@@ -309,7 +309,7 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
 
             // Sold text view
             if(mViewModel.propertyFilter.soldDate != 0L){
-                filterBottomSheetSoldDateEtInput.setText(formatCalendarToString(mViewModel.propertyFilter.soldDate))
+                filterBottomSheetSoldDateEtInput.setText(formatTimestampToString(mViewModel.propertyFilter.soldDate))
             } else {
                 filterBottomSheetSoldDateEtInput.setText("")
             }
@@ -350,7 +350,7 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
            mViewModel.propertyFilter.postDate = it
 
             mBinding?.apply {
-                filterBottomSheetPostDateEtInput.setText(formatCalendarToString(it))
+                filterBottomSheetPostDateEtInput.setText(formatTimestampToString(it))
                 filterBottomSheetPostDateEt.isEndIconVisible = true
             }
         }
@@ -380,7 +380,7 @@ class FilterBottomSheetDialog: BottomSheetDialogFragment() {
         datePicker.addOnPositiveButtonClickListener {
             mViewModel.propertyFilter.soldDate = it
             mBinding?.apply {
-                filterBottomSheetSoldDateEtInput.setText(formatCalendarToString(it))
+                filterBottomSheetSoldDateEtInput.setText(formatTimestampToString(it))
                 filterBottomSheetSoldDateEt.isEndIconVisible = true
             }
         }

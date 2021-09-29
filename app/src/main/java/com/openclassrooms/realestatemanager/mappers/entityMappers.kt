@@ -35,7 +35,7 @@ fun propertyToPropertyEntityMapper(property: Property, dataState: DataState): Pr
 }
 
 fun propertyEntityToPropertyMapper(entity: PropertyWithMediaItemAndPointsOfInterestEntity): Property {
-    val mediaList = mediaItemsEntityToMediaItemsMapper(entity.mediaList).sortedBy { it.id }
+    val mediaList = mediaItemsEntityToMediaItemsMapper(entity.mediaList.filter { it.dataState != DataState.WAITING_DELETE }).sortedBy { it.id }
     val pointOfInterestList = pointsOfInterestEntityToPointsOfInterestMapper(entity.pointOfInterestList)
 
     return Property(
@@ -73,14 +73,14 @@ fun pointsOfInterestEntityToPointsOfInterestMapper(entitiesList: List<PointOfInt
     return pointsOfInterest
 }
 
-fun mediaItemToMediaItemEntityMapper(mediaItem: MediaItem): MediaItemEntity {
+fun mediaItemToMediaItemEntityMapper(mediaItem: MediaItem, dataState: DataState): MediaItemEntity {
     return MediaItemEntity(
         mediaId = mediaItem.id,
         propertyId = mediaItem.propertyId,
         url = mediaItem.url,
         description = mediaItem.description,
         fileType = mediaItem.fileType,
-        dataState = DataState.SERVER
+        dataState = dataState
     )
 }
 

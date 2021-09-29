@@ -46,9 +46,6 @@ class PropertyUseCase @Inject constructor(
                 if(result is State.Download.DownloadSuccess){
                     mOfflinePropertyRepository.updateDatabase(result.propertiesList)
                 }
-                else if(result is State.Upload.UploadSuccess.Empty){
-                    onUploadSuccess()
-                }
                 _stateFlow.value = result
             }
         }
@@ -84,6 +81,8 @@ class PropertyUseCase @Inject constructor(
             mUploadService.enqueueUploadWorker()
             _stateFlow.value = State.Upload.Error(OfflineError())
         }
+
+        fetchProperties()
     }
 
     suspend fun updateProperty(newProperty: Property) {
@@ -151,7 +150,7 @@ class PropertyUseCase @Inject constructor(
             mPropertyRepository.addProperty(property)
         }
 
-        _stateFlow.value = State.Upload.UploadSuccess.Empty
+        onUploadSuccess()
 
         return Result.success()
     }

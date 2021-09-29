@@ -12,7 +12,7 @@ import com.openclassrooms.realestatemanager.models.ui.PropertyUiListView
 
 class PropertyListAdapter(private var mPropertyListener: PropertyListener) : RecyclerView.Adapter<PropertyListAdapter.PropertyViewHolder>() {
 
-    private var mSelectedItem = 0
+    private var mSelectedPropertyId = ""
 
     private val differCallback = object : DiffUtil.ItemCallback<PropertyUiListView>() {
         override fun areItemsTheSame(oldItem: PropertyUiListView, newItem: PropertyUiListView): Boolean {
@@ -32,19 +32,22 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
     }
 
     override fun onBindViewHolder(holder: PropertyViewHolder, position: Int) {
-        holder.updateViewHolder(mPropertyList.currentList[position], position)
+        holder.updateViewHolder(mPropertyList.currentList[position])
     }
 
     override fun getItemCount(): Int {
         return mPropertyList.currentList.size
     }
 
-    fun selectProperty(position: Int) {
-        val previousItem = mSelectedItem
-        mSelectedItem = position
+    fun selectProperty(selectedPropertyId: String) {
+        val previousSelectedPropertyId = mSelectedPropertyId
+        mSelectedPropertyId = selectedPropertyId
 
-        notifyItemChanged(previousItem)
-        notifyItemChanged(position)
+        val previousSelectedIndex = mPropertyList.currentList.indexOfFirst { it.id == previousSelectedPropertyId }
+        val selectedIndex = mPropertyList.currentList.indexOfFirst { it.id == mSelectedPropertyId }
+
+        notifyItemChanged(previousSelectedIndex)
+        notifyItemChanged(selectedIndex)
     }
 
     fun updateList(list : List<PropertyUiListView>){
@@ -55,7 +58,7 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
                                    private val mPropertyListener: PropertyListener
                                    ) : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun updateViewHolder(property: PropertyUiListView, position: Int) {
+        fun updateViewHolder(property: PropertyUiListView) {
             val context = mBinding.root.context
 
             mBinding.fragmentListItemPcv.setSold(property.sold)
@@ -68,14 +71,13 @@ class PropertyListAdapter(private var mPropertyListener: PropertyListener) : Rec
             mBinding.root.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
             mBinding.fragmentListItemPriceTv.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
 
-            if(mSelectedItem == position && context.resources.getBoolean(R.bool.isTabletLand)){
+            if(mSelectedPropertyId == property.id && context.resources.getBoolean(R.bool.isTabletLand)){
                 mBinding.root.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent))
                 mBinding.fragmentListItemPriceTv.setTextColor(ContextCompat.getColor(context, R.color.white))
             }
 
             mBinding.root.setOnClickListener {
                 mPropertyListener.onPropertyClick(bindingAdapterPosition)
-                selectProperty(bindingAdapterPosition)
             }
         }
     }

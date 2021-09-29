@@ -34,17 +34,17 @@ class MediaViewerActivity : AppCompatActivity() {
         mBinding.activityMediaViewerCloseBtn.setOnClickListener { finishActivityWithoutFile() }
 
         mMediaList = intent?.extras?.getParcelableArrayList<MediaItem>(BUNDLE_KEY_MEDIA_LIST) as MutableList<MediaItem>
-        mMediaIndex = intent?.extras?.getInt(BUNDLE_KEY_SELECTED_MEDIA_INDEX)!!
-        mEditMode = intent?.extras?.getBoolean(BUNDLE_KEY_EDIT_MODE)!!
+        mMediaIndex = intent?.extras?.getInt(BUNDLE_KEY_SELECTED_MEDIA_INDEX) ?: 0
+        mEditMode = intent?.extras?.getBoolean(BUNDLE_KEY_EDIT_MODE) ?: false
 
-        if(mEditMode){
+        if (mEditMode) {
             mBinding.apply {
                 activityMediaViewerCheckBtn.visibility = View.VISIBLE
                 activityMediaViewerDescriptionEt.visibility = View.VISIBLE
                 activityMediaViewerDescriptionEt.setText(mMediaList[0].description)
 
                 activityMediaViewerDescriptionEt.setOnEditorActionListener { _, actionId, _ ->
-                    if(actionId == EditorInfo.IME_ACTION_SEND){
+                    if (actionId == EditorInfo.IME_ACTION_SEND) {
                         checkDescriptionEditText()
                     }
                     return@setOnEditorActionListener true

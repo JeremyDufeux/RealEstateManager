@@ -1,14 +1,8 @@
 package com.openclassrooms.realestatemanager.database
 
 import com.openclassrooms.realestatemanager.models.PropertyFilter
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.util.*
 
 fun constructSqlQuery(propertyFilter: PropertyFilter): String{
-
-    val df = DecimalFormat("0", DecimalFormatSymbols(Locale.ENGLISH))
-    df.maximumFractionDigits = 340
 
     var query = if(propertyFilter.mediasAmount > 0) {
         "SELECT *, COUNT(media_items.propertyId) as mediasAmount " +

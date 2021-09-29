@@ -52,6 +52,7 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
         mBinding?.apply {
             fragmentListSrl.setOnRefreshListener { mViewModel.fetchProperties() }
 
+            mAdapter.registerAdapterDataObserver(mAdapterDataObserver)
             fragmentListRv.adapter = mAdapter
             fragmentListRv.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -72,8 +73,7 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
                 mViewModel.selectedPropertyIdForTabletLan = properties[0].id
                 mViewModel.setSelectedPropertyId(properties[0].id)
             } else {
-                val index = mPropertyList.indexOfFirst { it.id == mViewModel.selectedPropertyIdForTabletLan }
-                mAdapter.selectProperty(index)
+                mAdapter.selectProperty(mViewModel.selectedPropertyIdForTabletLan!!)
             }
         }
     }
@@ -102,9 +102,7 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
 
     private val selectedPropertyObserver = Observer<String?> { propertyId ->
         if (propertyId != null && resources.getBoolean(R.bool.isTabletLand)) {
-            val index = mPropertyList.indexOfFirst { it.id == propertyId }
-
-            mAdapter.selectProperty(index)
+            mAdapter.selectProperty(propertyId)
         }
     }
 
@@ -122,4 +120,24 @@ class ListFragment : Fragment(), PropertyListAdapter.PropertyListener {
         mBinding = null
     }
 
+    private val mAdapterDataObserver = object: RecyclerView.AdapterDataObserver(){
+        override fun onChanged() {
+            mBinding?.fragmentListRv?.scrollToPosition(0)
+        }
+        override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+            mBinding?.fragmentListRv?.scrollToPosition(0)
+        }
+        override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
+            mBinding?.fragmentListRv?.scrollToPosition(0)
+        }
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+            mBinding?.fragmentListRv?.scrollToPosition(0)
+        }
+        override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
+            mBinding?.fragmentListRv?.scrollToPosition(0)
+        }
+        override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
+            mBinding?.fragmentListRv?.scrollToPosition(0)
+        }
+    }
 }

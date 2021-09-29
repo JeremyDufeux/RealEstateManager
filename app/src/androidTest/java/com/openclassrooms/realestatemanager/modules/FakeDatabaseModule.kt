@@ -77,7 +77,7 @@ class FakeDatabaseModule {
                     contentValues.put("mapPictureUrl", propertyEntity.mapPictureUrl)
                     contentValues.put("postDate", propertyEntity.postDate)
                     contentValues.put("agentName", propertyEntity.agentName)
-                    contentValues.put("dataState", DataState.NONE.toString())
+                    contentValues.put("dataState", propertyEntity.dataState.toString())
 
                     if(propertyEntity.soldDate == null){
                         contentValues.putNull("soldDate")
@@ -89,7 +89,7 @@ class FakeDatabaseModule {
                     contentValues.clear()
 
                     for (media in property.mediaList){
-                        val mediaItemEntity = mediaItemToMediaItemEntityMapper(media)
+                        val mediaItemEntity = mediaItemToMediaItemEntityMapper(media, DataState.NONE)
                         contentValues.put("mediaId", mediaItemEntity.mediaId)
                         contentValues.put("propertyId", mediaItemEntity.propertyId)
                         contentValues.put("description", mediaItemEntity.description)

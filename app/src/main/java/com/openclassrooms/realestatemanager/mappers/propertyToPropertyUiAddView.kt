@@ -23,7 +23,7 @@ fun propertyToPropertyUiAddView(property: Property, userData: UserData): Propert
         ""
     }
 
-    val surfaceString = if(property.price != null){
+    val surfaceString = if(property.surface != null){
         if(userData.unit == Unit.IMPERIAL) {
             String.format("%d", property.surface?.toInt())
         } else {

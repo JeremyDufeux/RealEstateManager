@@ -1,8 +1,6 @@
 package com.openclassrooms.realestatemanager.modules
 
 import android.content.Context
-import android.os.Build
-import com.google.android.exoplayer2.ExoPlayerLibraryInfo
 import com.google.android.exoplayer2.database.DatabaseProvider
 import com.google.android.exoplayer2.database.ExoDatabaseProvider
 import com.google.android.exoplayer2.upstream.cache.Cache
@@ -25,17 +23,6 @@ import javax.inject.Singleton
     replaces = [HiltVideoDownloadServiceModule::class]
 )
 class FakeVideoDownloaderServiceModule {
-
-    @Provides
-    @HiltVideoDownloadServiceModule.UserAgent
-    fun provideUserAgent(): String{
-        return ("ExoPlayerDemo/"
-                + ExoPlayerLibraryInfo.VERSION
-                + " (Linux; Android "
-                + Build.VERSION.RELEASE
-                + ") "
-                + ExoPlayerLibraryInfo.VERSION_SLASHY)
-    }
 
     @Provides
     fun provideDownloadDirectory(@ApplicationContext context: Context): File {

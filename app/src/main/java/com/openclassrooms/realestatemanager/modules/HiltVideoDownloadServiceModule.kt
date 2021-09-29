@@ -20,26 +20,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.io.File
 import java.util.concurrent.Executors
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class HiltVideoDownloadServiceModule {
-
-    @Qualifier
-    annotation class UserAgent
-
-    @Provides
-    @UserAgent
-    fun provideUserAgent(): String{
-        return ("ExoPlayerDemo/"
-                + ExoPlayerLibraryInfo.VERSION
-                + " (Linux; Android "
-                + Build.VERSION.RELEASE
-                + ") "
-                + ExoPlayerLibraryInfo.VERSION_SLASHY)
-    }
 
     @Provides
     fun provideDownloadDirectory(@ApplicationContext context: Context): File{
@@ -64,9 +49,8 @@ class HiltVideoDownloadServiceModule {
         @ApplicationContext context: Context,
         downloadCache: Cache,
         databaseProvider: DatabaseProvider,
-        @UserAgent userAgent: String
     ): DownloadManager {
-        val httpDataSourceFactory = DefaultHttpDataSource.Factory().setUserAgent(userAgent)
+        val httpDataSourceFactory = DefaultHttpDataSource.Factory().setUserAgent(provideUserAgent())
 
         return DownloadManager(
             context,
@@ -85,4 +69,13 @@ class HiltVideoDownloadServiceModule {
     ): VideoDownloadService{
         return VideoDownloadServiceImpl(context, downloadManager)
     }
+}
+
+fun provideUserAgent(): String{
+    return ("ExoPlayerDemo/"
+            + ExoPlayerLibraryInfo.VERSION
+            + " (Linux; Android "
+            + Build.VERSION.RELEASE
+            + ") "
+            + ExoPlayerLibraryInfo.VERSION_SLASHY)
 }

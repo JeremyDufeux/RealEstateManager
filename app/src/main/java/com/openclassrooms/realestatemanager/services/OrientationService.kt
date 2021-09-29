@@ -26,12 +26,12 @@ class OrientationService @Inject constructor(context: Context)
                     orientationMode = OrientationMode.ORIENTATION_PORTRAIT_NORMAL
                 }
             }
-            orientation in 225..314 ->{
+            orientation in 225..314 -> {
                 if (orientationMode != OrientationMode.ORIENTATION_LANDSCAPE_NORMAL) {
                     orientationMode = OrientationMode.ORIENTATION_LANDSCAPE_NORMAL
                 }
             }
-            orientation in 135..224 ->{
+            orientation in 135..224 -> {
                 if (orientationMode != OrientationMode.ORIENTATION_PORTRAIT_INVERTED) {
                     orientationMode = OrientationMode.ORIENTATION_PORTRAIT_INVERTED
                 }
@@ -68,39 +68,35 @@ class OrientationService @Inject constructor(context: Context)
         var rotation: Float = _rotationFlow.value!!
         when (lastOrientation) {
             OrientationMode.ORIENTATION_PORTRAIT_NORMAL -> {
-                if (orientation == OrientationMode.ORIENTATION_LANDSCAPE_NORMAL) {
-                    rotation += 90
-                } else if (orientation == OrientationMode.ORIENTATION_LANDSCAPE_INVERTED) {
-                    rotation -= 90
-                } else if (orientation == OrientationMode.ORIENTATION_PORTRAIT_INVERTED) {
-                    rotation -= 180
+                when(orientation){
+                    OrientationMode.ORIENTATION_LANDSCAPE_NORMAL -> rotation += 90
+                    OrientationMode.ORIENTATION_LANDSCAPE_INVERTED -> rotation -= 90
+                    OrientationMode.ORIENTATION_PORTRAIT_INVERTED -> rotation -= 180
+                    else -> {}
                 }
             }
             OrientationMode.ORIENTATION_PORTRAIT_INVERTED -> {
-                if (orientation == OrientationMode.ORIENTATION_LANDSCAPE_NORMAL) {
-                    rotation -= 90
-                } else if (orientation == OrientationMode.ORIENTATION_LANDSCAPE_INVERTED) {
-                    rotation += 90
-                }else if (orientation == OrientationMode.ORIENTATION_PORTRAIT_NORMAL) {
-                    rotation += 180
+                when(orientation){
+                    OrientationMode.ORIENTATION_LANDSCAPE_NORMAL -> rotation -= 90
+                    OrientationMode.ORIENTATION_LANDSCAPE_INVERTED -> rotation += 90
+                    OrientationMode.ORIENTATION_PORTRAIT_NORMAL -> rotation += 180
+                    else -> {}
                 }
             }
             OrientationMode.ORIENTATION_LANDSCAPE_NORMAL -> {
-                if (orientation == OrientationMode.ORIENTATION_PORTRAIT_NORMAL) {
-                    rotation -= 90
-                } else if (orientation == OrientationMode.ORIENTATION_PORTRAIT_INVERTED) {
-                    rotation += 90
-                } else if (orientation == OrientationMode.ORIENTATION_LANDSCAPE_INVERTED) {
-                    rotation += 180
+                when(orientation){
+                    OrientationMode.ORIENTATION_LANDSCAPE_NORMAL -> rotation -= 90
+                    OrientationMode.ORIENTATION_PORTRAIT_INVERTED -> rotation += 90
+                    OrientationMode.ORIENTATION_LANDSCAPE_INVERTED -> rotation += 180
+                    else -> {}
                 }
             }
             OrientationMode.ORIENTATION_LANDSCAPE_INVERTED -> {
-                if (orientation == OrientationMode.ORIENTATION_PORTRAIT_NORMAL) {
-                    rotation += 90
-                } else if (orientation == OrientationMode.ORIENTATION_PORTRAIT_INVERTED) {
-                    rotation -= 90
-                } else if (orientation == OrientationMode.ORIENTATION_LANDSCAPE_NORMAL) {
-                    rotation -= 180
+                when(orientation){
+                    OrientationMode.ORIENTATION_PORTRAIT_NORMAL -> rotation += 90
+                    OrientationMode.ORIENTATION_PORTRAIT_INVERTED -> rotation -= 90
+                    OrientationMode.ORIENTATION_LANDSCAPE_NORMAL -> rotation -= 180
+                    else -> {}
                 }
             }
         }

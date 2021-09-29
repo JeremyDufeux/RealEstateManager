@@ -8,13 +8,6 @@ import java.util.*
 class DateFormatTest : TestCase(){
 
     @Test
-    fun testFormatCalendarToString(){
-        val formattedDate = formatCalendarToString(1631429951000)
-
-        assertEquals("September 12, 2021", formattedDate)
-    }
-
-    @Test
     fun testGetTodayDate(){
         val date = Calendar.getInstance().also {
             it.timeInMillis = 0
@@ -23,5 +16,12 @@ class DateFormatTest : TestCase(){
         val formattedDate = getTodayDate(Date(date))
 
         assertEquals("12/09/2021", formattedDate)
+    }
+
+    @Test
+    fun testFormatTimestampToString(){
+        val formattedDate = formatTimestampToString(1631429951000)
+
+        assertEquals("September 12, 2021", formattedDate)
     }
 }

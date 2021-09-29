@@ -31,7 +31,7 @@ import timber.log.Timber
 class ListActivity : AppCompatActivity() {
     private val mViewModel: ListViewModel by viewModels()
 
-    private lateinit var mBinding : ActivityListBinding
+    private var mBinding : ActivityListBinding? = null
 
     private var editMenuItem: MenuItem? = null
 
@@ -40,7 +40,7 @@ class ListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         mBinding = ActivityListBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
+        setContentView(mBinding?.root)
 
         configureViewModel()
         configureToolBar()
@@ -54,7 +54,7 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun configureToolBar() {
-        setSupportActionBar(mBinding.activityListToolbar)
+        setSupportActionBar(mBinding?.activityListToolbar)
     }
 
     private fun configureViewPager(){
@@ -62,23 +62,28 @@ class ListActivity : AppCompatActivity() {
         pagerAdapter.addFragment(ListFragment.newInstance())
         pagerAdapter.addFragment(MapFragment.newInstance())
 
-        mBinding.activityListViewPager.apply {
+        mBinding?.activityListViewPager?.apply {
             adapter= pagerAdapter
             isUserInputEnabled = false
             offscreenPageLimit = 2
         }
 
-        TabLayoutMediator(mBinding.activityListTabLayout, mBinding.activityListViewPager) { tab, position ->
-            when (position) {
-                0 -> tab.text = resources.getString(R.string.list_tab)
-                1 -> tab.text = resources.getString(R.string.map_tab)
-            }
-        }.attach()
+        if(mBinding?.activityListTabLayout != null && mBinding?.activityListViewPager != null) {
+            TabLayoutMediator(
+                mBinding?.activityListTabLayout!!,
+                mBinding?.activityListViewPager!!
+            ) { tab, position ->
+                when (position) {
+                    0 -> tab.text = resources.getString(R.string.list_tab)
+                    1 -> tab.text = resources.getString(R.string.map_tab)
+                }
+            }.attach()
+        }
     }
 
     private fun configureUi(){
-        mBinding.activityListAddBtn.setOnClickListener { openAddPropertyActivity() }
-        mBinding.activityListRemoveFilterBtn.setOnClickListener { mViewModel.removeFilters() }
+        mBinding?.activityListAddBtn?.setOnClickListener { openAddPropertyActivity() }
+        mBinding?.activityListRemoveFilterBtn?.setOnClickListener { mViewModel.removeFilters() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -124,10 +129,10 @@ class ListActivity : AppCompatActivity() {
     private val stateObserver = Observer<State> { state ->
         when(state){
             is State.Upload.Uploading -> {
-                mBinding.activityListProgressLine.visibility = View.VISIBLE
+                mBinding?.activityListProgressLine?.visibility = View.VISIBLE
             }
             is State.Upload.UploadSuccess.Empty -> {
-                mBinding.activityListProgressLine.visibility = View.GONE
+                mBinding?.activityListProgressLine?.visibility = View.GONE
                 showToast(this, R.string.all_properties_has_been_uploaded)
             }
             is State.Download.Error -> {
@@ -144,7 +149,7 @@ class ListActivity : AppCompatActivity() {
                 Timber.e("Error ListFragment.stateObserver: ${state.throwable.toString()}")
             }
             is State.Upload.Error -> {
-                mBinding.activityListProgressLine.visibility = View.GONE
+                mBinding?.activityListProgressLine?.visibility = View.GONE
                 if (state.throwable is OfflineError) {
                     showToast(this, R.string.the_property_will_be_uploaded_when_connected)
                 } else {
@@ -154,13 +159,13 @@ class ListActivity : AppCompatActivity() {
                 Timber.e("Error ListActivity.stateObserver: ${state.throwable.toString()}")
             }
             is State.Filter.Result -> {
-                mBinding.activityListRemoveFilterBtn.visibility = View.VISIBLE
+                mBinding?.activityListRemoveFilterBtn?.visibility = View.VISIBLE
             }
             is State.Filter.Clear -> {
-                mBinding.activityListRemoveFilterBtn.visibility = View.GONE
+                mBinding?.activityListRemoveFilterBtn?.visibility = View.GONE
             }
             else -> {
-                mBinding.activityListProgressLine.visibility = View.GONE
+                mBinding?.activityListProgressLine?.visibility = View.GONE
             }
         }
     }
@@ -181,12 +186,18 @@ class ListActivity : AppCompatActivity() {
     private fun showDetailsFragmentForTablet(){
         editMenuItem?.isVisible = true
 
-        mBinding.apply {
+        mBinding?.apply {
             activityListIconIv?.visibility = View.INVISIBLE
             activityListDetailsFragment?.visibility = View.VISIBLE
         }
         val detailFragment: DetailsFragment =
             supportFragmentManager.findFragmentById(R.id.activity_list_details_fragment) as DetailsFragment
         mViewModel.selectedPropertyIdForTabletLan?.let { detailFragment.setPropertyId(it) }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        mBinding = null
     }
 }

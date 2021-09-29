@@ -166,8 +166,6 @@ class DetailsFragment : Fragment(), DetailsMediaListAdapter.MediaListener {
         }
 
         intent.putParcelableArrayListExtra(BUNDLE_KEY_MEDIA_LIST, arrayList)
-
-        intent.putExtra(BUNDLE_KEY_PROPERTY_ID, mViewModel.propertyLiveData.value?.id)
         intent.putExtra(BUNDLE_KEY_SELECTED_MEDIA_INDEX, position)
         startActivity(intent)
     }

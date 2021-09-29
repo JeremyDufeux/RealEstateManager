@@ -4,7 +4,6 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.hardware.Camera
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.webkit.MimeTypeMap
@@ -179,10 +178,8 @@ class CameraActivity : AppCompatActivity() {
 
     private var openGalleryLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         if (uri != null) {
-            if (Build.VERSION.SDK_INT >= 19) {
-                val perms = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                contentResolver.takePersistableUriPermission(uri, perms)
-            }
+            val perms = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            contentResolver.takePersistableUriPermission(uri, perms)
             val mediaItem = MediaItem(UUID.randomUUID().toString(), "", uri.toString(), "", getFileType(getMimeType(uri)))
             mViewModel.setFileState(FileState.Success(mediaItem))
         }
@@ -207,7 +204,7 @@ class CameraActivity : AppCompatActivity() {
         finish()
     }
 
-    fun getMimeType(uri: Uri): String? {
+    private fun getMimeType(uri: Uri): String? {
         return if (ContentResolver.SCHEME_CONTENT == uri.scheme) {
             contentResolver.getType(uri)
         } else {

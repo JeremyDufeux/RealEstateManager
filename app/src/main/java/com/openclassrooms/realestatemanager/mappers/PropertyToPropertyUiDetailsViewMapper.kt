@@ -8,7 +8,7 @@ import com.openclassrooms.realestatemanager.models.enums.Unit
 import com.openclassrooms.realestatemanager.models.ui.PropertyUiDetailsView
 import com.openclassrooms.realestatemanager.utils.Utils.convertDollarsToEuros
 import com.openclassrooms.realestatemanager.utils.Utils.convertSquareFootToSquareMeters
-import com.openclassrooms.realestatemanager.utils.formatCalendarToString
+import com.openclassrooms.realestatemanager.utils.formatTimestampToString
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -18,11 +18,11 @@ class PropertyToPropertyUiDetailsViewMapper @Inject constructor(
     fun map(property: Property, userData: UserData): PropertyUiDetailsView {
         var address = ""
         property.apply {
-            if (addressLine1.isNotEmpty()) address += addressLine1
-            if (addressLine2.isNotEmpty()) address += "\n$addressLine2"
-            if (city.isNotEmpty()) address += "\n$city"
-            if (postalCode.isNotEmpty()) address += "\n$postalCode"
-            if (country.isNotEmpty()) address += "\n$country"
+            if (addressLine1.isNotEmpty()) address += "$addressLine1\n"
+            if (addressLine2.isNotEmpty()) address += "$addressLine2\n"
+            if (city.isNotEmpty()) address += "$city\n"
+            if (postalCode.isNotEmpty()) address += "$postalCode\n"
+            if (country.isNotEmpty()) address += country
         }
 
         val priceString = if (property.price != null) {
@@ -43,7 +43,7 @@ class PropertyToPropertyUiDetailsViewMapper @Inject constructor(
             ""
         }
 
-        val surfaceString = if (property.price != null) {
+        val surfaceString = if (property.surface != null) {
             if (userData.unit == Unit.IMPERIAL) {
                 String.format("%d %s", property.surface?.toInt(), mContext.getString(Unit.IMPERIAL.abbreviationRsId))
             } else {
@@ -63,7 +63,7 @@ class PropertyToPropertyUiDetailsViewMapper @Inject constructor(
         val bedroomsAmount =
             if (property.bedroomsAmount != null) property.bedroomsAmount.toString() else ""
         val soldDate =
-            if (property.soldDate != null) formatCalendarToString(property.soldDate!!) else ""
+            if (property.soldDate != null) formatTimestampToString(property.soldDate!!) else ""
 
         return PropertyUiDetailsView(
             id = property.id,
@@ -80,7 +80,7 @@ class PropertyToPropertyUiDetailsViewMapper @Inject constructor(
             latitude = property.latitude,
             longitude = property.longitude,
             mapPictureUrl = property.mapPictureUrl,
-            postDate = formatCalendarToString(property.postDate),
+            postDate = formatTimestampToString(property.postDate),
             soldDate = soldDate,
             agentName = property.agentName,
             mediaList = property.mediaList,

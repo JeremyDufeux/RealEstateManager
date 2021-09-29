@@ -18,7 +18,7 @@ import org.junit.runner.RunWith
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
-class ContentProviderTest {
+class xContentProviderTest {
     private val mPropertiesUri: Uri =
         Uri.parse("content://" + getContentAuthority() + "/" + getPropertiesPath())
     private val mMediasUri: Uri =

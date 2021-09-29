@@ -96,11 +96,14 @@ class VideoRecorder @Inject constructor(mContext: Context) {
         val fileName = "VID_$timeStamp.mp4"
 
         val values = ContentValues().apply {
+            put(MediaStore.MediaColumns.TITLE, fileName)
             put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-            put(MediaStore.MediaColumns.DATE_ADDED, System.currentTimeMillis())
+            put(MediaStore.MediaColumns.DATE_ADDED, System.currentTimeMillis() / 1000 )
+            put(MediaStore.MediaColumns.DATE_MODIFIED, System.currentTimeMillis() / 1000 )
             put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4")
             if(Build.VERSION.SDK_INT >= 29) {
                 put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_MOVIES)
+                put(MediaStore.MediaColumns.DATE_TAKEN, System.currentTimeMillis())
             }
         }
 

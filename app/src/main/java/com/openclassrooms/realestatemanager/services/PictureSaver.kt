@@ -82,10 +82,10 @@ class PictureSaver @Inject constructor(
         var pictureData = data
         if(mContext.resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
             var thePicture = BitmapFactory.decodeByteArray(pictureData, 0, pictureData.size)
-            val m = Matrix()
-            m.postRotate(mOrientationMode.rotation.toFloat())
+            val matrix = Matrix()
+            matrix.postRotate(mOrientationMode.rotation.toFloat())
             thePicture =
-                Bitmap.createBitmap(thePicture, 0, 0, thePicture.width, thePicture.height, m, true)
+                Bitmap.createBitmap(thePicture, 0, 0, thePicture.width, thePicture.height, matrix, true)
 
             val bos = ByteArrayOutputStream()
             thePicture.compress(Bitmap.CompressFormat.JPEG, 100, bos)
@@ -99,7 +99,6 @@ class PictureSaver @Inject constructor(
             }
         }
 
-        //return getRealPathFromURI(uri)
         return uri.toString()
     }
 
@@ -109,11 +108,14 @@ class PictureSaver @Inject constructor(
         val fileName = "IMG_$timeStamp.jpg"
 
         val values = ContentValues().apply {
+            put(MediaStore.MediaColumns.TITLE, fileName)
             put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-            put(MediaStore.MediaColumns.DATE_ADDED, System.currentTimeMillis())
+            put(MediaStore.MediaColumns.DATE_ADDED, System.currentTimeMillis() / 1000 )
+            put(MediaStore.MediaColumns.DATE_MODIFIED, System.currentTimeMillis() / 1000 )
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
             if(Build.VERSION.SDK_INT >= 29) {
                 put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+                put(MediaStore.MediaColumns.DATE_TAKEN, System.currentTimeMillis())
             }
         }
 

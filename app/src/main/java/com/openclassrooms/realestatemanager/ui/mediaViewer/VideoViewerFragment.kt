@@ -14,7 +14,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.cache.Cache
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory
 import com.openclassrooms.realestatemanager.databinding.FragmentVideoViewerBinding
-import com.openclassrooms.realestatemanager.modules.HiltVideoDownloadServiceModule
+import com.openclassrooms.realestatemanager.modules.provideUserAgent
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -24,6 +24,9 @@ class VideoViewerFragment : Fragment() {
     private var mBinding: FragmentVideoViewerBinding? = null
 
     private var mPlayer: SimpleExoPlayer? = null
+
+    @Inject
+    lateinit var downloadCache: Cache
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +53,25 @@ class VideoViewerFragment : Fragment() {
         initializePlayer()
     }
 
+    private fun initializePlayer() {
+        val dataSourceFactory = DefaultDataSourceFactory(requireContext(), provideUserAgent())
+        val cachedDataSourceFactory = CacheDataSourceFactory(downloadCache, dataSourceFactory)
+        val mediaSources = ProgressiveMediaSource.Factory(cachedDataSourceFactory).createMediaSource(
+            Uri.parse(mViewModel.url))
+
+        mPlayer = SimpleExoPlayer.Builder(requireContext())
+            .build()
+            .apply {
+                mBinding?.videoViewerFragmentEp?.player = this
+                mBinding?.videoViewerFragmentEp?.controllerAutoShow = false
+                setMediaSource(mediaSources)
+                repeatMode = Player.REPEAT_MODE_ALL
+                playWhenReady = mViewModel.playWhenReady
+                seekTo(mViewModel.currentWindow, mViewModel.playbackPosition)
+                prepare()
+            }
+    }
+
     override fun onResume() {
         super.onResume()
         if(mViewModel.isPlaying) {
@@ -68,32 +90,6 @@ class VideoViewerFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         releasePlayer()
-    }
-
-    @Inject
-    @HiltVideoDownloadServiceModule.UserAgent
-    lateinit var userAgent: String
-
-    @Inject
-    lateinit var downloadCache: Cache
-
-    private fun initializePlayer() {
-        val dataSourceFactory = DefaultDataSourceFactory(requireContext(), userAgent)
-        val cachedDataSourceFactory = CacheDataSourceFactory(downloadCache, dataSourceFactory)
-        val mediaSources = ProgressiveMediaSource.Factory(cachedDataSourceFactory).createMediaSource(
-            Uri.parse(mViewModel.url))
-
-        mPlayer = SimpleExoPlayer.Builder(requireContext())
-            .build()
-            .apply {
-                mBinding?.videoViewerFragmentEp?.player = this
-                mBinding?.videoViewerFragmentEp?.controllerAutoShow = false
-                setMediaSource(mediaSources)
-                repeatMode = Player.REPEAT_MODE_ALL
-                playWhenReady = mViewModel.playWhenReady
-                seekTo(mViewModel.currentWindow, mViewModel.playbackPosition)
-                prepare()
-            }
     }
 
     private fun releasePlayer() {

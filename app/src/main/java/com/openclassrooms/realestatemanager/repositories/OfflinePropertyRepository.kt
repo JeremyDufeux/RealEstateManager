@@ -52,9 +52,12 @@ class OfflinePropertyRepository @Inject constructor(
 
     suspend fun updateDatabase(propertiesList: List<Property>) {
         prepareDatabaseBeforeUpdate()
+
         for (property in propertiesList) {
             addProperty(property, DataState.SERVER)
         }
+        startDownloadService()
+
         deleteOldData()
     }
 
@@ -70,24 +73,14 @@ class OfflinePropertyRepository @Inject constructor(
         mPropertyDao.deleteOldPointsOfInterest()
     }
 
-    private fun cachePicture(url: String?) {
-        Glide.with(mContext).load(url).submit()
-    }
-
-    private fun cacheVideo(mediaItem: MediaItem) {
-        mVideoDownloadService.cacheVideo(mediaItem)
-    }
-
     suspend fun addProperty(property: Property, dataState: DataState) {
         val propertyEntity = propertyToPropertyEntityMapper(property, dataState)
-        propertyEntity.dataState = dataState
         mPropertyDao.insertProperty(propertyEntity)
 
         cachePicture(property.mapPictureUrl)
 
         for (media in property.mediaList) {
-            val mediaItemEntity = mediaItemToMediaItemEntityMapper(media)
-            mediaItemEntity.dataState = dataState
+            val mediaItemEntity = mediaItemToMediaItemEntityMapper(media, dataState)
             mPropertyDao.insertMediaItem(mediaItemEntity)
 
             if(dataState == DataState.SERVER) {
@@ -99,9 +92,15 @@ class OfflinePropertyRepository @Inject constructor(
             }
         }
 
-        startDownloadService()
-
         insertPointsOfInterestForProperty(property, DataState.SERVER)
+    }
+
+    private fun cachePicture(url: String?) {
+        Glide.with(mContext).load(url).submit()
+    }
+
+    private fun cacheVideo(mediaItem: MediaItem) {
+        mVideoDownloadService.cacheVideo(mediaItem)
     }
 
     private fun startDownloadService() {
@@ -129,14 +128,12 @@ class OfflinePropertyRepository @Inject constructor(
     }
 
     suspend fun addMediaToUpload(mediaItem: MediaItem) {
-        val mediaItemEntity = mediaItemToMediaItemEntityMapper(mediaItem)
-        mediaItemEntity.dataState = DataState.WAITING_UPLOAD
+        val mediaItemEntity = mediaItemToMediaItemEntityMapper(mediaItem, DataState.WAITING_UPLOAD)
         mPropertyDao.insertMediaItem(mediaItemEntity)
     }
 
     suspend fun setMediaToDelete(mediaItem: MediaItem) {
-        val mediaItemEntity = mediaItemToMediaItemEntityMapper(mediaItem)
-        mediaItemEntity.dataState = DataState.WAITING_DELETE
+        val mediaItemEntity = mediaItemToMediaItemEntityMapper(mediaItem, DataState.WAITING_DELETE)
         mPropertyDao.insertMediaItem(mediaItemEntity)
     }
 

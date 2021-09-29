@@ -77,7 +77,7 @@ class ChangeUnitTest {
 
         val textView = onView(
             allOf(
-                withId(R.id.fragment_detail_surface_tv), withText("900 sq ft"),
+                withId(R.id.fragment_detail_surface_tv),
                 withParent(
                     allOf(
                         withId(R.id.fragment_detail_cl),
@@ -157,19 +157,7 @@ class ChangeUnitTest {
 
         recyclerView.perform(actionOnItemAtPosition<ViewHolder>(0, click()))
 
-        val textView2 = onView(
-            allOf(
-                withId(R.id.fragment_detail_surface_tv), withText("83.61 m²"),
-                withParent(
-                    allOf(
-                        withId(R.id.fragment_detail_cl),
-                        withParent(withId(R.id.fragment_detail_sv))
-                    )
-                ),
-                isDisplayed()
-            )
-        )
-        textView2.check(matches(withText("83.61 m²")))
+        textView.check(matches(withText("83.61 m²")))
     }
 
     private fun childAtPosition(

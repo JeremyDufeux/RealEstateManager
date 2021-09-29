@@ -161,6 +161,7 @@ class PropertyUseCaseTest {
 
                 mPropertyUseCase.fetchProperties()
 
+                assertThat(awaitItem()).isInstanceOf(State.Download.Downloading::class.java)
                 val result = awaitItem()
                 assertThat(result).isInstanceOf(State.Download.DownloadSuccess::class.java)
 
@@ -214,6 +215,9 @@ class PropertyUseCaseTest {
 
                 val list = (result as State.OfflineSuccess).propertiesList
                 assertThat(list.size).isEqualTo(generateOfflineProperties().size + 1)
+
+                assertThat(awaitItem()).isInstanceOf(State.Download.Error::class.java)
+                assertThat(awaitItem()).isInstanceOf(State.OfflineSuccess::class.java)
             }
         }
         enableConnections()
@@ -297,7 +301,6 @@ class PropertyUseCaseTest {
                 assertThat(awaitItem()).isInstanceOf(State.OfflineSuccess::class.java)
                 assertThat(awaitItem()).isInstanceOf(State.Upload.Error::class.java)
 
-                mPropertyUseCase.fetchProperties()
                 assertThat(awaitItem()).isInstanceOf(State.Download.Error::class.java)
 
                 result = awaitItem()
@@ -314,6 +317,7 @@ class PropertyUseCaseTest {
 
                 mPropertyUseCase.fetchProperties()
 
+                assertThat(awaitItem()).isInstanceOf(State.Download.Downloading::class.java)
                 result = awaitItem()
                 assertThat(result).isInstanceOf(State.Download.DownloadSuccess::class.java)
 

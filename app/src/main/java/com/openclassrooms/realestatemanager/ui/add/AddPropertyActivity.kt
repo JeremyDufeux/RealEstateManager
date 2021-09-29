@@ -33,7 +33,7 @@ import com.openclassrooms.realestatemanager.ui.camera.CameraActivity
 import com.openclassrooms.realestatemanager.ui.mediaViewer.*
 import com.openclassrooms.realestatemanager.utils.Utils.*
 import com.openclassrooms.realestatemanager.utils.extensions.setFormattedNumber
-import com.openclassrooms.realestatemanager.utils.formatCalendarToString
+import com.openclassrooms.realestatemanager.utils.formatTimestampToString
 import com.openclassrooms.realestatemanager.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -152,7 +152,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
     private fun dropdownListener() =
         AdapterView.OnItemClickListener { parent, _, position, _ ->
             if (parent != null) {
-                mViewModel.propertyType = parent.getItemAtPosition(position) as PropertyType
+                mViewModel.propertyType = PropertyType.valueOf(parent.getItemAtPosition(position).toString().uppercase())
             }
         }
 
@@ -177,7 +177,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
             activityAddPropertySoldDateEt.visibility = View.VISIBLE
             activityAddPropertySoldDateIv.visibility = View.VISIBLE
 
-            activityAddPropertySoldDateEtInput.setText(property.soldDate?.let { formatCalendarToString(it) })
+            activityAddPropertySoldDateEtInput.setText(property.soldDate?.let { formatTimestampToString(it) })
             activityAddPropertySoldDateEtInput.setOnClickListener { openDatePicker() }
             activityAddPropertySoldDateEt.isEndIconVisible = (property.soldDate != null)
             activityAddPropertySoldDateEt.setEndIconOnClickListener { clearDatePicker() }
@@ -205,7 +205,7 @@ class AddPropertyActivity : AppCompatActivity(), AddPropertyMediaListAdapter.Med
         datePicker.show(supportFragmentManager, "DatePicker")
         datePicker.addOnPositiveButtonClickListener {
             mViewModel.soldDate = it
-            mBinding.activityAddPropertySoldDateEtInput.setText(formatCalendarToString(it))
+            mBinding.activityAddPropertySoldDateEtInput.setText(formatTimestampToString(it))
             mBinding.activityAddPropertySoldDateEt.isEndIconVisible = true
         }
     }
