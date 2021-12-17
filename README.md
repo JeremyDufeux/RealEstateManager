@@ -6,6 +6,7 @@ This project uses:
 - Firebase storage
 - Room
 - Glide
+- Hilt
 - MVVM architecture
 - StateFlow
 - Camera 1 API
@@ -14,6 +15,7 @@ This project uses:
 - Content Provider
 - Orientation Service
 - Turbine
+- Mockito
 - Truth
 
 ***
